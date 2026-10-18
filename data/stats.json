@@ -1,3 +1,416 @@
 {
-  "updated": null
+  "updated": "2026-10-18T05:39:28.549Z",
+  "player": {
+    "name": "LoomBoom",
+    "avatar": "https://avatars.steamstatic.com/9e8af0555fb3fccfbf72c94ccf72d9da34206af7_full.jpg",
+    "url": "https://steamcommunity.com/id/LoomBoom/",
+    "online": true,
+    "playing": null,
+    "level": 25
+  },
+  "library": {
+    "count": 53,
+    "hours": 7154.2
+  },
+  "tracked": [
+    {
+      "appid": 730,
+      "name": "Counter-Strike 2",
+      "hours": 6547.6,
+      "hours2w": 47.5
+    },
+    {
+      "appid": 1966720,
+      "name": "Lethal Company",
+      "hours": 227.7,
+      "hours2w": 0
+    }
+  ],
+  "recent": [
+    {
+      "appid": 1883580,
+      "name": "Cactus Simulator",
+      "hours2w": 100.7,
+      "hours": 100.7
+    },
+    {
+      "appid": 730,
+      "name": "Counter-Strike 2",
+      "hours2w": 47.5,
+      "hours": 6547.6
+    },
+    {
+      "appid": 728880,
+      "name": "Overcooked! 2",
+      "hours2w": 15.7,
+      "hours": 15.7
+    },
+    {
+      "appid": 652980,
+      "name": "Loading Screen Simulator",
+      "hours2w": 9.9,
+      "hours": 9.9
+    },
+    {
+      "appid": 2923300,
+      "name": "Banana",
+      "hours2w": 8.3,
+      "hours": 8.3
+    },
+    {
+      "appid": 3131610,
+      "name": "Bread",
+      "hours2w": 4,
+      "hours": 4
+    }
+  ],
+  "cs": {
+    "kills": 184283,
+    "deaths": 165079,
+    "headshots": 77639,
+    "shotsFired": 3170088,
+    "shotsHit": 333517,
+    "roundsWon": 99020,
+    "roundsPlayed": 190533,
+    "matchesWon": 5044,
+    "matchesPlayed": 9993,
+    "mvps": 32465,
+    "damage": 26259290
+  },
+  "leetify": {
+    "url": "https://leetify.com/app/profile/76561199030446550",
+    "premier": null,
+    "leetifyRating": 3.9800000000000004,
+    "faceitLevel": 10,
+    "faceitElo": 2184,
+    "wingman": 18,
+    "renown": null,
+    "winrate": 0.5333,
+    "totalMatches": 3312,
+    "rating": {
+      "aim": 82.3814,
+      "positioning": 75.8036,
+      "utility": 51.2974,
+      "clutch": 0.0692,
+      "opening": 0.0537
+    },
+    "recent": [
+      {
+        "date": "2026-10-17T23:26:58.000Z",
+        "map": "de_anubis",
+        "source": "esplay",
+        "outcome": "loss",
+        "score": [
+          6,
+          13
+        ],
+        "rating": 0.0326
+      },
+      {
+        "date": "2026-10-17T19:58:23.000Z",
+        "map": "de_vertigo",
+        "source": "esplay",
+        "outcome": "win",
+        "score": [
+          13,
+          9
+        ],
+        "rating": 0.0352
+      },
+      {
+        "date": "2026-10-17T19:27:52.000Z",
+        "map": "de_ancient",
+        "source": "esplay",
+        "outcome": "win",
+        "score": [
+          13,
+          2
+        ],
+        "rating": 0.0534
+      },
+      {
+        "date": "2026-10-16T23:09:06.000Z",
+        "map": "de_ancient",
+        "source": "esplay",
+        "outcome": "win",
+        "score": [
+          13,
+          11
+        ],
+        "rating": 0.0229
+      },
+      {
+        "date": "2026-10-16T22:22:55.000Z",
+        "map": "de_vertigo",
+        "source": "esplay",
+        "outcome": "loss",
+        "score": [
+          10,
+          13
+        ],
+        "rating": 0.0167
+      },
+      {
+        "date": "2026-10-16T14:24:46.000Z",
+        "map": "de_anubis",
+        "source": "esplay",
+        "outcome": "win",
+        "score": [
+          13,
+          9
+        ],
+        "rating": 0.0515
+      },
+      {
+        "date": "2026-10-15T00:00:50.000Z",
+        "map": "de_vertigo",
+        "source": "esplay",
+        "outcome": "win",
+        "score": [
+          13,
+          9
+        ],
+        "rating": 0.0291
+      },
+      {
+        "date": "2026-10-14T23:07:35.000Z",
+        "map": "de_vertigo",
+        "source": "esplay",
+        "outcome": "win",
+        "score": [
+          13,
+          8
+        ],
+        "rating": 0.0474
+      }
+    ]
+  },
+  "faceit": {
+    "nickname": "LoomBoom",
+    "url": "https://www.faceit.com/sv/players/LoomBoom",
+    "level": 10,
+    "elo": 2028,
+    "matches": 357,
+    "wins": 203,
+    "winrate": 57,
+    "kd": 1.16,
+    "hs": 45,
+    "longestStreak": 10,
+    "currentStreak": 1,
+    "recent": [
+      false,
+      false,
+      true,
+      false,
+      true
+    ]
+  },
+  "chess": {
+    "username": "loomboom10",
+    "url": "https://www.chess.com/member/LoomBoom10",
+    "avatar": null,
+    "league": "Bronze",
+    "joined": "2020-11-26T09:33:26.000Z",
+    "modes": [
+      {
+        "key": "chess_rapid",
+        "label": "Rapid",
+        "rating": 571,
+        "best": 754,
+        "win": 51,
+        "loss": 54,
+        "draw": 16
+      },
+      {
+        "key": "chess_blitz",
+        "label": "Blitz",
+        "rating": 516,
+        "best": 768,
+        "win": 1,
+        "loss": 1,
+        "draw": 1
+      },
+      {
+        "key": "chess_daily",
+        "label": "Daily",
+        "rating": 730,
+        "best": 956,
+        "win": 8,
+        "loss": 3,
+        "draw": 1
+      }
+    ],
+    "puzzles": 1528,
+    "puzzleRush": null,
+    "recent": [
+      {
+        "date": "2026-10-13T22:09:11.000Z",
+        "mode": "rapid",
+        "color": "svart",
+        "result": "loss",
+        "opponent": "ecologicalrealist",
+        "oppRating": 599,
+        "myRating": 571,
+        "url": "https://www.chess.com/game/live/185287304620"
+      },
+      {
+        "date": "2026-10-13T03:41:16.000Z",
+        "mode": "rapid",
+        "color": "svart",
+        "result": "loss",
+        "opponent": "Brage33",
+        "oppRating": 454,
+        "myRating": 579,
+        "url": "https://www.chess.com/game/live/185242831932"
+      },
+      {
+        "date": "2026-10-13T03:20:38.000Z",
+        "mode": "rapid",
+        "color": "vit",
+        "result": "loss",
+        "opponent": "Kali_MXR",
+        "oppRating": 613,
+        "myRating": 591,
+        "url": "https://www.chess.com/game/live/185242627192"
+      },
+      {
+        "date": "2026-10-13T03:18:46.000Z",
+        "mode": "rapid",
+        "color": "svart",
+        "result": "loss",
+        "opponent": "jeanmi61",
+        "oppRating": 618,
+        "myRating": 599,
+        "url": "https://www.chess.com/game/live/185242188682"
+      },
+      {
+        "date": "2026-10-13T02:57:43.000Z",
+        "mode": "rapid",
+        "color": "svart",
+        "result": "win",
+        "opponent": "ankit1079",
+        "oppRating": 576,
+        "myRating": 607,
+        "url": "https://www.chess.com/game/live/185241864492"
+      },
+      {
+        "date": "2026-10-13T02:48:12.000Z",
+        "mode": "daily",
+        "color": "svart",
+        "result": "win",
+        "opponent": "Coach-David",
+        "oppRating": 530,
+        "myRating": 599,
+        "url": "https://www.chess.com/game/daily/272176250"
+      }
+    ]
+  },
+  "perfect": {
+    "count": 10,
+    "gamesWithAchievements": 39,
+    "unlocked": 1079,
+    "total": 2480,
+    "games": [
+      {
+        "appid": 2313240,
+        "name": "Travellin Cats in Italy",
+        "achievements": 102,
+        "hours": 0.5
+      },
+      {
+        "appid": 2356500,
+        "name": "Travellin Cats in Bali",
+        "achievements": 102,
+        "hours": 0.2
+      },
+      {
+        "appid": 2551170,
+        "name": "Travellin Cats in Maple Hollow",
+        "achievements": 102,
+        "hours": 0.2
+      },
+      {
+        "appid": 2313250,
+        "name": "Travellin Cats in Paris",
+        "achievements": 101,
+        "hours": 0.6
+      },
+      {
+        "appid": 2485180,
+        "name": "Travellin Cats in Georgia",
+        "achievements": 100,
+        "hours": 1.1
+      },
+      {
+        "appid": 2608040,
+        "name": "Travellin Cats in China",
+        "achievements": 100,
+        "hours": 0.7
+      },
+      {
+        "appid": 2700540,
+        "name": "Travellin Cats in Japan",
+        "achievements": 100,
+        "hours": 0.6
+      },
+      {
+        "appid": 2776570,
+        "name": "Travellin Cats in Germany",
+        "achievements": 100,
+        "hours": 0.5
+      },
+      {
+        "appid": 2296990,
+        "name": "We Were Here Expeditions: The FriendShip",
+        "achievements": 12,
+        "hours": 2.7
+      },
+      {
+        "appid": 730,
+        "name": "Counter-Strike 2",
+        "achievements": 1,
+        "hours": 6547.6
+      }
+    ]
+  },
+  "fortnite": {
+    "name": "LooomBooom",
+    "level": 1,
+    "overall": {
+      "matches": 17882,
+      "wins": 781,
+      "winRate": 4.368,
+      "kills": 30119,
+      "kd": 1.761,
+      "top10": 718,
+      "minutes": 133151
+    },
+    "solo": {
+      "matches": 4765,
+      "wins": 95,
+      "winRate": 1.994,
+      "kills": 5595,
+      "kd": 1.198,
+      "top10": 718,
+      "minutes": 23466
+    },
+    "duo": {
+      "matches": 5576,
+      "wins": 238,
+      "winRate": 4.268,
+      "kills": 7236,
+      "kd": 1.356,
+      "top10": null,
+      "minutes": 39808
+    },
+    "squad": {
+      "matches": 3250,
+      "wins": 141,
+      "winRate": 4.338,
+      "kills": 3883,
+      "kd": 1.249,
+      "top10": null,
+      "minutes": 14739
+    }
+  }
 }
