@@ -130,6 +130,48 @@ if (process.env.FACEIT_API_KEY) {
   }
 }
 
+// Schack via chess.coms öppna API (ingen nyckel behövs)
+let chess = null;
+try {
+  const user = (process.env.CHESS_USERNAME || "LoomBoom10").trim().toLowerCase();
+  const ch = { "User-Agent": "LoomBoom-hemsida (loomboom.se)" };
+  const cj = async (u) => { const r = await fetch(u, { headers: ch }); if (!r.ok) throw new Error(u + " svarade " + r.status); return r.json(); };
+  const [P, S] = await Promise.all([cj(`https://api.chess.com/pub/player/${user}`), cj(`https://api.chess.com/pub/player/${user}/stats`)]);
+  const mode = (k, label) => S[k] ? {
+    key: k, label,
+    rating: S[k].last?.rating ?? null,
+    best: S[k].best?.rating ?? null,
+    win: S[k].record?.win ?? 0, loss: S[k].record?.loss ?? 0, draw: S[k].record?.draw ?? 0
+  } : null;
+  let games = [];
+  try {
+    const A = await cj(`https://api.chess.com/pub/player/${user}/games/archives`);
+    const urls = (A.archives || []).slice(-2);
+    for (const u of urls) games = games.concat((await cj(u)).games || []);
+  } catch (e) { console.warn("Kunde inte hämta schackpartier:", e.message); }
+  const drawish = ["agreed", "repetition", "stalemate", "insufficient", "50move", "timevsinsufficient"];
+  const recent = games.sort((a, b) => (b.end_time || 0) - (a.end_time || 0)).slice(0, 6).map((g) => {
+    const white = (g.white?.username || "").toLowerCase() === user;
+    const me = white ? g.white : g.black, opp = white ? g.black : g.white;
+    const res = me?.result === "win" ? "win" : drawish.includes(me?.result) ? "draw" : "loss";
+    return { date: g.end_time ? new Date(g.end_time * 1000).toISOString() : null, mode: g.time_class || null, color: white ? "vit" : "svart",
+             result: res, opponent: opp?.username || null, oppRating: opp?.rating ?? null, myRating: me?.rating ?? null, url: g.url || null };
+  });
+  chess = {
+    username: P.username || user,
+    url: P.url || `https://www.chess.com/member/${user}`,
+    avatar: P.avatar || null,
+    league: P.league || null,
+    joined: P.joined ? new Date(P.joined * 1000).toISOString() : null,
+    modes: [mode("chess_rapid", "Rapid"), mode("chess_blitz", "Blitz"), mode("chess_bullet", "Bullet"), mode("chess_daily", "Daily")].filter(Boolean),
+    puzzles: S.tactics?.highest?.rating ?? null,
+    puzzleRush: S.puzzle_rush?.best?.score ?? null,
+    recent
+  };
+} catch (e) {
+  console.warn("Kunde inte hämta schack:", e.message);
+}
+
 const stats = {
   updated: new Date().toISOString(),
   player: {
@@ -154,7 +196,8 @@ const stats = {
     .slice(0, 6),
   cs,
   leetify,
-  faceit
+  faceit,
+  chess
 };
 
 await mkdir("data", { recursive: true });
@@ -168,6 +211,7 @@ const point = { date: day };
 for (const t of stats.tracked) point[t.appid] = t.hours;
 if (leetify?.premier) point.premier = leetify.premier;
 if (faceit?.elo) point.faceitElo = faceit.elo;
+for (const m of chess?.modes || []) if (m.rating) point["chess_" + m.label.toLowerCase()] = m.rating;
 history = history.filter((h) => h.date !== day);
 history.push(point);
 history.sort((a, b) => a.date.localeCompare(b.date));

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>LoomBoom Statistik</title>
-<meta name="description" content="LoomBooms statistik i CS2 Premier, FACEIT och Esplay, plus speltid från Steam.">
+<meta name="description" content="LoomBooms statistik i CS2 Premier, FACEIT, Esplay och schack på chess.com, plus speltid från Steam.">
 <link rel="icon" href="bilder/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -139,6 +139,24 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,100px);line
 .matches .res{width:24px;height:24px;border-radius:6px;border:2px solid var(--ink);display:grid;place-items:center;font:700 12px var(--mono)}
 .matches .src{font-size:12px;font-weight:700;color:var(--brown);text-transform:uppercase;letter-spacing:.04em;margin-left:6px}
 .matches .sc{font-family:var(--mono);font-weight:700;white-space:nowrap}
+
+/* CHESS */
+.chess-head{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.chess-head .sq{width:44px;height:44px;flex:none;border:var(--line);border-radius:8px;box-shadow:2px 2px 0 var(--ink);
+  background:conic-gradient(#EEEED2 25%, #769656 0 50%, #EEEED2 0 75%, #769656 0) 0 0/50% 50%}
+.modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));gap:12px;margin-top:16px}
+.mode{background:var(--paper);border:var(--line);border-radius:10px;padding:10px 12px 12px;box-shadow:3px 3px 0 var(--ink);min-width:0}
+.mode .l{display:block;font-size:12px;font-weight:700;color:var(--brown);text-transform:uppercase;letter-spacing:.04em}
+.mode .n{display:block;font-family:var(--mono);font-weight:700;font-size:clamp(24px,3vw,30px);line-height:1.15;white-space:nowrap}
+.mode .best{display:block;font-size:13px;font-weight:600;color:var(--brown)}
+.wdl{display:flex;height:12px;border:2px solid var(--ink);border-radius:999px;overflow:hidden;margin-top:8px;background:var(--paper)}
+.wdl i{display:block;height:100%}
+.wdl .w{background:var(--mint)} .wdl .d{background:#C9C2B4} .wdl .lo{background:#E9A0A0}
+.wdl i{min-width:0}
+.wdl i + i:not([style*='width:0.0%']){border-left:2px solid var(--paper)}
+.wdl-t{display:flex;gap:10px;flex-wrap:wrap;margin-top:5px;font:600 12px var(--body);color:var(--ink)}
+.wdl-t span{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.wdl-t b{width:9px;height:9px;border-radius:2px;border:1.5px solid var(--ink);display:inline-block}
 .source{font-size:13px;font-weight:600;color:var(--brown);margin-top:12px}
 footer{text-align:center;padding-block:0 48px}
 footer a{display:inline-block;border:var(--line);border-radius:6px;padding:6px 20px;font-family:var(--pirate);font-size:22px;box-shadow:3px 3px 0 var(--ink)}
@@ -160,7 +178,7 @@ footer a:hover{background:var(--yellow)}
 
   <header class="head">
     <h1>Statistik</h1>
-    <p class="lead">Premier, FACEIT, Esplay och min speltid på Steam. Sidan uppdateras automatiskt varje timme.</p>
+    <p class="lead">Premier, FACEIT, Esplay, schack och min speltid på Steam. Sidan uppdateras automatiskt varje timme.</p>
     <span class="updated" id="updated" hidden><span class="dot" aria-hidden="true"></span><span id="updated-text"></span></span>
   </header>
 
@@ -184,7 +202,7 @@ footer a:hover{background:var(--yellow)}
 <script>
 // Om sidan inte visar ny statistik efter en uppdatering: skriv ditt repo här,
 // t.ex. "LooomBooom/looombooom.github.io", så hämtas filerna direkt från GitHub.
-var GITHUB_REPO = "";
+var GITHUB_REPO = "LoomBoom/LoomBoom.github.io";
 var BRANCH = "main";
 
 (function(){
@@ -288,6 +306,34 @@ var BRANCH = "main";
       (rows.length? '<div class="stats">'+rows.map(function(r,i){return tile(r[0], String(r[1]), "", i===0);}).join("")+'</div>' : '')+
       '<a class="ext" href="'+esc(E.profil)+'" target="_blank" rel="noopener">Se min Esplay-profil →</a>');
   }
+
+  function chessBoard(C, hist){
+    var MODE={rapid:"Rapid",blitz:"Blitz",bullet:"Bullet",daily:"Daily"};
+    var modes=(C.modes||[]).map(function(m){
+      var tot=m.win+m.loss+m.draw||1;
+      var pc=function(v){return (v/tot*100).toFixed(1)+"%";};
+      return '<div class="mode"><span class="l">'+esc(m.label)+'</span><span class="n">'+n(m.rating)+'</span>'+
+        (m.best? '<span class="best">Bästa: '+n(m.best)+'</span>':'')+
+        '<span class="wdl" role="img" aria-label="'+m.win+' vinster, '+m.draw+' remi, '+m.loss+' förluster"><i class="w" style="width:'+pc(m.win)+'"></i><i class="d" style="width:'+pc(m.draw)+'"></i><i class="lo" style="width:'+pc(m.loss)+'"></i></span>'+
+        '<span class="wdl-t"><span><b style="background:var(--mint)"></b>'+n(m.win)+' V</span><span><b style="background:#C9C2B4"></b>'+n(m.draw)+' R</span><span><b style="background:#E9A0A0"></b>'+n(m.loss)+' F</span></span></div>';
+    }).join("");
+    var extra=(C.puzzles||C.puzzleRush)? '<div class="stats">'+(C.puzzles? tile("Pussel, högsta", n(C.puzzles)):'')+(C.puzzleRush? tile("Puzzle Rush, bästa", n(C.puzzleRush)):'')+'</div>' : '';
+    var res=function(r){ return r==="win"?'<span class="res" style="background:var(--mint)">V</span>':r==="loss"?'<span class="res" style="background:#E9A0A0">F</span>':'<span class="res" style="background:#C9C2B4">R</span>'; };
+    var games=(C.recent&&C.recent.length)? '<ul class="matches">'+C.recent.slice(0,5).map(function(g){
+      return '<li>'+res(g.result)+'<span>mot '+esc(g.opponent||"okänd")+(g.oppRating? ' ('+n(g.oppRating)+')':'')+'<span class="src">'+esc(MODE[g.mode]||g.mode||"")+' · '+esc(g.color)+'</span></span><span class="sc">'+(g.url? '<a href="'+esc(g.url)+'" target="_blank" rel="noopener">Se partiet</a>':'')+'</span></li>';
+    }).join("")+'</ul>' : '';
+    board("full","Schack","Från chess.com, där jag spelar som "+(C.username||"LoomBoom10")+".",
+      '<div class="chess-head"><span class="sq" aria-hidden="true"></span>'+(C.league? '<span class="chip">Liga: '+esc(C.league)+'</span>':'')+'</div>'+
+      '<div class="modes">'+modes+'</div>'+extra+games+
+      '<a class="ext" href="'+esc(C.url)+'" target="_blank" rel="noopener">Se profilen på chess.com →</a>');
+    var main=(C.modes||[]).slice().sort(function(a,b){return (b.win+b.loss+b.draw)-(a.win+a.loss+a.draw);})[0];
+    if(main){
+      var key="chess_"+main.label.toLowerCase();
+      var pts=(hist||[]).filter(function(p){return p[key];}).map(function(p){return {d:p.date, v:p[key]};});
+      var cb=board("","Schackrating över tid",main.label+", dag för dag.",'<div class="chart"></div>');
+      lineChart(cb.querySelector(".chart"), pts, "", main.label+"-rating");
+    }
+  }
   function render(S, hist){
     document.getElementById("setup-board").remove();
     var up = document.getElementById("updated"); up.hidden = false;
@@ -325,6 +371,7 @@ var BRANCH = "main";
     if (S.leetify) premierBoard(S.leetify);
     if (S.faceit) faceitBoard(S.faceit);
     if (ESPLAY) esplayBoard(ESPLAY);
+    if (S.chess) chessBoard(S.chess, hist);
     var pp = (hist||[]).filter(function(p){return p.premier;}).map(function(p){return {d:p.date, v:p.premier};});
     if (S.leetify && S.leetify.premier){ var pc = board("","Premier över tid","Min Premier-rating dag för dag.",'<div class="chart"></div>'); lineChart(pc.querySelector(".chart"), pp, "", "Premier-rating"); }
     var pts = (hist||[]).filter(function(p){return p["730"]!=null;}).map(function(p){return {d:p.date, v:p["730"]};});
@@ -339,15 +386,20 @@ var BRANCH = "main";
       }).join("")+'</ul>' : '<div class="empty">Inga Steam-spel de senaste två veckorna.</div>');
 
     var src = document.createElement("p"); src.className = "source";
-    src.textContent = "Källor: Steam Web API, Leetify och FACEIT. Esplay fylls i för hand.";
+    src.textContent = "Källor: Steam Web API, Leetify, FACEIT och chess.com. Esplay fylls i för hand.";
     boards.lastElementChild.appendChild(src);
   }
 
   var ESPLAY = null;
+  function getJSON(file, fallback){
+    var tryUrl = function(u){ return fetch(u + bust).then(function(r){ if(!r.ok) throw 0; return r.json(); }); };
+    var first = base ? tryUrl(base + file).catch(function(){ return tryUrl(file); }) : tryUrl(file);
+    return first.catch(function(){ return fallback; });
+  }
   Promise.all([
-    fetch(base + "data/esplay.json" + bust).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; }),
-    fetch(base + "data/stats.json" + bust).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; }),
-    fetch(base + "data/history.json" + bust).then(function(r){ return r.ok ? r.json() : []; }).catch(function(){ return []; })
+    getJSON("data/esplay.json", null),
+    getJSON("data/stats.json", null),
+    getJSON("data/history.json", [])
   ]).then(function(res){
     ESPLAY = res[0];
     if (res[1] && res[1].updated) render(res[1], res[2]);
