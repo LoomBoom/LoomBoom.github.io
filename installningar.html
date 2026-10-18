@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LoomBoom Inställningar</title>
+<meta name="description" content="LoomBooms inställningar i CS2, Minecraft, Fortnite och Lethal Company, plus hela setupen.">
+<link rel="icon" href="bilder/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Pirata+One&family=Fredoka:wght@500;600;700&family=Figtree:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: a captain's sea chest under the sky. Each game is a nailed plank board with its settings as rows; setup board first. Values in mono so numbers line up. */
+:root{
+  color-scheme: light;
+  --sky:#CFEFF6;
+  --sky-2:#A9E1EE;
+  --paper:#ffffff;
+  --ink:#121826;
+  --brown:#4a2c12;
+  --wood:#D39A5D;
+  --wood-2:#C0834A;
+  --nail:#3A2614;
+  --yellow:#FAE052;
+  --blue:#20ACE4;
+  --mint:#73BB89;
+  --amethyst:#91569D;
+  --line:3px solid var(--ink);
+  --pirate:"Pirata One", "Fredoka", Georgia, serif;
+  --title:"Luckiest Guy", "Fredoka", "Arial Black", sans-serif;
+  --display:"Fredoka", "Trebuchet MS", system-ui, sans-serif;
+  --body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:linear-gradient(var(--sky), var(--sky-2) 60%, #7FC6E8) fixed;color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;overflow-x:hidden;min-height:100vh;
+  padding-top:env(safe-area-inset-top, 0px);padding-bottom:env(safe-area-inset-bottom, 0px)}
+a{color:inherit;text-decoration:none}
+img{max-width:100%}
+[hidden]{display:none!important}
+:focus-visible{outline:3px dashed var(--amethyst);outline-offset:4px;border-radius:8px}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+
+.wood{background:repeating-linear-gradient(181deg, rgba(91,58,28,.14) 0 1px, transparent 1px 6px), repeating-linear-gradient(179deg, rgba(255,235,200,.12) 0 2px, transparent 2px 13px), linear-gradient(var(--wood), var(--wood-2))}
+
+.nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding-block:18px}
+.logo{display:block;width:64px;height:64px;filter:drop-shadow(3px 3px 0 var(--ink))}
+.logo img{width:100%;height:100%;display:block}
+.nav ul{display:flex;gap:8px;list-style:none;margin:0;padding:0;flex-wrap:wrap}
+.nav ul a{display:block;border:var(--line);border-radius:6px;padding:4px 14px;font-family:var(--pirate);font-size:19px;line-height:1.2;box-shadow:2px 2px 0 var(--ink)}
+.nav ul a:hover{background:var(--yellow)}
+.nav ul a[aria-current]{background:var(--yellow)}
+
+header.head{text-align:center;padding-block:16px 28px}
+h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,100px);line-height:1;margin:0;color:var(--yellow);-webkit-text-stroke:.05em var(--ink);paint-order:stroke fill;text-shadow:.045em .05em 0 var(--ink);text-wrap:balance}
+.lead{margin:14px auto 0;max-width:48ch;color:#2c3a4a;font-weight:600}
+
+/* GAME TABS */
+.tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;list-style:none;margin:22px 0 0;padding:0}
+.tabs a{display:inline-flex;align-items:center;gap:8px;background:var(--paper);border:var(--line);border-radius:999px;padding:5px 16px 5px 6px;font-family:var(--display);font-weight:600;box-shadow:3px 3px 0 var(--ink);transition:transform .15s}
+.tabs a:hover{transform:translateY(-2px)}
+.tabs .dot{width:26px;height:26px;border-radius:50%;border:2.5px solid var(--ink);background:var(--c)}
+
+/* BOARDS */
+.boards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:clamp(22px,3vw,34px);padding-block:20px 60px;align-items:start}
+.board{position:relative;min-width:0;border:var(--line);border-radius:10px;box-shadow:inset 0 0 0 9px rgba(120,76,36,.45), inset 0 0 0 11px rgba(58,38,20,.55), 7px 7px 0 var(--ink);padding:26px clamp(20px,3vw,30px) 24px;scroll-margin-top:20px}
+.board:nth-child(odd){transform:rotate(-.5deg)}
+.board:nth-child(even){transform:rotate(.5deg)}
+.board.full{grid-column:1 / -1;transform:none!important}
+.board::before{content:"";position:absolute;inset:4px;pointer-events:none;
+  background:
+    radial-gradient(circle, var(--nail) 0 3.5px, #9b7a55 4px, transparent 5px) 0 0/12px 12px no-repeat,
+    radial-gradient(circle, var(--nail) 0 3.5px, #9b7a55 4px, transparent 5px) 100% 0/12px 12px no-repeat,
+    radial-gradient(circle, var(--nail) 0 3.5px, #9b7a55 4px, transparent 5px) 0 100%/12px 12px no-repeat,
+    radial-gradient(circle, var(--nail) 0 3.5px, #9b7a55 4px, transparent 5px) 100% 100%/12px 12px no-repeat}
+.board-head{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.badge{width:44px;height:44px;flex:none;border-radius:50%;border:var(--line);background:var(--c);display:grid;place-items:center;font-family:var(--title);font-size:20px;color:var(--ink);box-shadow:2px 2px 0 var(--ink)}
+.board h2{font-family:var(--pirate);font-weight:400;font-size:clamp(32px,4.5vw,44px);line-height:1;margin:0}
+.board .note{color:var(--brown);font-weight:600;margin:4px 0 14px;font-size:15px}
+
+.rows{list-style:none;margin:0;padding:0}
+.board.full .rows{columns:2 300px;column-gap:40px}
+.rows li{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:2px 14px;padding:9px 0;border-top:2px dashed rgba(91,58,28,.55);break-inside:avoid}
+.rows li:first-child{border-top:0}
+.board.full .rows li{border-top:2px dashed rgba(91,58,28,.55)}
+.rows .k{font-weight:700;flex:0 1 auto}
+.rows .v{flex:0 1 auto;margin-left:auto;font-family:var(--mono);font-weight:700;font-size:15px;text-align:right;font-variant-numeric:tabular-nums;min-width:0}
+.rows .v.hl{background:var(--yellow);border:2px solid var(--ink);border-radius:999px;padding:0 10px}
+.todo{font-family:var(--body);font-weight:600;font-size:13px;color:var(--brown);border:2px dashed var(--brown);border-radius:999px;padding:0 10px;opacity:.85;white-space:nowrap}
+
+.code{margin-top:14px;display:flex;gap:8px;align-items:stretch;flex-wrap:wrap}
+.code code{flex:1 1 220px;min-width:0;font-family:var(--mono);font-size:13px;background:var(--paper);border:var(--line);border-radius:8px;padding:8px 10px;overflow-x:auto;white-space:nowrap}
+.copy{font:700 15px var(--display);background:var(--yellow);border:var(--line);border-radius:8px;padding:6px 14px;cursor:pointer;box-shadow:2px 2px 0 var(--ink)}
+.copy:active{transform:translate(2px,2px);box-shadow:none}
+.code-label{font-weight:700;font-size:14px;margin-top:14px;display:block}
+
+
+/* CS2 big board */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,185px),1fr));gap:12px;margin:6px 0 22px}
+.stat{background:var(--paper);border:var(--line);border-radius:10px;padding:8px 12px 10px;box-shadow:3px 3px 0 var(--ink);min-width:0}
+.stat .l{display:block;font-size:12px;font-weight:700;color:var(--brown);text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+.stat .n{display:block;font-family:var(--mono);font-weight:700;font-size:clamp(17px,1.9vw,23px);line-height:1.2;font-variant-numeric:tabular-nums;white-space:nowrap}
+.stat.main{background:var(--yellow)}
+.groups{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,330px),1fr));gap:14px;align-items:start}
+.grp{background:rgba(255,248,235,.55);border:2.5px solid var(--ink);border-radius:10px;min-width:0}
+.grp summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 14px;font-family:var(--pirate);font-size:26px;line-height:1.1}
+.grp summary::-webkit-details-marker{display:none}
+.grp summary::after{content:"+";font:700 20px var(--display);width:28px;height:28px;flex:none;border:2.5px solid var(--ink);border-radius:50%;display:grid;place-items:center;background:var(--paper)}
+.grp[open] summary::after{content:"–"}
+.grp .rows{padding:0 14px 10px}
+.grp .rows li{padding:7px 0;font-size:15px}
+.grp .rows .v{font-size:14px}
+.grp .count{font:600 13px var(--body);color:var(--brown);margin-left:auto}
+.keys{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr));gap:4px 18px;padding:0 14px 12px;list-style:none;margin:0}
+.keys li{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px 10px;padding:5px 0;border-top:2px dashed rgba(91,58,28,.4);font-size:15px;font-weight:600}
+.keys li span{white-space:nowrap}
+kbd{margin-left:auto;font-family:var(--mono);font-weight:700;font-size:13px;background:var(--paper);border:2px solid var(--ink);border-bottom-width:4px;border-radius:6px;padding:1px 8px;white-space:nowrap}
+.grp.wide{grid-column:1 / -1}
+.mc-top{display:flex;gap:20px;align-items:center;flex-wrap:wrap;margin:6px 0 22px}
+.mc-top .stats{flex:1 1 320px;margin:0}
+.skin{margin:0;flex:none;display:grid;justify-items:center;gap:8px;background:linear-gradient(#8fd0f0,#cdeffa 70%, #7cc36b 70%, #5a9a49);border:var(--line);border-radius:12px;padding:14px 22px 10px;box-shadow:4px 4px 0 var(--ink)}
+.skin img{display:block;width:96px;height:auto;image-rendering:pixelated;filter:drop-shadow(3px 4px 0 rgba(0,0,0,.35));animation:sway 3s ease-in-out infinite}
+@keyframes sway{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+.skin figcaption{font:600 14px var(--display);background:var(--paper);border:2px solid var(--ink);border-radius:999px;padding:0 10px}
+@media (prefers-reduced-motion:reduce){.skin img{animation:none}}
+.xh-row{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:18px}
+.xh-code{flex:1 1 260px;min-width:0}
+.xh-code .code-label{margin-top:0}
+.xh-note{display:block;font-size:13px;font-weight:600;color:var(--brown);margin-top:6px}
+.xh{position:relative;width:96px;height:96px;flex:none;border:var(--line);border-radius:10px;box-shadow:3px 3px 0 var(--ink);
+  background:linear-gradient(#cdb48f 0 58%, #a88b62 58%)}
+.xh .a{position:absolute;background:#00FFFF;left:50%;top:50%}
+.xh .t,.xh .b{width:4px;height:12px;margin-left:-2px}
+.xh .l,.xh .r{width:12px;height:4px;margin-top:-2px}
+.xh .t{margin-top:-18px}.xh .b{margin-top:6px}
+.xh .l{margin-left:-18px}.xh .r{margin-left:6px}
+
+footer{text-align:center;padding-block:0 48px}
+footer a{display:inline-block;border:var(--line);border-radius:6px;padding:6px 20px;font-family:var(--pirate);font-size:22px;box-shadow:3px 3px 0 var(--ink)}
+footer a:hover{background:var(--yellow)}
+
+@media (max-width:760px){.board:nth-child(n){transform:none}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.tabs a{transition:none}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav class="nav">
+    <a class="logo" href="./" aria-label="Till startsidan"><img src="bilder/logo.png" alt="LoomBoom logga"></a>
+    <ul>
+      <li><a class="wood" href="./">Start</a></li>
+      <li><a class="wood" href="konst.html">Konstgalleri</a></li>
+      <li><a class="wood" href="installningar.html" aria-current="page">Inställningar</a></li>
+    </ul>
+  </nav>
+
+  <header class="head">
+    <h1>Inställningar</h1>
+    <p class="lead">Mina inställningar i spelen jag kör, och grejerna jag spelar och målar med.</p>
+    <ul class="tabs" id="tabs" aria-label="Hoppa till"></ul>
+  </header>
+
+  <main class="boards" id="boards"></main>
+
+  <footer><a class="wood" href="./">← Tillbaka till startsidan</a></footer>
+</div>
+
+<script>
+/*
+  Fyll i dina värden här. Skriv null för det som inte är ifyllt än,
+  då visas "Fyll i" på sidan.
+*/
+var DPI = 1000;
+var CS_SENS = 1.50;
+
+var SETUP = [
+  ["Processor","Intel Core i7-10700 (2,90 GHz)"],
+  ["RAM","16 GB (2667 MHz)"],
+  ["Grafikkort","NVIDIA GeForce GTX 1660 SUPER (6 GB)"],
+  ["Lagring","2,29 TB"],
+  ["Skärm","Acer XV240Y"],
+  ["Uppdateringsfrekvens","165 Hz"],
+  ["Headset","HyperX"],
+  ["DPI", DPI + " DPI"],
+  ["Ritprogram","Paint"],
+  ["Mus","Glorious Model O"],
+  ["Musmatta","Cherry Xtrfy"],
+  ["Tangentbord","Logitech G PRO X TKL"],
+  ["Tangentbordsbelysning","Ocean Wave"]
+];
+
+var CS = {
+  stats:[
+    ["Sensitivity", CS_SENS.toFixed(2), true],
+    ["DPI", String(DPI)],
+    ["eDPI", String(Math.round(DPI*CS_SENS))],
+    ["Zoom", "0.75"],
+    ["Upplösning", "1920×1080"],
+    ["Hz / FPS-tak", "165 / 400"]
+  ],
+  groups:[
+    {t:"Mus", open:true, rows:[
+      ["Muskänslighet","1.50"],["Multiplikator för zoomkänslighet","0.75"],["Inverterad mus","Av"],
+      ["Duckningsläge","Håll"],["Gångläge","Håll"],["Nedhållning av zoomknapp","Upprepning inaktiverad"]]},
+    {t:"Hårkors", open:true, rows:[
+      ["Stil","Statiskt kors"],["Färg","Cyan"],["Kontur","Ingen"],["Tjocklek","2"],["Längd","2"],["Mellanrum","2"],
+      ["Prick i mitten","Nej"],["T-stil","Nej"],["Följ rekyl","Nej"],["Hårkorsfärg för kikarsiktepunkt","Nej"],
+      ["Punktskala för kikarsikte","1.00"],["Friendly fire-varning","Alltid av"],["Visa spelares hårkors","Vänner och grupp"]]},
+    {t:"Bild", open:true, rows:[
+      ["Skärm","XV240Y"],["Visningsläge","Helskärm i fönsterläge"],["Bildförhållande","16:9"],["Upplösning","1920×1080"],
+      ["Bildfrekvens","165 Hz"],["Ljusstyrka","93 %"],["Förstärk kontrast på spelare","Aktiverad"],
+      ["V-Sync","Av"],["NVIDIA Reflex","Aktiverad"],["Max FPS i spelet","400"],["Max FPS i menyer","200"],["HUD-kantpositioner","Max / max"]]},
+    {t:"Grafikkvalitet", rows:[
+      ["Kantutjämning","2x MSAA"],["Skuggkvalitet","Medel"],["Dynamiska skuggor","Alla"],["Modeller/texturer","Hög"],
+      ["Texturfiltrering","Anisotropisk 2x"],["Shader-detaljer","Låg"],["Partikeldetaljer","Låg"],
+      ["Ambient Occlusion","Hög"],["High Dynamic Range","Kvalitet"],["FidelityFX Super Resolution","Av"]]},
+    {t:"Granatsikte", rows:[
+      ["Behåll vanligt hårkors","Ja"],["Flash","2.00"],["HE-granat","2.00"],["Molotov","2.00"],["Smoke","2.00"],["Decoy","2.00"]]},
+    {t:"Kikarsikten", rows:[
+      ["Fördröj utzoomning efter skott","Nej"],["Visa felaktigheter i kikarsikte","Ja"],["Zooma igen efter skott","Ja"],["Hårkorstjocklek för AWP","1"]]},
+    {t:"Chatthjul 1", rows:[
+      ["Upp","Vi borde köpa"],["Uppe vänster","Vi borde spara"],["Uppe höger","Behöver ett vapen"],["Vänster","Pinga bombplats A"],
+      ["Höger","Pinga bombplats B"],["Nere vänster","Följ mig"],["Nere höger","Följer dig"],["Ner","Pinga mitten"]]},
+    {t:"Ljud", rows:[
+      ["Huvudvolym","50 %"],["Menyns omgivningsvolym","100 %"],["EQ-profil","Skarp"],["Vänster-/högerisolering","20 %"],
+      ["Perspektivkorrigering","Nej"],["Ljud i bakgrunden","Nej"],["EQ per spelläge","Standard"]]},
+    {t:"Röst", rows:[
+      ["Röstvolym för andra","100 %"],["Mikrofonläge","Tryck för att prata"],["Lyssna på egen röst","Av"],
+      ["Effektiviserad tryck för att prata","Nej"],["Utlösartröskel","-120"]]},
+    {t:"Musik", rows:[
+      ["Huvudvolym för musik","100 %"],["Huvudmenyn","8 %"],["Omgångsstart","0 %"],["Runda","0 %"],["Omgångsslut","40 %"],
+      ["MVP","40 %"],["Bomb/gisslan","20 %"],["Tiosekundersvarning","20 %"],["Dödskamera","40 %"],["Tysta MVP när båda lagen lever","Nej"]]},
+    {t:"Föremål & vymodell", rows:[
+      ["Vymodellens position","Skrivbord"],["Hand","Höger"],["Ta bort ljuddämpare","Nej"],["Ljusspår i förstaperson","Aktiverad"],
+      ["Visa alltid förråd","Nej"],["Köpmeny med \"Använd\"","Nej"],["Siffertangenter i köpmenyn","Köper föremål"],
+      ["Donationstangent","Vänster Ctrl"],["Senaste vapnet i cirkelmenyn","Ja"]]},
+    {t:"Radar", rows:[
+      ["Centrerar spelaren","Ja"],["Roterar","Ja"],["Bakgrundsblandning","Ja"],["Suddig bakgrund","Ja"],["Bakgrundsopacitet","0.63"],
+      ["Storlek på HUD","1.00"],["Zoom","0.70"],["Alternativ zoom","1.00"],["Fyrkantig med resultattavlan","Ja"],
+      ["Tvinga fyrkantig","Nej"],["Dynamisk zoom","Nej"]]},
+    {t:"HUD", rows:[
+      ["HUD-skala","1.00"],["HUD-färg","Lagfärg"],["Stort spelarantal","Nej"],["Gemenskapsaviseringar","Uppe till höger"],
+      ["Raritetsfärg på vapen","Nej"],["Åsidosätt HUD-färg för åskådare","Nej"]]},
+    {t:"Lag", rows:[
+      ["Lagtaggar i dödsnotiser","Ja"],["Lag-ID genom väggar","Symboler, namn, HP och utrustning"],["Spelarfärger i Competitive","Visa"],
+      ["Spelarfärger på lag-ID","Ja"],["Vännerlobby","Vänner bjuds in"],["När CS startar","Senaste tillstånd"]]},
+    {t:"Kommunikation", rows:[
+      ["Spelarmarkeringar","Visa och spela ljud"],["Tysta motståndarlaget","Nej"],["Tysta alla utom vänner","Nej"],
+      ["Animerade avatarer","Ja"],["Avatarbilder","Visa alla"],["Rena spelarnamn","Nej"]]},
+    {t:"Åskådare", rows:[
+      ["Röstnummer","Nummertangenter"],["Mus i resultattavlan","Sekundäreld"],["Förlustanimation","Aktiverad"],
+      ["Överlevare alltid synliga","Nej"],["Mjuk åskådarkamera","Ja"],["Kamerahastighet","1.00"]]},
+    {t:"Spel & nätverk", rows:[
+      ["Utvecklarkonsol","Ja"],["Max matchningsping","33 ms"],["Bandbredd","Obegränsad"],["Buffring","Ingen"],["Workshop-verktyg","Nej"]]},
+    {t:"Skadeförutsägelse", rows:[
+      ["Kroppsskott","Nej"],["Huvudskott","Nej"],["Ragdoll vid död","Ja"]]},
+    {t:"Telemetri", rows:[
+      ["Bildtid och FPS","Om dåligt"],["Varning bildtid","100 ms = 10 FPS"],["Ping","Om dåligt"],["Nätverksproblem","Om dåligt"],
+      ["Varning missade tick","5.0"],["Graf för instabilitet","Aldrig"],["Detaljerad nätverksvisning","Aldrig"]]}
+  ],
+  keys:[
+    ["Framåt","W"],["Bakåt","S"],["Vänster","A"],["Höger","D"],["Gå","Shift"],["Ducka","Ctrl"],["Hoppa","Mellanslag"],
+    ["Använd","E"],["Skjut","Mus1"],["Sekundäreld","Mus2"],["Ladda om","R"],["Föregående vapen","Hjul upp"],["Nästa vapen","Hjul ned"],
+    ["Huvudvapen","1"],["Sekundärvapen","Mus3"],["Kniv","3"],["Bläddra granater","4"],["Bomb","5"],["HE-granat","6"],
+    ["Flash","7"],["Smoke","8"],["Decoy","9"],["Molotov","0"],["Hälsospruta","X"],["Släpp vapen","½"],["Inspektera","F"],
+    ["Byt hand","H"],["Köpmeny","B"],["Auto-köp","F3"],["Köp igen","F4"],["Graffiti","T"],
+    ["Resultattavla","Tab"],["Välj lag","M"],["Konsol","Ä"],["Mikrofon","Mus4"],["Spelarmarkering","I"],
+    ["Radiomeddelande","Z"],["Chatthjul","C"],["Lagchatt","U"],["Chatt","Y"]
+  ],
+  codes:[["Crosshair-kod","CSVXHE254JWcTBZMeckStPWFAzHKorWzY54LEUSMYrJVTX"]]
+};
+
+var MC = {
+  skin:"bilder/skin-fram.png",
+  stats:[
+    ["Profilnamn","LooomBooom", true],
+    ["Sensitivity","60 %"],
+    ["Synfält","80"],
+    ["Synligt avstånd","29 chunks"],
+    ["Gränssnittsskala","3"],
+    ["Max FPS","Oändlig"],
+    ["Resurspaket","Standard"]
+  ],
+  groups:[
+    {t:"Skärm", open:true, rows:[
+      ["Synfält","80"],["Helskärm","På"],["Exklusiv helskärm","På"],["Exklusivt helskärmsläge","Nuvarande"],["Max bildfrekvens","Oändlig"],
+      ["VSync","På"],["Sänk bildfrekvens","Vid minimering"],["Gränssnittsskala","3"],["Ljusstyrka","Ljust"],["Grafik-API","Standard"]]},
+    {t:"Kvalitet & prestanda", open:true, rows:[
+      ["Förinställning","Anpassad"],["Synligt avstånd","29 chunks"],["Simulerat avstånd","12 chunks"],["Biomblandning","7 × 7 (hög)"],
+      ["Chunkuppdateringar","Omgivande"],["Ljusutjämning","På"],["Moln","Snygga"],["Molnavstånd","128 chunks"],["Partiklar","Alla"],
+      ["Mipmapnivåer","4"],["Entitetsskuggor","På"],["Entitetsavstånd","100 %"],["Suddig menybakgrund","5"],["Genomsynliga löv","På"],
+      ["Bättre genomskinlighet","Av"],["Texturfiltrering","Ingen"],["Anisotropisk filtrering","4x"],["Vädereffektsradie","10 block"]]},
+    {t:"Mus", open:true, rows:[
+      ["Muskänslighet","60 %"],["Mushjulets känslighet","1.00"],["Diskret mushjulsrullning","Av"],
+      ["Invertera vågrätt","Av"],["Invertera lodrätt","Av"],["Dynamisk muspekare","På"]]},
+    {t:"Kontroller", rows:[
+      ["Smyg","Håll ned"],["Spring","Håll ned"],["Anfall/förstör","Håll ned"],["Använd/placera","Håll ned"],["Hoppa automatiskt","Av"],
+      ["Period för att springa","7"],["Avsluta med kortkommandon","På"],["Operativ föremålsflik","Av"]]},
+    {t:"Preferenser", rows:[
+      ["Text vid autosparning","På"],["Vinjett","På"],["Attackmätare","Hårkors"],["Chunktoning","0.75 s"],["Språk","Svenska (Sverige)"]]},
+    {t:"Ljud", rows:[
+      ["Huvudvolym","30 %"],["Musik","3 %"],["Jukebox/notblock","15 %"],["Väder","5 %"],["Block","100 %"],["Fientliga varelser","5 %"],
+      ["Fredliga varelser","10 %"],["Spelare","100 %"],["Omgivning/miljö","100 %"],["Uppläsare/röst","100 %"],["Gränssnitt","100 %"],
+      ["Enhet","Systemstandard"],["Undertexter","Av"],["Riktat ljud","Av"],["Musikuppspelning","Standard"],["Musikinfo","Aldrig"]]},
+    {t:"Skin", rows:[
+      ["Mantel","På"],["Jacka","På"],["Vänster ärm","På"],["Höger ärm","På"],["Vänster byxben","På"],["Höger byxben","På"],
+      ["Hatt","På"],["Primär hand","Höger"]]},
+    {t:"Chatt", rows:[
+      ["Chatt","Visas"],["Färger","På"],["Webblänkar","På"],["Fråga om länkar","På"],["Textopacitet","100 %"],["Bakgrundsopacitet","50 %"],
+      ["Textstorlek","80 %"],["Radavstånd","0 %"],["Chattfördröjning","Ingen"],["Bredd","320 px"],["Fokuserad höjd","180 px"],
+      ["Ofokuserad höjd","90 px"],["Kommandoförslag","På"],["Dölj matchande namn","På"],["Kort felsökningsinfo","Av"],
+      ["Endast säker chatt","Av"],["Spara oskickad chatt","Av"]]},
+    {t:"Flerspelare", rows:[
+      ["Vänlista","På"],["Tillåt förfrågningar","På"],["Notiser i spelet","Av"],["Synlighet","Full"],["Serverlistningar","På"],["Realms-nyheter","På"]]},
+    {t:"Tillgänglighet", rows:[
+      ["Uppläsare","Av"],["Undertexter","Av"],["Hög kontrast","Av"],["Textbakgrund","Chatt"],["Visningstid för notiser","1.0×"],
+      ["Vygungning","På"],["Skärmeffekter","100 %"],["Synfältseffekter","100 %"],["Pulserande mörker","100 %"],["Vyskakning vid skada","100 %"],
+      ["Skimmerhastighet","50 %"],["Skimmerstyrka","75 %"],["Dölj sken från blixtar","Av"],["Monokrom logotyp","Av"],
+      ["Panoramahastighet","100 %"],["Dölj splash-text","Av"],["Rotera vy med gruvvagn","Av"],["Tydligare blockkonturer","Av"]]},
+    {t:"F3-menyn", rows:[
+      ["Gränssnittsskala","Automatisk"],["fps","I överlägg"],["biome","I överlägg"],["player_position","I överlägg"],
+      ["player_section_position","I överlägg"],["light_levels","I överlägg"],["local_difficulty","I överlägg"],
+      ["entity_render_stats","I överlägg"],["3d_crosshair","I överlägg"],["Allt annat","Av"]]}
+  ],
+  keyGroups:[
+    {t:"Tangenter", keys:[
+      ["Framåt","W"],["Bakåt","S"],["Vänster","A"],["Höger","D"],["Hoppa","Mellanslag"],["Smyg","Vänster Shift"],["Spring","Vänster Ctrl"],
+      ["Anfall/förstör","Vänsterklick"],["Använd/placera","Högerklick"],["Välj block","Mittenklick"],["Förråd","E"],["Släpp föremål","Q"],
+      ["Byt till andra handen","F"],["Föremålsplats 1–9","1–9"],["Öppna chatt","T"],["Öppna kommando","-"],["Spelarlista","Tab"],
+      ["Vänner","O"],["Sociala interaktioner","P"],["Byt perspektiv","F5"],["Framsteg","L"],["Snabbåtgärder","G"],["Skärmdump","F2"],
+      ["Dölj gränssnitt","F1"],["Shadereffekter (åskådare)","F4"],["Helskärm","F11"],["Läs in föremålsmeny","X"],["Åskådarmeny","Mittenklick"]]},
+    {t:"F3-kortkommandon", keys:[
+      ["Visa/dölj överlägg","F3"],["Felsökningsalternativ","F3 + F6"],["Spellägesbytare","F3 + F4"],["Visa hitboxar","F3 + B"],
+      ["Visa chunkgränser","F3 + G"],["Avancerade inforutor","F3 + H"],["Kopiera position","F3 + C"],["Kopiera data","F3 + I"],
+      ["Rensa chatt","F3 + D"],["Uppdatera chunks","F3 + A"],["Uppdatera resurspaket","F3 + T"],["Växla till åskådare","F3 + N"],
+      ["Paus vid förlorad fokus","F3 + P"],["Bättre genomskinlighet","F3 + X"],["Profilering","F3 + L"],["Versionsinfo","F3 + V"],
+      ["Dumpa texturer","F3 + S"],["Profileringsdiagram","F3 + 1"],["Bildfrekvensdiagram","F3 + 2"],["Nätverksdiagram","F3 + 3"],
+      ["Ljuskartstextur","F3 + 4"]]}
+  ]
+};
+
+var OTHER = [
+  { id:"fortnite", name:"Fortnite", short:"FN", color:"#91569D", note:"Bygga snabbt och landa hett.",
+    rows:[["X-sensitivity",null],["Y-sensitivity",null],["Sikte (ADS)",null],["Kikarsikte",null],["Renderläge",null],["FPS-gräns",null],["Favoritlandning",null]]},
+  { id:"lethal", name:"Lethal Company", short:"LC", color:"#F2A55B", note:"Samla skrot och överlev nätterna.",
+    rows:[["Look sensitivity",null],["Röstchatt",null],["Favoritmåne",null],["Favoritföremål",null]]}
+];
+
+(function(){
+  var boards=document.getElementById('boards'), tabs=document.getElementById('tabs');
+  function esc(t){ return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  function rowsHtml(rows){
+    return rows.map(function(r){
+      var v=r[1];
+      var vh = v==null ? '<span class="todo">Fyll i</span>' : '<span class="v'+(r[2]?' hl':'')+'">'+esc(v)+'</span>';
+      return '<li><span class="k">'+esc(r[0])+'</span>'+vh+'</li>';
+    }).join('');
+  }
+  function head(short,color,name){ return '<div class="board-head"><span class="badge" style="--c:'+color+'" aria-hidden="true">'+esc(short)+'</span><h2>'+esc(name)+'</h2></div>'; }
+  function add(id,cls,html,name,color){
+    var s=document.createElement('section'); s.className='board wood '+cls; s.id=id; s.innerHTML=html; boards.appendChild(s);
+    var li=document.createElement('li'); li.innerHTML='<a href="#'+id+'"><span class="dot" style="--c:'+color+'" aria-hidden="true"></span>'+esc(name)+'</a>'; tabs.appendChild(li);
+  }
+
+  add('setup','full', head('PC','#FAE052','Setup')+'<p class="note">Datorn och prylarna jag spelar och målar med.</p><ul class="rows">'+rowsHtml(SETUP)+'</ul>','Setup','#FAE052');
+
+  function big(D){
+  var stats='<div class="stats">'+D.stats.map(function(x){return '<div class="stat'+(x[2]?' main':'')+'"><span class="l">'+esc(x[0])+'</span><span class="n">'+esc(x[1])+'</span></div>';}).join('')+'</div>';
+  var groups='<div class="groups">'+D.groups.map(function(g){
+    return '<details class="grp"'+(g.open?' open':'')+'><summary>'+esc(g.t)+'<span class="count">'+g.rows.length+' st</span></summary><ul class="rows">'+rowsHtml(g.rows)+'</ul></details>';
+  }).join('')+
+    (D.keyGroups||(D.keys?[{t:"Tangenter",keys:D.keys}]:[])).map(function(G){return '<details class="grp wide"><summary>'+esc(G.t)+'<span class="count">'+G.keys.length+' st</span></summary><ul class="keys">'+
+    G.keys.map(function(k){return '<li><span>'+esc(k[0])+'</span><kbd>'+esc(k[1])+'</kbd></li>';}).join('')+'</ul></details>';}).join('')+'</div>';
+  var codes=(D.codes||[]).map(function(c,i){
+    if(c[1]==null) return '<span class="code-label">'+esc(c[0])+' <span class="todo">Fyll i</span></span>';
+    return '<div class="xh-row"><div class="xh" role="img" aria-label="Ungefärlig bild av hårkorset: cyan statiskt kors utan prick"><i class="a t"></i><i class="a b"></i><i class="a l"></i><i class="a r"></i></div><div class="xh-code"><span class="code-label">'+esc(c[0])+'</span><div class="code"><code id="cs-c'+i+'">'+esc(c[1])+'</code><button class="copy" type="button" data-target="cs-c'+i+'">Kopiera</button></div><span class="xh-note">Klistra in under Hårkors → Dela eller importera i CS2.</span></div></div>';
+  }).join('');
+  if(D.skin) stats='<div class="mc-top"><figure class="skin"><img src="'+D.skin+'" alt="LoomBooms Minecraft-skin framifrån: brunt hår, gröna ögon, svart kavaj och ljusblå skjorta" width="160" height="320"><figcaption>Mitt skin</figcaption></figure>'+stats+'</div>';
+  return stats+groups+codes;
+  }
+  add('cs','full', head('CS','#20ACE4','Counter-Strike 2')+'<p class="note">Mitt main-spel. Tryck på en rubrik för att visa eller dölja den.</p>'+big(CS),'Counter-Strike 2','#20ACE4');
+  add('minecraft','full', head('MC','#73BB89','Minecraft')+'<p class="note">Bygga, gräva och överleva. Tryck på en rubrik för att visa eller dölja den.</p>'+big(MC),'Minecraft','#73BB89');
+
+  OTHER.forEach(function(b){
+    add(b.id,'', head(b.short,b.color,b.name)+'<p class="note">'+esc(b.note)+'</p><ul class="rows">'+rowsHtml(b.rows)+'</ul>', b.name, b.color);
+  });
+
+  boards.addEventListener('click',function(e){
+    var btn=e.target.closest('.copy'); if(!btn) return;
+    var el=document.getElementById(btn.dataset.target), text=el.textContent;
+    function done(){ btn.textContent='Kopierad!'; setTimeout(function(){btn.textContent='Kopiera';},1600); }
+    function fallback(){ var r=document.createRange(); r.selectNodeContents(el); var s=getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent='Markerad, tryck Ctrl+C'; }
+    if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done,fallback); } else fallback();
+  });
+})();
+</script>
+</body>
+</html>
