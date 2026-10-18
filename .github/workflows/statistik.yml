@@ -30,6 +30,7 @@ jobs:
           FACEIT_API_KEY: ${{ secrets.FACEIT_API_KEY }}
           FACEIT_NICKNAME: ${{ secrets.FACEIT_NICKNAME }}
           LEETIFY_API_KEY: ${{ secrets.LEETIFY_API_KEY }}
+          FORTNITE_API_KEY: ${{ secrets.FORTNITE_API_KEY }}
 
       - name: Spara den nya statistiken
         run: |
