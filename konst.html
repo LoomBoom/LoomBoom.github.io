@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LoomBoom Konstgalleri</title>
+<meta name="description" content="Alla målningar av LoomBoom i stort format.">
+<link rel="icon" href="bilder/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Fredoka:wght@500;600;700&family=Figtree:wght@400;500;700&display=swap">
+<style>
+/* Layout: a light "sky over the sea" gallery wall. One painting per row, shown as large as its own pixels allow, each in a thick cartoon frame like the paintings' outlines. */
+:root{
+  color-scheme: light;
+  --sky:#CFEFF6;
+  --sky-2:#A9E1EE;
+  --paper:#ffffff;
+  --ink:#121826;
+  --soft:#3f4c5e;
+  --bubble:#22D3D6;
+  --jasmine:#FDE69A;
+  --orange:#FFB347;
+  --line:3px solid var(--ink);
+  --title:"Luckiest Guy", "Fredoka", "Arial Black", sans-serif;
+  --display:"Fredoka", "Trebuchet MS", system-ui, sans-serif;
+  --body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:linear-gradient(var(--sky), var(--sky-2) 60%, #7FC6E8) fixed;color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;overflow-x:hidden;min-height:100vh;
+  padding-top:env(safe-area-inset-top, 0px);padding-bottom:env(safe-area-inset-bottom, 0px)}
+a{color:inherit;text-decoration:none}
+img{max-width:100%}
+[hidden]{display:none!important}
+:focus-visible{outline:3px dashed var(--orange);outline-offset:4px;border-radius:12px}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+
+.nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding-block:18px}
+.logo{display:block;width:64px;height:64px;filter:drop-shadow(3px 3px 0 var(--ink))}
+.logo img{width:100%;height:100%;display:block}
+.back{display:inline-block;background:var(--paper);border:var(--line);border-radius:999px;padding:6px 16px;font-weight:700;font-size:15px;box-shadow:3px 3px 0 var(--ink)}
+.back:hover{background:var(--jasmine)}
+
+header.head{text-align:center;padding-block:20px 36px}
+h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,104px);line-height:1;margin:0;color:var(--jasmine);-webkit-text-stroke:.05em var(--ink);paint-order:stroke fill;text-shadow:.045em .05em 0 var(--ink);text-wrap:balance}
+.lead{margin:14px auto 0;max-width:46ch;color:var(--soft);font-weight:500}
+
+/* QUICK JUMP */
+.jump{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;list-style:none;margin:22px 0 0;padding:0}
+.jump a{display:block;width:64px;height:48px;border:2.5px solid var(--ink);border-radius:10px;overflow:hidden;background:var(--paper);box-shadow:2px 2px 0 var(--ink);transition:transform .15s}
+.jump a:hover{transform:translateY(-3px)}
+.jump img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* ARTWORKS */
+.wall{display:grid;gap:clamp(48px,8vw,96px);padding-block:30px 80px}
+.art{margin:0;display:grid;justify-items:center;gap:14px;scroll-margin-top:24px}
+.frame{all:unset;cursor:zoom-in;display:block;background:var(--paper);border:var(--line);border-radius:20px;padding:clamp(8px,1.4vw,14px);box-shadow:8px 8px 0 var(--ink);max-width:100%;transition:transform .2s}
+.frame:hover{transform:translate(-2px,-2px)}
+.frame:focus-visible{outline:3px dashed var(--orange);outline-offset:6px}
+.frame img{display:block;border:2.5px solid var(--ink);border-radius:12px;height:auto;max-height:82vh;width:auto;max-width:100%}
+.art figcaption{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;text-align:center}
+.art .name{font-family:var(--display);font-weight:700;font-size:clamp(22px,3.5vw,30px);line-height:1.1}
+.art .size{font-size:13px;font-weight:700;background:var(--paper);border:2px solid var(--ink);border-radius:999px;padding:0 10px;color:var(--soft);font-variant-numeric:tabular-nums}
+
+footer{text-align:center;padding-block:10px 48px}
+footer .back{font-size:17px;padding:8px 22px}
+
+/* LIGHTBOX */
+.lightbox{position:fixed;inset:0;z-index:20;background:rgba(18,24,38,.92);display:grid;place-items:center;
+  padding:max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px))}
+.lightbox img{max-width:100%;max-height:92vh;border:var(--line);border-radius:12px;background:var(--paper)}
+.lb-btn{position:absolute;width:52px;height:52px;border-radius:50%;border:var(--line);background:var(--jasmine);font:700 22px var(--display);color:var(--ink);cursor:pointer;box-shadow:3px 3px 0 #000;display:grid;place-items:center}
+.lb-close{top:calc(14px + env(safe-area-inset-top, 0px));right:calc(14px + env(safe-area-inset-right, 0px))}
+.lb-prev{left:calc(14px + env(safe-area-inset-left, 0px));top:50%;transform:translateY(-50%)}
+.lb-next{right:calc(14px + env(safe-area-inset-right, 0px));top:50%;transform:translateY(-50%)}
+.lb-cap{position:absolute;left:50%;bottom:calc(16px + env(safe-area-inset-bottom, 0px));transform:translateX(-50%);background:var(--paper);border:var(--line);border-radius:999px;padding:3px 16px;font-weight:700;white-space:nowrap}
+
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.frame,.jump a{transition:none}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav class="nav">
+    <a class="logo" href="./" aria-label="Till startsidan"><img src="bilder/logo.png" alt="LoomBoom logga"></a>
+    <a class="back" href="./">← Tillbaka till startsidan</a>
+  </nav>
+
+  <header class="head">
+    <h1>Konstgalleri</h1>
+    <p class="lead">Allt här är målat av mig, LoomBoom. Tryck på en målning för att se den i helskärm.</p>
+    <ul class="jump" id="jump" aria-label="Hoppa till målning"></ul>
+  </header>
+
+  <main class="wall" id="wall"></main>
+
+  <footer>
+    <a class="back" href="./">← Tillbaka till startsidan</a>
+  </footer>
+</div>
+
+<div class="lightbox" id="lb" hidden role="dialog" aria-modal="true" aria-label="Målning i helskärm">
+  <img id="lb-img" alt="">
+  <button class="lb-btn lb-prev" type="button" aria-label="Föregående">‹</button>
+  <button class="lb-btn lb-next" type="button" aria-label="Nästa">›</button>
+  <button class="lb-btn lb-close" type="button" aria-label="Stäng">✕</button>
+  <span class="lb-cap" id="lb-cap"></span>
+</div>
+
+<script>
+// Lägg till nya målningar här: id, filnamn i mappen bilder, namn, bredd, höjd
+var ART = [
+  ["utter","utter.webp","Uttern vid ån",1920,1080],
+  ["manet","manet.webp","Manet i djupet",1920,1080],
+  ["halloween","halloween.webp","Halloween-natt",1920,1080],
+  ["koltrast","koltrast.webp","Koltrast i snön",1920,1080],
+  ["havet","ocean.webp","Ner i djupet",1920,5400],
+  ["katt","katt.webp","Glad katt",500,500],
+  ["arg-mas","arg-mas.webp","Arg mås",854,696],
+  ["mas-skriker","mas-skriker.webp","Måsen säger AAA",854,696],
+  ["liten-mas","liten-mas.webp","Liten mås på stranden",854,696],
+  ["mas-havet","mas-havet.webp","Mås vid havet",854,696],
+  ["gnico","gnico-banner.webp","GNICO-banner",1280,250]
+];
+(function(){
+  var wall=document.getElementById('wall'), jump=document.getElementById('jump');
+  ART.forEach(function(a,i){
+    var f=document.createElement('figure'); f.className='art'; f.id=a[0];
+    f.innerHTML='<button class="frame" type="button" aria-label="Visa '+a[2]+' i helskärm">'+
+      '<img src="bilder/'+a[1]+'" alt="'+a[2]+', målad av LoomBoom" width="'+a[3]+'" height="'+a[4]+'"'+(i>1?' loading="lazy"':'')+'></button>'+
+      '<figcaption><span class="name">'+a[2]+'</span><span class="size">'+a[3]+' × '+a[4]+' px</span></figcaption>';
+    f.querySelector('button').addEventListener('click',function(){open(i);});
+    wall.appendChild(f);
+    var li=document.createElement('li');
+    li.innerHTML='<a href="#'+a[0]+'" aria-label="'+a[2]+'"><img src="bilder/'+a[1]+'" alt="" loading="lazy"></a>';
+    jump.appendChild(li);
+  });
+
+  var lb=document.getElementById('lb'), im=document.getElementById('lb-img'), cap=document.getElementById('lb-cap'), cur=0, last=null;
+  function show(i){ cur=(i+ART.length)%ART.length; var a=ART[cur]; im.src='bilder/'+a[1]; im.alt=a[2]; cap.textContent=a[2]; }
+  function open(i){ last=document.activeElement; show(i); lb.hidden=false; lb.querySelector('.lb-close').focus(); }
+  function close(){ lb.hidden=true; im.removeAttribute('src'); if(last) last.focus(); }
+  lb.querySelector('.lb-close').addEventListener('click',close);
+  lb.querySelector('.lb-prev').addEventListener('click',function(){show(cur-1);});
+  lb.querySelector('.lb-next').addEventListener('click',function(){show(cur+1);});
+  lb.addEventListener('click',function(e){ if(e.target===lb) close(); });
+  document.addEventListener('keydown',function(e){
+    if(lb.hidden) return;
+    if(e.key==='Escape') close();
+    if(e.key==='ArrowLeft') show(cur-1);
+    if(e.key==='ArrowRight') show(cur+1);
+  });
+})();
+</script>
+</body>
+</html>

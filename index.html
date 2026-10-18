@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="LoomBoom – gamer, streamer och konstnär. Twitch, TikTok, Discord, X och Esplay.">
+<meta name="description" content="LoomBoom – gamer och konstnär. Spelar CS, Minecraft, Fortnite och Lethal Company, och målar i Paint.">
 <link rel="icon" href="bilder/logo.png">
 <title>LoomBoom</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Fredoka:wght@500;600;700&family=Figtree:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Pirata+One&family=Fredoka:wght@500;600;700&family=Figtree:wght@400;500;700&display=swap">
 <style>
-/* Layout: a dive. The user's tall ocean painting is a fixed layer that slides from surface (top of page) to seabed (bottom of page) as you scroll; outlined cartoon cards float over it with open water between them. */
+/* Layout: a dive. The user's tall ocean painting is a fixed layer that slides from surface to seabed as you scroll; outlined cartoon panels sit beside each creature. Social links are the painting's own cyan bubbles. */
 :root{
   color-scheme: light;
   --water:#2a6cf5;
@@ -19,12 +19,18 @@
   --ink:#121826;
   --soft:#4a5568;
   --bubble:#22D3D6;
+  --bubble-2:#8EF0F0;
   --pink:#F6B6F4;
   --jelly:#B79BF2;
   --jasmine:#FDE69A;
   --mint:#73BB89;
   --orange:#FFB347;
   --line:3px solid var(--ink);
+  --wood:#D39A5D;
+  --wood-2:#C0834A;
+  --seam:#5B3A1C;
+  --nail:#3A2614;
+  --pirate:"Pirata One", "Fredoka", Georgia, serif;
   --title:"Luckiest Guy", "Fredoka", "Arial Black", sans-serif;
   --display:"Fredoka", "Trebuchet MS", system-ui, sans-serif;
   --body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -49,80 +55,90 @@ a{color:inherit;text-decoration:none}
 .logo{display:block;width:72px;height:72px;filter:drop-shadow(3px 3px 0 var(--ink))}
 .logo img{width:100%;height:100%;display:block}
 .nav ul{display:flex;gap:8px;list-style:none;margin:0;padding:0;flex-wrap:wrap}
-.nav ul a{display:block;background:var(--paper);border:var(--line);border-radius:999px;padding:4px 14px;font-weight:700;font-size:14px;box-shadow:2px 2px 0 var(--ink)}
+.nav ul a{display:block;background:repeating-linear-gradient(181deg, rgba(91,58,28,.14) 0 1px, transparent 1px 6px), linear-gradient(var(--wood), var(--wood-2));border:var(--line);border-radius:6px;padding:4px 14px;font-family:var(--pirate);font-size:19px;line-height:1.2;box-shadow:2px 2px 0 var(--ink)}
 .nav ul a:hover{background:var(--jasmine)}
 
-.hero{padding-block:clamp(40px,10vw,110px) clamp(120px,24vw,260px);text-align:center}
+.hero{padding-block:clamp(32px,8vw,90px) clamp(110px,22vw,240px);text-align:center}
 h1{font-family:var(--title);font-weight:400;font-size:clamp(46px,13vw,168px);line-height:1;margin:0;white-space:nowrap;letter-spacing:.02em}
 h1 span{display:inline-block;color:var(--c);-webkit-text-stroke:.05em var(--ink);paint-order:stroke fill;text-shadow:.045em .05em 0 var(--ink);animation:bob 3.2s ease-in-out infinite;animation-delay:calc(var(--i) * -.4s)}
 @keyframes bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-.06em) rotate(2deg)}}
-.hi{display:inline-block;margin-top:18px;background:var(--paper);border:var(--line);border-radius:18px;padding:10px 18px;font-weight:500;max-width:40ch;box-shadow:4px 4px 0 var(--ink)}
-.dive{display:block;margin:28px auto 0;width:max-content;font-family:var(--display);font-weight:700;color:#fff;-webkit-text-stroke:1px var(--ink);text-shadow:2px 2px 0 var(--ink);font-size:20px}
-.dive::after{content:"";display:block;width:14px;height:14px;margin:6px auto 0;border-right:3px solid #fff;border-bottom:3px solid #fff;transform:rotate(45deg);animation:sink 1.6s ease-in-out infinite}
-@keyframes sink{50%{transform:translateY(6px) rotate(45deg)}}
+.hi{display:inline-block;margin-top:18px;border:var(--line);border-radius:8px;padding:12px 22px;font-weight:600;max-width:42ch;box-shadow:4px 4px 0 var(--ink);transform:rotate(-1deg);
+  background:radial-gradient(circle at 12px 50%, var(--nail) 0 3px, transparent 3.5px), radial-gradient(circle at calc(100% - 12px) 50%, var(--nail) 0 3px, transparent 3.5px), repeating-linear-gradient(181deg, rgba(91,58,28,.14) 0 1px, transparent 1px 6px), linear-gradient(var(--wood), var(--wood-2))}
+
+/* SEA BUBBLES (socials) – float in the open water between the planks */
+.gap{position:relative}
+.seabub{position:absolute;z-index:2;width:clamp(70px,9vw,104px);aspect-ratio:1;max-width:100%;animation:float 4s ease-in-out infinite;animation-delay:calc(var(--i) * -.9s)}
+.seabub.l{left:0}
+.seabub.r{right:0}
+@keyframes float{0%,100%{transform:translate(0,0)}33%{transform:translate(4px,-10px)}66%{transform:translate(-3px,-4px)}}
+.bub{position:relative;display:grid;place-items:center;width:100%;height:100%;border-radius:50%;border:var(--line);
+  background:radial-gradient(circle at 45% 58%, #ffffff 0%, var(--tint) 62%, color-mix(in srgb, var(--tint) 65%, var(--bubble)) 100%);
+  box-shadow:3px 4px 0 var(--ink);transition:transform .2s cubic-bezier(.3,1.6,.5,1)}
+.bub::after{content:"";position:absolute;top:13%;right:16%;width:20%;height:20%;border-radius:50%;background:#fff;border:2px solid var(--ink)}
+.bub svg{width:42%;height:42%;fill:var(--ink)}
+.bub:hover{transform:scale(1.15) rotate(-8deg)}
+.bub:active{transform:scale(.9)}
+.bub .tip{position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%) translateY(-4px);background:var(--ink);color:#fff;font:600 13px var(--display);
+  padding:3px 10px;border-radius:999px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s, transform .15s}
+.bub:hover .tip,.bub:focus-visible .tip{opacity:1;transform:translateX(-50%)}
+.t-twitch{--tint:#C7A6FF}
+.t-tiktok{--tint:#FFA3CB}
+.t-discord{--tint:#A3B1FF}
+.t-x{--tint:#DCE4EC}
+.t-esplay{--tint:#C9F2A0}
+.bub .ico-img{width:46%;height:auto;display:block;filter:drop-shadow(1.5px 0 0 var(--ink)) drop-shadow(-1.5px 0 0 var(--ink)) drop-shadow(0 1.5px 0 var(--ink)) drop-shadow(0 -1.5px 0 var(--ink))}
 
 /* PANELS */
-.panel{background:var(--paper);border:var(--line);border-radius:26px;box-shadow:6px 6px 0 var(--ink);padding:clamp(20px,4vw,32px)}
-.gap{height:clamp(140px,22vw,300px)}
 .sea{padding-left:max(24px, 4vw, env(safe-area-inset-left, 0px));padding-right:max(24px, 4vw, env(safe-area-inset-right, 0px))}
-.panel.left{width:min(46vw,600px);margin-right:auto}
-.panel.right{width:min(36vw,540px);margin-left:auto}
+.panel{position:relative;border:var(--line);border-radius:10px;box-shadow:inset 0 0 0 9px rgba(120,76,36,.45), inset 0 0 0 11px rgba(58,38,20,.55), 7px 7px 0 var(--ink);padding:clamp(24px,4vw,34px) clamp(22px,4vw,34px);
+  background:
+    radial-gradient(ellipse 22px 9px at 78% 30%, rgba(91,58,28,.35) 0 40%, transparent 70%),
+    radial-gradient(ellipse 16px 7px at 18% 72%, rgba(91,58,28,.3) 0 40%, transparent 70%),
+    repeating-linear-gradient(181deg, rgba(91,58,28,.13) 0 1px, transparent 1px 7px),
+    repeating-linear-gradient(179deg, rgba(255,235,200,.12) 0 2px, transparent 2px 13px),
+    linear-gradient(var(--wood), var(--wood-2))}
+.panel::before{content:"";position:absolute;inset:4px;pointer-events:none;
+  background:
+    radial-gradient(circle, var(--nail) 0 3.5px, #9b7a55 4px, transparent 5px) 0 0/12px 12px no-repeat,
+    radial-gradient(circle, var(--nail) 0 3.5px, #9b7a55 4px, transparent 5px) 100% 0/12px 12px no-repeat,
+    radial-gradient(circle, var(--nail) 0 3.5px, #9b7a55 4px, transparent 5px) 0 100%/12px 12px no-repeat,
+    radial-gradient(circle, var(--nail) 0 3.5px, #9b7a55 4px, transparent 5px) 100% 100%/12px 12px no-repeat}
+.panel.left{transform:rotate(-.8deg)}
+.panel.right{transform:rotate(.7deg)}
+.panel.left{width:min(46vw,560px);margin-right:auto}
+.panel.right{width:min(34vw,460px);margin-left:auto}
+.gap{height:clamp(140px,24vw,320px)}
 @media (max-width:900px){.panel.left,.panel.right{width:auto;margin:0}}
-.depth{display:inline-block;font-family:var(--display);font-weight:600;font-size:13px;background:var(--ink);color:var(--bubble);border-radius:999px;padding:2px 12px;margin-bottom:10px;font-variant-numeric:tabular-nums}
-h2{font-family:var(--display);font-weight:700;font-size:clamp(30px,5vw,42px);line-height:1.05;margin:0}
-.sub{color:var(--soft);margin:6px 0 22px;max-width:58ch}
+.depth{display:inline-block;font-family:var(--display);font-weight:600;font-size:13px;background:var(--ink);color:var(--jasmine);border-radius:999px;padding:2px 12px;margin-bottom:10px;font-variant-numeric:tabular-nums}
+h2{font-family:var(--pirate);font-weight:400;font-size:clamp(36px,5.5vw,50px);line-height:1;margin:0;color:var(--ink);letter-spacing:.01em}
+.sub{color:#4a2c12;font-weight:600;margin:6px 0 20px;max-width:58ch}
 
-/* SOCIALS */
-.socials{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));gap:12px}
-.social{display:flex;align-items:center;gap:12px;background:var(--paper-2);border:var(--line);border-radius:18px;padding:12px 14px;transition:transform .15s, box-shadow .15s}
-.social:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--ink);background:var(--paper)}
-.social .ico{width:44px;height:44px;flex:none;border-radius:50%;border:var(--line);display:grid;place-items:center;background:var(--c)}
-.social .ico svg{width:20px;height:20px;fill:var(--ink)}
-.social .txt{min-width:0}
-.social .name{font-family:var(--display);font-weight:600;font-size:19px;line-height:1.1;display:block}
-.social .handle{font-size:13px;color:var(--soft);display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-
-/* GALLERY */
-.gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.shot{margin:0;border:var(--line);border-radius:16px;overflow:hidden;background:var(--paper);display:flex;flex-direction:column}
-.shot button{all:unset;cursor:zoom-in;display:block}
-.shot button:focus-visible{outline:3px dashed var(--bubble);outline-offset:-6px}
-.shot img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;border-bottom:var(--line);transition:transform .25s}
-.shot button:hover img{transform:scale(1.04)}
-.shot.wide{grid-column:1 / -1}
-.shot.wide img{aspect-ratio:1280/250}
-.shot figcaption{padding:8px 12px 10px;font-weight:700;font-size:15px;line-height:1.3}
-
-/* LIGHTBOX */
-.lightbox{position:fixed;inset:0;z-index:20;background:rgba(18,24,38,.86);display:grid;place-items:center;
-  padding:max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px))}
-.lightbox figure{margin:0;max-width:min(1100px,100%);display:grid;gap:10px;justify-items:center}
-.lightbox img{max-width:100%;max-height:78vh;border:var(--line);border-radius:16px;background:var(--paper);box-shadow:6px 6px 0 var(--ink)}
-.lightbox figcaption{background:var(--paper);border:var(--line);border-radius:999px;padding:4px 16px;font-weight:700}
-.lb-close{position:absolute;top:calc(14px + env(safe-area-inset-top, 0px));right:calc(14px + env(safe-area-inset-right, 0px));width:48px;height:48px;border-radius:50%;border:var(--line);background:var(--jasmine);font:700 22px var(--display);cursor:pointer;box-shadow:3px 3px 0 var(--ink)}
+/* ART PREVIEW */
+.preview{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.preview a{display:block;border:var(--line);border-radius:6px;overflow:hidden;background:var(--paper-2);box-shadow:2px 2px 0 var(--ink)}
+.preview img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;transition:transform .25s}
+.preview a:hover img{transform:scale(1.06)}
+.btn{display:inline-flex;align-items:center;gap:8px;margin-top:18px;background:var(--jasmine);border:var(--line);border-radius:999px;padding:6px 20px;font-family:var(--pirate);font-size:22px;box-shadow:3px 3px 0 var(--ink);transition:transform .15s, box-shadow .15s}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink)}
 
 /* PROFILE */
-.profile{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:24px}
-.profile > div{min-width:0}
-.profile h3{font-family:var(--display);font-weight:600;font-size:24px;margin:0 0 8px}
 .rows{list-style:none;margin:0;padding:0}
-.rows li{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:2px dashed #d5e8f0}
+.rows li{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:2px dashed rgba(91,58,28,.55)}
 .rows li:first-child{border-top:0}
 .rows .k{font-weight:700}
-.rows .v{color:var(--soft);text-align:right}
+.rows .v{color:#4a2c12;font-weight:500;text-align:right}
 .tag{background:var(--pink);border:2px solid var(--ink);border-radius:999px;padding:0 10px;font-weight:700;font-size:13px}
 
-footer{padding-block:clamp(200px,34vw,420px) 40px;text-align:center}
-footer .gg{display:inline-block;background:var(--paper);border:var(--line);border-radius:18px;padding:12px 22px;box-shadow:4px 4px 0 var(--ink)}
-footer .gg b{font-family:var(--title);font-weight:400;font-size:28px;color:var(--orange);-webkit-text-stroke:1.5px var(--ink);paint-order:stroke fill;display:block;line-height:1.1}
-footer .gg span{font-size:14px;color:var(--soft)}
+footer{padding-top:clamp(220px,40vw,520px);padding-bottom:max(24px, env(safe-area-inset-bottom, 0px));display:flex;justify-content:center}
+footer .gg{position:relative;width:min(380px,100%);border:var(--line);border-radius:8px;padding:12px 20px 14px;box-shadow:5px 5px 0 var(--ink);text-align:center;transform:rotate(1deg);
+  background:radial-gradient(circle at 12px 12px, var(--nail) 0 3px, transparent 3.5px), radial-gradient(circle at calc(100% - 12px) 12px, var(--nail) 0 3px, transparent 3.5px), repeating-linear-gradient(181deg, rgba(91,58,28,.14) 0 1px, transparent 1px 6px), linear-gradient(var(--wood), var(--wood-2))}
+footer .gg b{font-family:var(--pirate);font-weight:400;font-size:32px;color:var(--ink);display:block;line-height:1.1}
+footer .gg span{font-size:14px;color:#4a2c12;font-weight:600}
 
-@media (prefers-reduced-motion:reduce){h1 span,.dive::after{animation:none}.social{transition:none}}
+@media (prefers-reduced-motion:reduce){h1 span,.seabub{animation:none}.bub,.btn,.preview img{transition:none}}
 </style>
 </head>
 <body>
-
-<div class="lightbox" id="lb" hidden role="dialog" aria-modal="true" aria-label="Bild"><button class="lb-close" type="button" aria-label="Stäng">✕</button><figure><img id="lb-img" alt=""><figcaption id="lb-cap"></figcaption></figure></div>
 
 <div class="ocean" aria-hidden="true"><img id="ocean" src="bilder/ocean.webp" alt=""></div>
 
@@ -131,93 +147,66 @@ footer .gg span{font-size:14px;color:var(--soft)}
     <nav class="nav">
       <a class="logo" href="#"><img src="bilder/logo.png" alt="LoomBoom logga"></a>
       <ul>
-        <li><a href="#socials">Socials</a></li>
-        <li><a href="#konst">Konst</a></li>
-        <li><a href="#profil">Profil</a></li>
+        <li><a href="konst.html">Konstgalleri</a></li>
+        <li><a href="#om">Om mig</a></li>
       </ul>
     </nav>
 
     <header class="hero">
-      <h1 aria-label="LoomBoom"><span aria-hidden="true" style="--c:#FDE69A;--i:0">L</span><span aria-hidden="true" style="--c:#22D3D6;--i:1">o</span><span aria-hidden="true" style="--c:#F6B6F4;--i:2">o</span><span aria-hidden="true" style="--c:#73BB89;--i:3">m</span><span aria-hidden="true" style="--c:#FFB347;--i:4">B</span><span aria-hidden="true" style="--c:#B79BF2;--i:5">o</span><span aria-hidden="true" style="--c:#FDE69A;--i:6">o</span><span aria-hidden="true" style="--c:#22D3D6;--i:7">m</span></h1>
-      <p class="hi">Hej! Jag spelar, streamar och målar. Välkommen ner i djupet.</p>
-      <a class="dive" href="#socials">Dyk ner</a>
+      <h1 aria-label="LoomBoom"><span aria-hidden="true" style="--c:#FAE052;--i:0">L</span><span aria-hidden="true" style="--c:#20ACE4;--i:1">o</span><span aria-hidden="true" style="--c:#73BB89;--i:2">o</span><span aria-hidden="true" style="--c:#91569D;--i:3">m</span><span aria-hidden="true" style="--c:#FAE052;--i:4">B</span><span aria-hidden="true" style="--c:#20ACE4;--i:5">o</span><span aria-hidden="true" style="--c:#73BB89;--i:6">o</span><span aria-hidden="true" style="--c:#91569D;--i:7">m</span></h1>
+      <p class="hi">Ahoj! Jag spelar spel och målar i Paint. Dyk ner och klicka på bubblorna för att hitta mig.</p>
     </header>
   </div>
 
   <main class="sea">
-    <section id="socials" class="panel left" data-creature="0.16">
+    <section id="konst" class="panel left" data-creature="0.16">
       <span class="depth">↓ 10 m</span>
-      <h2>Hitta mig här</h2>
-      <p class="sub">Alla mina kanaler på ett ställe.</p>
-      <div class="socials">
-        <a class="social" style="--c:var(--jelly)" href="https://www.twitch.tv/looombooom" target="_blank" rel="noopener">
-          <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.3 3 3 6.4v13.1h4.5V22H10l2.5-2.5h3.7l4.8-4.8V3H4.3Zm15.9 10.8-2.9 2.9h-4.6l-2.5 2.5v-2.5H6.4V4.7h13.8v9.1ZM17.4 7.8v4.8h-1.7V7.8h1.7Zm-4.6 0v4.8h-1.7V7.8h1.7Z"/></svg></span>
-          <span class="txt"><span class="name">Twitch</span><span class="handle">twitch.tv/looombooom</span></span></a>
-        <a class="social" style="--c:var(--bubble)" href="https://www.tiktok.com/@loomboom10" target="_blank" rel="noopener">
-          <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.6 2h-3.4v13.4a2.9 2.9 0 1 1-2-2.8V9.1a6.3 6.3 0 1 0 5.4 6.3V8.6a8 8 0 0 0 4.6 1.5V6.7a4.7 4.7 0 0 1-4.6-4.7Z"/></svg></span>
-          <span class="txt"><span class="name">TikTok</span><span class="handle">@loomboom10</span></span></a>
-        <a class="social" style="--c:var(--mint)" href="https://discord.gg/jajX36mE5Q" target="_blank" rel="noopener">
-          <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.6 5.3A17 17 0 0 0 15.4 4l-.5 1.1a15.6 15.6 0 0 0-5.8 0L8.6 4a17 17 0 0 0-4.2 1.3C1.7 9.3 1 13.2 1.3 17a17 17 0 0 0 5.2 2.6l1.1-1.8a11 11 0 0 1-1.7-.8l.4-.3a12.2 12.2 0 0 0 11.4 0l.4.3-1.7.8 1.1 1.8a17 17 0 0 0 5.2-2.6c.4-4.4-.7-8.3-3.1-11.7ZM8.7 14.7c-1 0-1.9-1-1.9-2.1s.8-2.1 1.9-2.1 1.9 1 1.9 2.1-.8 2.1-1.9 2.1Zm6.6 0c-1 0-1.9-1-1.9-2.1s.8-2.1 1.9-2.1 1.9 1 1.9 2.1-.8 2.1-1.9 2.1Z"/></svg></span>
-          <span class="txt"><span class="name">Discord</span><span class="handle">Gå med i servern</span></span></a>
-        <a class="social" style="--c:var(--paper-2)" href="https://x.com/LooomBooom" target="_blank" rel="noopener">
-          <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.8 3h3.1l-6.8 7.7L22 21h-6.2l-4.9-6.4L5.3 21H2.2l7.2-8.3L1.8 3h6.4l4.4 5.9L17.8 3Zm-1.1 16.2h1.7L7.3 4.7H5.5l11.2 14.5Z"/></svg></span>
-          <span class="txt"><span class="name">X</span><span class="handle">@LooomBooom</span></span></a>
-        <a class="social" style="--c:var(--orange)" href="https://esplay.com/loomboom/?r=1314559669" target="_blank" rel="noopener">
-          <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 3V2H6v1H2v3a5 5 0 0 0 4.4 5 6 6 0 0 0 4.6 3.9V18H8v2H7v2h10v-2h-1v-2h-3v-3.1A6 6 0 0 0 17.6 11 5 5 0 0 0 22 6V3h-4ZM4 6V5h2v3.8A3 3 0 0 1 4 6Zm16 0a3 3 0 0 1-2 2.8V5h2v1Z"/></svg></span>
-          <span class="txt"><span class="name">Esplay</span><span class="handle">esplay.com/loomboom</span></span></a>
-      </div>
-    </section>
-
-    <div class="gap" aria-hidden="true"></div>
-
-    <section id="konst" class="panel right" data-creature="0.45">
-      <span class="depth">↓ 40 m</span>
       <h2>Min konst</h2>
-      <p class="sub">Allt här är målat av mig. Tryck på en bild för att se den större.</p>
-      <div class="gallery">
-        <figure class="shot"><button type="button" data-full="bilder/manet.webp" aria-label="Visa större: Manet i djupet"><img src="bilder/manet.webp" alt="Manet i djupet, målad av LoomBoom" loading="lazy"></button><figcaption>Manet i djupet</figcaption></figure>
-        <figure class="shot"><button type="button" data-full="bilder/halloween.webp" aria-label="Visa större: Halloween-natt"><img src="bilder/halloween.webp" alt="Halloween-natt, målad av LoomBoom" loading="lazy"></button><figcaption>Halloween-natt</figcaption></figure>
-        <figure class="shot"><button type="button" data-full="bilder/utter.webp" aria-label="Visa större: Uttern vid ån"><img src="bilder/utter.webp" alt="Uttern vid ån, målad av LoomBoom" loading="lazy"></button><figcaption>Uttern vid ån</figcaption></figure>
-        <figure class="shot"><button type="button" data-full="bilder/koltrast.webp" aria-label="Visa större: Koltrast i snön"><img src="bilder/koltrast.webp" alt="Koltrast i snön, målad av LoomBoom" loading="lazy"></button><figcaption>Koltrast i snön</figcaption></figure>
-        <figure class="shot"><button type="button" data-full="bilder/katt.webp" aria-label="Visa större: Glad katt"><img src="bilder/katt.webp" alt="Glad katt, målad av LoomBoom" loading="lazy"></button><figcaption>Glad katt</figcaption></figure>
-        <figure class="shot"><button type="button" data-full="bilder/arg-mas.webp" aria-label="Visa större: Arg mås"><img src="bilder/arg-mas.webp" alt="Arg mås, målad av LoomBoom" loading="lazy"></button><figcaption>Arg mås</figcaption></figure>
-        <figure class="shot"><button type="button" data-full="bilder/mas-skriker.webp" aria-label="Visa större: Måsen säger AAA"><img src="bilder/mas-skriker.webp" alt="Måsen säger AAA, målad av LoomBoom" loading="lazy"></button><figcaption>Måsen säger AAA</figcaption></figure>
-        <figure class="shot"><button type="button" data-full="bilder/liten-mas.webp" aria-label="Visa större: Liten mås på stranden"><img src="bilder/liten-mas.webp" alt="Liten mås på stranden, målad av LoomBoom" loading="lazy"></button><figcaption>Liten mås på stranden</figcaption></figure>
-        <figure class="shot"><button type="button" data-full="bilder/mas-havet.webp" aria-label="Visa större: Mås vid havet"><img src="bilder/mas-havet.webp" alt="Mås vid havet, målad av LoomBoom" loading="lazy"></button><figcaption>Mås vid havet</figcaption></figure>
-        <figure class="shot wide"><button type="button" data-full="bilder/gnico-banner.webp" aria-label="Visa större: GNICO-banner"><img src="bilder/gnico-banner.webp" alt="GNICO-banner, målad av LoomBoom" loading="lazy"></button><figcaption>GNICO-banner</figcaption></figure>
+      <p class="sub">Allt jag målar hamnar i mitt konstgalleri.</p>
+      <div class="preview">
+        <a href="konst.html#utter"><img src="bilder/utter.webp" alt="Uttern vid ån" loading="lazy"></a>
+        <a href="konst.html#halloween"><img src="bilder/halloween.webp" alt="Halloween-natt" loading="lazy"></a>
+        <a href="konst.html#koltrast"><img src="bilder/koltrast.webp" alt="Koltrast i snön" loading="lazy"></a>
+        <a href="konst.html#katt"><img src="bilder/katt.webp" alt="Glad katt" loading="lazy"></a>
       </div>
+      <a class="btn" href="konst.html">Se hela galleriet →</a>
     </section>
 
-    <div class="gap" aria-hidden="true"></div>
+    <div class="gap"><div class="seabub l" style="top:8%;--i:0"><a class="bub t-twitch" href="https://www.twitch.tv/looombooom" target="_blank" rel="noopener" aria-label="Twitch"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.3 3 3 6.4v13.1h4.5V22H10l2.5-2.5h3.7l4.8-4.8V3H4.3Zm15.9 10.8-2.9 2.9h-4.6l-2.5 2.5v-2.5H6.4V4.7h13.8v9.1ZM17.4 7.8v4.8h-1.7V7.8h1.7Zm-4.6 0v4.8h-1.7V7.8h1.7Z"/></svg><span class="tip" aria-hidden="true">Twitch</span></a></div><div class="seabub r" style="top:48%;--i:1"><a class="bub t-tiktok" href="https://www.tiktok.com/@loomboom10" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.6 2h-3.4v13.4a2.9 2.9 0 1 1-2-2.8V9.1a6.3 6.3 0 1 0 5.4 6.3V8.6a8 8 0 0 0 4.6 1.5V6.7a4.7 4.7 0 0 1-4.6-4.7Z"/></svg><span class="tip" aria-hidden="true">TikTok</span></a></div></div>
 
-    <section id="profil" class="panel left" data-creature="0.66">
+    <section id="om" class="panel right" data-creature="0.45">
+      <span class="depth">↓ 40 m</span>
+      <h2>Spelar nu</h2>
+      <p class="sub">Det som går varmt just nu.</p>
+      <ul class="rows">
+        <li><span class="k">Counter-Strike</span><span class="tag">Main</span></li>
+        <li><span class="k">Minecraft</span></li>
+        <li><span class="k">Fortnite</span></li>
+        <li><span class="k">Lethal Company</span></li>
+        <li><span class="k">…och mycket mer</span></li>
+      </ul>
+    </section>
+
+    <div class="gap"><div class="seabub l" style="top:12%;--i:2"><a class="bub t-discord" href="https://discord.gg/jajX36mE5Q" target="_blank" rel="noopener" aria-label="Discord"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.6 5.3A17 17 0 0 0 15.4 4l-.5 1.1a15.6 15.6 0 0 0-5.8 0L8.6 4a17 17 0 0 0-4.2 1.3C1.7 9.3 1 13.2 1.3 17a17 17 0 0 0 5.2 2.6l1.1-1.8a11 11 0 0 1-1.7-.8l.4-.3a12.2 12.2 0 0 0 11.4 0l.4.3-1.7.8 1.1 1.8a17 17 0 0 0 5.2-2.6c.4-4.4-.7-8.3-3.1-11.7ZM8.7 14.7c-1 0-1.9-1-1.9-2.1s.8-2.1 1.9-2.1 1.9 1 1.9 2.1-.8 2.1-1.9 2.1Zm6.6 0c-1 0-1.9-1-1.9-2.1s.8-2.1 1.9-2.1 1.9 1 1.9 2.1-.8 2.1-1.9 2.1Z"/></svg><span class="tip" aria-hidden="true">Discord</span></a></div><div class="seabub r" style="top:50%;--i:3"><a class="bub t-x" href="https://x.com/LooomBooom" target="_blank" rel="noopener" aria-label="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.8 3h3.1l-6.8 7.7L22 21h-6.2l-4.9-6.4L5.3 21H2.2l7.2-8.3L1.8 3h6.4l4.4 5.9L17.8 3Zm-1.1 16.2h1.7L7.3 4.7H5.5l11.2 14.5Z"/></svg><span class="tip" aria-hidden="true">X</span></a></div></div>
+
+    <section id="setup" class="panel left" data-creature="0.66">
       <span class="depth">↓ 80 m</span>
-      <h2>Om mig</h2>
-      <p class="sub">Vad jag spelar och vad jag spelar på.</p>
-      <div class="profile">
-        <div>
-          <h3>Spelar nu</h3>
-          <ul class="rows">
-            <li><span class="k">Fortnite</span><span class="tag">Main</span></li>
-            <li><span class="k">Minecraft</span><span class="v">Survival-serie</span></li>
-            <li><span class="k">Rocket League</span><span class="v">Platinum</span></li>
-            <li><span class="k">Valorant</span><span class="v">Ibland</span></li>
-          </ul>
-        </div>
-        <div>
-          <h3>Mitt setup</h3>
-          <ul class="rows">
-            <li><span class="k">Grafikkort</span><span class="v">RTX 4060</span></li>
-            <li><span class="k">Skärm</span><span class="v">27″ · 165 Hz</span></li>
-            <li><span class="k">Mus</span><span class="v">800 DPI</span></li>
-            <li><span class="k">Ritprogram</span><span class="v">Ditt program här</span></li>
-          </ul>
-        </div>
-      </div>
+      <h2>Mitt setup</h2>
+      <p class="sub">Grejerna bakom spelandet och målningarna.</p>
+      <ul class="rows">
+        <li><span class="k">Grafikkort</span><span class="v">GeForce GTX 1660 SUPER</span></li>
+        <li><span class="k">Mus</span><span class="v">1100 DPI</span></li>
+        <li><span class="k">Ritprogram</span><span class="v">Paint</span></li>
+      </ul>
     </section>
+
+    <div class="gap"><div class="seabub r" style="top:30%;--i:4"><a class="bub t-esplay" href="https://esplay.com/loomboom/?r=1314559669" target="_blank" rel="noopener" aria-label="Esplay"><img class="ico-img" src="bilder/esplay.png" alt=""><span class="tip" aria-hidden="true">Esplay</span></a></div></div>
 
     <footer>
-      <div class="gg"><b>Du nådde botten!</b><span>LoomBoom · All konst målad av LoomBoom</span></div>
+      <div class="gg">
+        <b>Du nådde botten!</b>
+        <span>LoomBoom · All konst målad av LoomBoom</span>
+      </div>
     </footer>
   </main>
 </div>
@@ -261,20 +250,6 @@ footer .gg span{font-size:14px;color:var(--soft)}
   img.addEventListener('load', update);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(update);
   update();
-})();
-</script>
-<script>
-(function(){
-  var lb=document.getElementById('lb'), im=document.getElementById('lb-img'), cap=document.getElementById('lb-cap'), last=null;
-  function close(){ lb.hidden=true; im.removeAttribute('src'); if(last) last.focus(); }
-  document.querySelectorAll('.shot button').forEach(function(b){
-    b.addEventListener('click', function(){
-      last=b; im.src=b.dataset.full; var c=b.parentNode.querySelector('figcaption').textContent;
-      im.alt=c; cap.textContent=c; lb.hidden=false; lb.querySelector('.lb-close').focus();
-    });
-  });
-  lb.addEventListener('click', function(e){ if(e.target===lb || e.target.closest('.lb-close')) close(); });
-  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && !lb.hidden) close(); });
 })();
 </script>
 
