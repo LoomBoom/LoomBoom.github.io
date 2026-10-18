@@ -8,75 +8,105 @@
 <link rel="icon" href="bilder/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Fredoka:wght@500;600;700&family=Figtree:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Pirata+One&family=Fredoka:wght@500;600;700&family=Figtree:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap">
 <style>
-/* Layout: a light "sky over the sea" gallery wall. One painting per row, shown as large as its own pixels allow, each in a thick cartoon frame like the paintings' outlines. */
+/* Layout: the captain's gallery. Same sky, wood nav and nailed planks as the other pages; every painting hangs in a wooden frame with a small plank nameplate under it. */
 :root{
   color-scheme: light;
   --sky:#CFEFF6;
   --sky-2:#A9E1EE;
   --paper:#ffffff;
   --ink:#121826;
-  --soft:#3f4c5e;
-  --bubble:#22D3D6;
-  --jasmine:#FDE69A;
-  --orange:#FFB347;
+  --brown:#4a2c12;
+  --wood:#D39A5D;
+  --wood-2:#C0834A;
+  --nail:#3A2614;
+  --yellow:#FAE052;
+  --blue:#20ACE4;
+  --mint:#73BB89;
+  --amethyst:#91569D;
   --line:3px solid var(--ink);
+  --pirate:"Pirata One", "Fredoka", Georgia, serif;
   --title:"Luckiest Guy", "Fredoka", "Arial Black", sans-serif;
   --display:"Fredoka", "Trebuchet MS", system-ui, sans-serif;
   --body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, Consolas, monospace;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:linear-gradient(var(--sky), var(--sky-2) 60%, #7FC6E8) fixed;color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;overflow-x:hidden;min-height:100vh;
+body{margin:0;background:linear-gradient(var(--sky), var(--sky-2) 60%, #7FC6E8) fixed;color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;overflow-x:hidden;min-height:100vh;
   padding-top:env(safe-area-inset-top, 0px);padding-bottom:env(safe-area-inset-bottom, 0px)}
 a{color:inherit;text-decoration:none}
 img{max-width:100%}
 [hidden]{display:none!important}
-:focus-visible{outline:3px dashed var(--orange);outline-offset:4px;border-radius:12px}
+:focus-visible{outline:3px dashed var(--amethyst);outline-offset:4px;border-radius:8px}
 .wrap{max-width:1180px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+.wood{background:repeating-linear-gradient(181deg, rgba(91,58,28,.14) 0 1px, transparent 1px 6px), repeating-linear-gradient(179deg, rgba(255,235,200,.12) 0 2px, transparent 2px 13px), linear-gradient(var(--wood), var(--wood-2))}
+.nails{position:relative}
+.nails::before{content:"";position:absolute;inset:4px;pointer-events:none;
+  background:
+    radial-gradient(circle, var(--nail) 0 3.5px, #9b7a55 4px, transparent 5px) 0 0/12px 12px no-repeat,
+    radial-gradient(circle, var(--nail) 0 3.5px, #9b7a55 4px, transparent 5px) 100% 0/12px 12px no-repeat,
+    radial-gradient(circle, var(--nail) 0 3.5px, #9b7a55 4px, transparent 5px) 0 100%/12px 12px no-repeat,
+    radial-gradient(circle, var(--nail) 0 3.5px, #9b7a55 4px, transparent 5px) 100% 100%/12px 12px no-repeat}
 
 .nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding-block:18px}
 .logo{display:block;width:64px;height:64px;filter:drop-shadow(3px 3px 0 var(--ink))}
 .logo img{width:100%;height:100%;display:block}
-.back{display:inline-block;background:var(--paper);border:var(--line);border-radius:999px;padding:6px 16px;font-weight:700;font-size:15px;box-shadow:3px 3px 0 var(--ink)}
-.back:hover{background:var(--jasmine)}
-.navlinks{display:flex;gap:8px;flex-wrap:wrap}
+.nav ul{display:flex;gap:8px;list-style:none;margin:0;padding:0;flex-wrap:wrap}
+.nav ul a{display:block;border:var(--line);border-radius:6px;padding:4px 14px;font-family:var(--pirate);font-size:19px;line-height:1.2;box-shadow:2px 2px 0 var(--ink)}
+.nav ul a:hover,.nav ul a[aria-current]{background:var(--yellow)}
 
-header.head{text-align:center;padding-block:20px 36px}
-h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,104px);line-height:1;margin:0;color:var(--jasmine);-webkit-text-stroke:.05em var(--ink);paint-order:stroke fill;text-shadow:.045em .05em 0 var(--ink);text-wrap:balance}
-.lead{margin:14px auto 0;max-width:46ch;color:var(--soft);font-weight:500}
+header.head{text-align:center;padding-block:16px 26px}
+h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,100px);line-height:1;margin:0;color:var(--yellow);-webkit-text-stroke:.05em var(--ink);paint-order:stroke fill;text-shadow:.045em .05em 0 var(--ink);text-wrap:balance}
+.lead{margin:14px auto 0;max-width:48ch;color:#2c3a4a;font-weight:600}
 
-/* QUICK JUMP */
-.jump{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;list-style:none;margin:22px 0 0;padding:0}
-.jump a{display:block;width:64px;height:48px;border:2.5px solid var(--ink);border-radius:10px;overflow:hidden;background:var(--paper);box-shadow:2px 2px 0 var(--ink);transition:transform .15s}
-.jump a:hover{transform:translateY(-3px)}
+/* QUICK JUMP: a plank shelf of thumbnails */
+.shelf{margin:24px auto 0;max-width:900px;border:var(--line);border-radius:10px;box-shadow:inset 0 0 0 7px rgba(120,76,36,.45), 5px 5px 0 var(--ink);padding:16px 20px}
+.shelf .t{display:block;font-family:var(--pirate);font-size:24px;line-height:1;margin-bottom:10px}
+.jump{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;list-style:none;margin:0;padding:0}
+.jump a{display:block;width:64px;height:48px;border:2.5px solid var(--ink);border-radius:4px;overflow:hidden;background:var(--paper);box-shadow:2px 2px 0 var(--ink);transition:transform .15s}
+.jump a:hover{transform:translateY(-3px) rotate(-2deg)}
 .jump img{width:100%;height:100%;object-fit:cover;display:block}
 
 /* ARTWORKS */
-.wall{display:grid;gap:clamp(48px,8vw,96px);padding-block:30px 80px}
-.art{margin:0;display:grid;justify-items:center;gap:14px;scroll-margin-top:24px}
-.frame{all:unset;cursor:zoom-in;display:block;background:var(--paper);border:var(--line);border-radius:20px;padding:clamp(8px,1.4vw,14px);box-shadow:8px 8px 0 var(--ink);max-width:100%;transition:transform .2s}
-.frame:hover{transform:translate(-2px,-2px)}
-.frame:focus-visible{outline:3px dashed var(--orange);outline-offset:6px}
-.frame img{display:block;border:2.5px solid var(--ink);border-radius:12px;height:auto;max-height:82vh;width:auto;max-width:100%}
-.art figcaption{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;text-align:center}
-.art .name{font-family:var(--display);font-weight:700;font-size:clamp(22px,3.5vw,30px);line-height:1.1}
-.art .size{font-size:13px;font-weight:700;background:var(--paper);border:2px solid var(--ink);border-radius:999px;padding:0 10px;color:var(--soft);font-variant-numeric:tabular-nums}
+.wall{display:grid;gap:clamp(48px,8vw,90px);padding-block:30px 70px}
+.art{margin:0;display:grid;justify-items:center;gap:0;scroll-margin-top:24px}
+.art:nth-child(odd) .frame{transform:rotate(-.6deg)}
+.art:nth-child(even) .frame{transform:rotate(.6deg)}
+.frame{all:unset;cursor:zoom-in;display:block;position:relative;max-width:100%;border:var(--line);border-radius:8px;padding:clamp(12px,2vw,20px);
+  box-shadow:inset 0 0 0 6px rgba(120,76,36,.45), inset 0 0 0 8px rgba(58,38,20,.55), 8px 8px 0 var(--ink);transition:transform .2s;
+  background:repeating-linear-gradient(181deg, rgba(91,58,28,.14) 0 1px, transparent 1px 6px), repeating-linear-gradient(179deg, rgba(255,235,200,.12) 0 2px, transparent 2px 13px), linear-gradient(var(--wood), var(--wood-2))}
+.frame::before{content:"";position:absolute;inset:4px;pointer-events:none;
+  background:
+    radial-gradient(circle, var(--nail) 0 3px, #9b7a55 3.5px, transparent 4.5px) 0 0/10px 10px no-repeat,
+    radial-gradient(circle, var(--nail) 0 3px, #9b7a55 3.5px, transparent 4.5px) 100% 0/10px 10px no-repeat,
+    radial-gradient(circle, var(--nail) 0 3px, #9b7a55 3.5px, transparent 4.5px) 0 100%/10px 10px no-repeat,
+    radial-gradient(circle, var(--nail) 0 3px, #9b7a55 3.5px, transparent 4.5px) 100% 100%/10px 10px no-repeat}
+.art .frame:hover{transform:rotate(0) translate(-2px,-2px)}
+.frame:focus-visible{outline:3px dashed var(--amethyst);outline-offset:6px}
+.frame img{display:block;border:3px solid var(--ink);border-radius:3px;height:auto;max-height:78vh;width:auto;max-width:100%;background:var(--paper)}
+.art figcaption{position:relative;margin-top:-6px;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;justify-content:center;text-align:center;
+  border:var(--line);border-radius:6px;padding:6px 20px 8px;box-shadow:4px 4px 0 var(--ink)}
+.art .name{font-family:var(--pirate);font-size:clamp(24px,3.4vw,32px);line-height:1.1}
+.art .size{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--brown);white-space:nowrap;font-variant-numeric:tabular-nums}
 
-footer{text-align:center;padding-block:10px 48px}
-footer .back{font-size:17px;padding:8px 22px}
+footer{text-align:center;padding-block:0 48px}
+footer a{display:inline-block;border:var(--line);border-radius:6px;padding:6px 20px;font-family:var(--pirate);font-size:22px;box-shadow:3px 3px 0 var(--ink)}
+footer a:hover{background:var(--yellow)}
 
 /* LIGHTBOX */
 .lightbox{position:fixed;inset:0;z-index:20;background:rgba(18,24,38,.92);display:grid;place-items:center;
   padding:max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px))}
-.lightbox img{max-width:100%;max-height:92vh;border:var(--line);border-radius:12px;background:var(--paper)}
-.lb-btn{position:absolute;width:52px;height:52px;border-radius:50%;border:var(--line);background:var(--jasmine);font:700 22px var(--display);color:var(--ink);cursor:pointer;box-shadow:3px 3px 0 #000;display:grid;place-items:center}
+.lightbox img{max-width:100%;max-height:88vh;border:var(--line);border-radius:6px;background:var(--paper)}
+.lb-btn{position:absolute;width:52px;height:52px;border-radius:50%;border:var(--line);background:var(--yellow);font:700 22px var(--display);color:var(--ink);cursor:pointer;box-shadow:3px 3px 0 #000;display:grid;place-items:center}
 .lb-close{top:calc(14px + env(safe-area-inset-top, 0px));right:calc(14px + env(safe-area-inset-right, 0px))}
 .lb-prev{left:calc(14px + env(safe-area-inset-left, 0px));top:50%;transform:translateY(-50%)}
 .lb-next{right:calc(14px + env(safe-area-inset-right, 0px));top:50%;transform:translateY(-50%)}
-.lb-cap{position:absolute;left:50%;bottom:calc(16px + env(safe-area-inset-bottom, 0px));transform:translateX(-50%);background:var(--paper);border:var(--line);border-radius:999px;padding:3px 16px;font-weight:700;white-space:nowrap}
+.lb-cap{position:absolute;left:50%;bottom:calc(16px + env(safe-area-inset-bottom, 0px));transform:translateX(-50%);border:var(--line);border-radius:6px;padding:2px 18px 4px;font-family:var(--pirate);font-size:22px;white-space:nowrap;
+  background:repeating-linear-gradient(181deg, rgba(91,58,28,.14) 0 1px, transparent 1px 6px), linear-gradient(var(--wood), var(--wood-2))}
 
+@media (max-width:600px){.art .frame{transform:none!important}}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.frame,.jump a{transition:none}}
 </style>
 </head>
@@ -85,20 +115,23 @@ footer .back{font-size:17px;padding:8px 22px}
 <div class="wrap">
   <nav class="nav">
     <a class="logo" href="./" aria-label="Till startsidan"><img src="bilder/logo.png" alt="LoomBoom logga"></a>
-    <span class="navlinks"><a class="back" href="installningar.html">Inställningar</a> <a class="back" href="statistik.html">Statistik</a> <a class="back" href="./">← Startsidan</a></span>
+    <ul>
+      <li><a class="wood" href="./">Start</a></li>
+      <li><a class="wood" href="konst.html" aria-current="page">Konstgalleri</a></li>
+      <li><a class="wood" href="installningar.html">Inställningar</a></li>
+      <li><a class="wood" href="statistik.html">Statistik</a></li>
+    </ul>
   </nav>
 
   <header class="head">
     <h1>Konstgalleri</h1>
-    <p class="lead">Allt här är målat av mig, LoomBoom. Tryck på en målning för att se den i helskärm.</p>
-    <ul class="jump" id="jump" aria-label="Hoppa till målning"></ul>
+    <p class="lead">Allt här är målat av mig i Paint. Tryck på en målning för att se den i helskärm.</p>
+    <div class="shelf wood"><span class="t">Hoppa till</span><ul class="jump" id="jump" aria-label="Hoppa till målning"></ul></div>
   </header>
 
   <main class="wall" id="wall"></main>
 
-  <footer>
-    <a class="back" href="./">← Tillbaka till startsidan</a>
-  </footer>
+  <footer><a class="wood" href="./">← Tillbaka till startsidan</a></footer>
 </div>
 
 <div class="lightbox" id="lb" hidden role="dialog" aria-modal="true" aria-label="Målning i helskärm">
@@ -130,7 +163,7 @@ var ART = [
     var f=document.createElement('figure'); f.className='art'; f.id=a[0];
     f.innerHTML='<button class="frame" type="button" aria-label="Visa '+a[2]+' i helskärm">'+
       '<img src="bilder/'+a[1]+'" alt="'+a[2]+', målad av LoomBoom" width="'+a[3]+'" height="'+a[4]+'"'+(i>1?' loading="lazy"':'')+'></button>'+
-      '<figcaption><span class="name">'+a[2]+'</span><span class="size">'+a[3]+' × '+a[4]+' px</span></figcaption>';
+      '<figcaption class="wood"><span class="name">'+a[2]+'</span><span class="size">'+a[3]+' × '+a[4]+' px</span></figcaption>';
     f.querySelector('button').addEventListener('click',function(){open(i);});
     wall.appendChild(f);
     var li=document.createElement('li');

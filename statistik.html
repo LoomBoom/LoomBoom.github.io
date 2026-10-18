@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>LoomBoom Statistik</title>
-<meta name="description" content="LoomBooms statistik i CS2 Premier, FACEIT, Esplay och schack på chess.com, plus speltid från Steam.">
+<meta name="description" content="LoomBooms statistik i CS2 Premier, FACEIT, Esplay, Fortnite och schack, plus speltid och 100 %-spel på Steam.">
 <link rel="icon" href="bilder/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -157,6 +157,19 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,100px);line
 .wdl-t{display:flex;gap:10px;flex-wrap:wrap;margin-top:5px;font:600 12px var(--body);color:var(--ink)}
 .wdl-t span{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
 .wdl-t b{width:9px;height:9px;border-radius:2px;border:1.5px solid var(--ink);display:inline-block}
+
+/* PERFECT GAMES */
+.perfect{list-style:none;margin:14px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,230px),1fr));gap:10px}
+.perfect li{display:flex;gap:10px;align-items:center;background:var(--paper);border:var(--line);border-radius:8px;padding:6px;box-shadow:2px 2px 0 var(--ink);min-width:0}
+.perfect img{width:92px;height:43px;object-fit:cover;border:2px solid var(--ink);border-radius:4px;flex:none;background:var(--sky)}
+.perfect .t{min-width:0}
+.perfect .t b{display:block;font-size:14px;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.perfect .t > span{display:flex;align-items:center;gap:6px;font:600 12px var(--body);color:var(--brown);white-space:nowrap}
+.medal{display:inline-block;flex:none;padding:0 6px;border-radius:999px;background:var(--yellow);border:2px solid var(--ink);font:700 11px/16px var(--mono);color:var(--ink)}
+.prog{height:14px;background:rgba(255,248,235,.6);border:2px solid var(--ink);border-radius:999px;overflow:hidden;margin-top:12px}
+.prog i{display:block;height:100%;background:var(--yellow)}
+/* FORTNITE */
+.fn-modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));gap:12px;margin-top:14px}
 .source{font-size:13px;font-weight:600;color:var(--brown);margin-top:12px}
 footer{text-align:center;padding-block:0 48px}
 footer a{display:inline-block;border:var(--line);border-radius:6px;padding:6px 20px;font-family:var(--pirate);font-size:22px;box-shadow:3px 3px 0 var(--ink)}
@@ -178,7 +191,7 @@ footer a:hover{background:var(--yellow)}
 
   <header class="head">
     <h1>Statistik</h1>
-    <p class="lead">Premier, FACEIT, Esplay, schack och min speltid på Steam. Sidan uppdateras automatiskt varje timme.</p>
+    <p class="lead">Premier, FACEIT, Esplay, Fortnite, schack och mina Steam-spel. Sidan uppdateras automatiskt varje timme.</p>
     <span class="updated" id="updated" hidden><span class="dot" aria-hidden="true"></span><span id="updated-text"></span></span>
   </header>
 
@@ -334,6 +347,28 @@ var BRANCH = "main";
       lineChart(cb.querySelector(".chart"), pts, "", main.label+"-rating");
     }
   }
+
+  function perfectBoard(Pf){
+    var pc = Pf.total? Math.round(Pf.unlocked/Pf.total*1000)/10 : 0;
+    board("full","100 % avklarade","Steam-spel där jag har tagit alla achievements.",
+      '<div class="stats">'+tile("Avklarade spel", n(Pf.count), "av "+n(Pf.gamesWithAchievements)+" spel med achievements", true)+
+        tile("Achievements", n(Pf.unlocked), "av "+n(Pf.total)+" möjliga")+tile("Totalt avklarat", nf1.format(pc)+" %")+'</div>'+
+      '<div class="prog" role="img" aria-label="'+nf1.format(pc)+' procent av alla achievements"><i style="width:'+pc+'%"></i></div>'+
+      (Pf.games&&Pf.games.length? '<ul class="perfect">'+Pf.games.map(function(g){
+        return '<li><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/'+g.appid+'/capsule_184x69.jpg" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'"><span class="t"><b>'+esc(g.name)+'</b><span><span class="medal" aria-hidden="true">100 %</span>'+n(g.achievements)+' achievements</span></span></li>';
+      }).join("")+'</ul>' : '<div class="empty" style="margin-top:14px">Inget spel är 100 % klart än. Snart!</div>'));
+  }
+  function fortniteBoard(F){
+    var o=F.overall||{};
+    var hrs=o.minutes!=null? Math.round(o.minutes/60) : null;
+    var m=function(label, x){ if(!x||!x.matches) return ''; return '<div class="mode"><span class="l">'+label+'</span><span class="n">'+n(x.wins)+'</span><span class="best">vinster av '+n(x.matches)+' matcher</span><span class="best">K/D '+(x.kd!=null? x.kd.toFixed(2).replace(".",","):"–")+'</span></div>'; };
+    board("full","Fortnite","Battle Royale, där jag spelar som "+(F.name||"LooomBooom")+".",
+      '<div class="stats">'+tile("Vinster", n(o.wins), "", true)+tile("Matcher", n(o.matches))+tile("Vinstprocent", o.winRate!=null? nf1.format(o.winRate)+" %":"–")+
+        tile("Kills", n(o.kills))+tile("K/D", o.kd!=null? o.kd.toFixed(2).replace(".",","):"–")+tile("Topp 10", n(o.top10))+
+        (hrs!=null? tile("Speltid", n(hrs)+" h"):'')+(F.level!=null? tile("Battle Pass", "Nivå "+n(F.level)):'')+'</div>'+
+      '<div class="fn-modes">'+m("Solo",F.solo)+m("Duo",F.duo)+m("Squad",F.squad)+'</div>'+
+      '<a class="ext" href="https://fortnitetracker.com/profile/all/'+encodeURIComponent(F.name||"LooomBooom")+'" target="_blank" rel="noopener">Se mer på Fortnite Tracker →</a>');
+  }
   function render(S, hist){
     document.getElementById("setup-board").remove();
     var up = document.getElementById("updated"); up.hidden = false;
@@ -371,6 +406,8 @@ var BRANCH = "main";
     if (S.leetify) premierBoard(S.leetify);
     if (S.faceit) faceitBoard(S.faceit);
     if (ESPLAY) esplayBoard(ESPLAY);
+    if (S.fortnite) fortniteBoard(S.fortnite);
+    if (S.perfect) perfectBoard(S.perfect);
     if (S.chess) chessBoard(S.chess, hist);
     var pp = (hist||[]).filter(function(p){return p.premier;}).map(function(p){return {d:p.date, v:p.premier};});
     if (S.leetify && S.leetify.premier){ var pc = board("","Premier över tid","Min Premier-rating dag för dag.",'<div class="chart"></div>'); lineChart(pc.querySelector(".chart"), pp, "", "Premier-rating"); }
@@ -386,7 +423,7 @@ var BRANCH = "main";
       }).join("")+'</ul>' : '<div class="empty">Inga Steam-spel de senaste två veckorna.</div>');
 
     var src = document.createElement("p"); src.className = "source";
-    src.textContent = "Källor: Steam Web API, Leetify, FACEIT och chess.com. Esplay fylls i för hand.";
+    src.textContent = "Källor: Steam Web API, Leetify, FACEIT, Fortnite-API.com och chess.com. Esplay fylls i för hand.";
     boards.lastElementChild.appendChild(src);
   }
 

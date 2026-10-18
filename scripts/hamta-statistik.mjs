@@ -172,6 +172,60 @@ try {
   console.warn("Kunde inte hämta schack:", e.message);
 }
 
+// 100 % avklarade spel: kollar achievements för alla spel jag har spelat
+let perfect = null;
+try {
+  const played = games.filter((g) => (g.playtime_forever || 0) > 0).slice(0, 300);
+  const list = [];
+  let withAch = 0, unlocked = 0, total = 0;
+  for (let i = 0; i < played.length; i += 8) {
+    const batch = played.slice(i, i + 8);
+    const res = await Promise.all(batch.map(async (g) => {
+      try {
+        const url = new URL("https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v1/");
+        url.searchParams.set("key", KEY); url.searchParams.set("steamid", steamid); url.searchParams.set("appid", g.appid);
+        const r = await fetch(url); if (!r.ok) return null;
+        const a = (await r.json()).playerstats?.achievements || [];
+        if (!a.length) return null;
+        return { g, done: a.filter((x) => x.achieved === 1).length, all: a.length };
+      } catch { return null; }
+    }));
+    for (const x of res) {
+      if (!x) continue;
+      withAch++; unlocked += x.done; total += x.all;
+      if (x.done === x.all) list.push({ appid: x.g.appid, name: x.g.name, achievements: x.all, hours: hours(x.g.playtime_forever) });
+    }
+  }
+  list.sort((a, b) => b.achievements - a.achievements);
+  perfect = { count: list.length, gamesWithAchievements: withAch, unlocked, total, games: list };
+} catch (e) {
+  console.warn("Kunde inte räkna achievements:", e.message);
+}
+
+// Fortnite via fortnite-api.com (kräver FORTNITE_API_KEY och att statistiken är offentlig i Fortnite)
+let fortnite = null;
+if (process.env.FORTNITE_API_KEY) {
+  try {
+    const name = (process.env.FORTNITE_NAME || "LooomBooom").trim();
+    const r = await fetch(`https://fortnite-api.com/v2/stats/br/v2?name=${encodeURIComponent(name)}&accountType=epic`, { headers: { Authorization: process.env.FORTNITE_API_KEY } });
+    if (r.status === 403) throw new Error("statistiken är privat. Slå på offentlig statistik i Fortnite.");
+    if (r.status === 404) throw new Error("hittade inget Epic-konto som heter " + name);
+    if (!r.ok) throw new Error("fortnite-api svarade " + r.status);
+    const D = (await r.json()).data || {};
+    const pick = (o) => o ? { matches: o.matches ?? null, wins: o.wins ?? null, winRate: o.winRate ?? null, kills: o.kills ?? null, kd: o.kd ?? null,
+      top10: o.top10 ?? null, minutes: o.minutesPlayed ?? null } : null;
+    const all = D.stats?.all || {};
+    fortnite = {
+      name: D.account?.name || name,
+      level: D.battlePass?.level ?? null,
+      overall: pick(all.overall),
+      solo: pick(all.solo), duo: pick(all.duo), squad: pick(all.squad)
+    };
+  } catch (e) {
+    console.warn("Kunde inte hämta Fortnite:", e.message);
+  }
+}
+
 const stats = {
   updated: new Date().toISOString(),
   player: {
@@ -197,7 +251,9 @@ const stats = {
   cs,
   leetify,
   faceit,
-  chess
+  chess,
+  perfect,
+  fortnite
 };
 
 await mkdir("data", { recursive: true });
@@ -211,6 +267,8 @@ const point = { date: day };
 for (const t of stats.tracked) point[t.appid] = t.hours;
 if (leetify?.premier) point.premier = leetify.premier;
 if (faceit?.elo) point.faceitElo = faceit.elo;
+if (fortnite?.overall?.wins != null) point.fortniteWins = fortnite.overall.wins;
+if (perfect) point.perfect = perfect.count;
 for (const m of chess?.modes || []) if (m.rating) point["chess_" + m.label.toLowerCase()] = m.rating;
 history = history.filter((h) => h.date !== day);
 history.push(point);
