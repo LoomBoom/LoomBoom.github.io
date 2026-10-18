@@ -153,6 +153,7 @@ footer a:hover{background:var(--yellow)}
       <li><a class="wood" href="./">Start</a></li>
       <li><a class="wood" href="konst.html">Konstgalleri</a></li>
       <li><a class="wood" href="installningar.html" aria-current="page">Inställningar</a></li>
+      <li><a class="wood" href="statistik.html">Statistik</a></li>
     </ul>
   </nav>
 
@@ -193,6 +194,7 @@ var SETUP = [
 
 var CS = {
   stats:[
+    ["Steam-namn","LoomBoom", true],
     ["Sensitivity", CS_SENS.toFixed(2), true],
     ["DPI", String(DPI)],
     ["eDPI", String(Math.round(DPI*CS_SENS))],
@@ -345,7 +347,7 @@ var OTHER = [
   { id:"fortnite", name:"Fortnite", short:"FN", color:"#91569D", note:"Bygga snabbt och landa hett.",
     rows:[["X-sensitivity",null],["Y-sensitivity",null],["Sikte (ADS)",null],["Kikarsikte",null],["Renderläge",null],["FPS-gräns",null],["Favoritlandning",null]]},
   { id:"lethal", name:"Lethal Company", short:"LC", color:"#F2A55B", note:"Samla skrot och överlev nätterna.",
-    rows:[["Look sensitivity",null],["Röstchatt",null],["Favoritmåne",null],["Favoritföremål",null]]}
+    rows:[["Steam-namn","LoomBoom", true],["Look sensitivity",null],["Röstchatt",null],["Favoritmåne",null],["Favoritföremål",null]]}
 ];
 
 (function(){

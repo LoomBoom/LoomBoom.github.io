@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LoomBoom Statistik</title>
+<meta name="description" content="LoomBooms statistik i CS2 Premier, FACEIT och Esplay, plus speltid från Steam.">
+<link rel="icon" href="bilder/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Pirata+One&family=Fredoka:wght@500;600;700&family=Figtree:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: the captain's logbook. Same sky and nailed planks as the settings page; numbers in mono, one chart for hours over time, bars for the last two weeks. */
+:root{
+  color-scheme: light;
+  --sky:#CFEFF6;
+  --sky-2:#A9E1EE;
+  --paper:#ffffff;
+  --ink:#121826;
+  --brown:#4a2c12;
+  --wood:#D39A5D;
+  --wood-2:#C0834A;
+  --nail:#3A2614;
+  --yellow:#FAE052;
+  --blue:#20ACE4;
+  --mint:#73BB89;
+  --amethyst:#91569D;
+  --grid:rgba(74,44,18,.22);
+  --line:3px solid var(--ink);
+  --pirate:"Pirata One", "Fredoka", Georgia, serif;
+  --title:"Luckiest Guy", "Fredoka", "Arial Black", sans-serif;
+  --display:"Fredoka", "Trebuchet MS", system-ui, sans-serif;
+  --body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(var(--sky), var(--sky-2) 60%, #7FC6E8) fixed;color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;overflow-x:hidden;min-height:100vh;
+  padding-top:env(safe-area-inset-top, 0px);padding-bottom:env(safe-area-inset-bottom, 0px)}
+a{color:inherit;text-decoration:none}
+img{max-width:100%}
+[hidden]{display:none!important}
+:focus-visible{outline:3px dashed var(--amethyst);outline-offset:4px;border-radius:8px}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+.wood{background:repeating-linear-gradient(181deg, rgba(91,58,28,.14) 0 1px, transparent 1px 6px), repeating-linear-gradient(179deg, rgba(255,235,200,.12) 0 2px, transparent 2px 13px), linear-gradient(var(--wood), var(--wood-2))}
+
+.nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding-block:18px}
+.logo{display:block;width:64px;height:64px;filter:drop-shadow(3px 3px 0 var(--ink))}
+.logo img{width:100%;height:100%;display:block}
+.nav ul{display:flex;gap:8px;list-style:none;margin:0;padding:0;flex-wrap:wrap}
+.nav ul a{display:block;border:var(--line);border-radius:6px;padding:4px 14px;font-family:var(--pirate);font-size:19px;line-height:1.2;box-shadow:2px 2px 0 var(--ink)}
+.nav ul a:hover,.nav ul a[aria-current]{background:var(--yellow)}
+
+header.head{text-align:center;padding-block:16px 26px}
+h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,100px);line-height:1;margin:0;color:var(--yellow);-webkit-text-stroke:.05em var(--ink);paint-order:stroke fill;text-shadow:.045em .05em 0 var(--ink)}
+.lead{margin:14px auto 0;max-width:50ch;color:#2c3a4a;font-weight:600}
+.updated{display:inline-flex;align-items:center;gap:8px;margin-top:14px;background:var(--paper);border:var(--line);border-radius:999px;padding:3px 14px;font-weight:700;font-size:14px;box-shadow:2px 2px 0 var(--ink)}
+.updated .dot{width:10px;height:10px;border-radius:50%;background:var(--mint);border:2px solid var(--ink)}
+
+.boards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:clamp(22px,3vw,34px);padding-block:10px 60px;align-items:start}
+.board{position:relative;min-width:0;border:var(--line);border-radius:10px;box-shadow:inset 0 0 0 9px rgba(120,76,36,.45), inset 0 0 0 11px rgba(58,38,20,.55), 7px 7px 0 var(--ink);padding:26px clamp(20px,3vw,30px) 24px}
+.board.full{grid-column:1 / -1}
+.board::before{content:"";position:absolute;inset:4px;pointer-events:none;
+  background:
+    radial-gradient(circle, var(--nail) 0 3.5px, #9b7a55 4px, transparent 5px) 0 0/12px 12px no-repeat,
+    radial-gradient(circle, var(--nail) 0 3.5px, #9b7a55 4px, transparent 5px) 100% 0/12px 12px no-repeat,
+    radial-gradient(circle, var(--nail) 0 3.5px, #9b7a55 4px, transparent 5px) 0 100%/12px 12px no-repeat,
+    radial-gradient(circle, var(--nail) 0 3.5px, #9b7a55 4px, transparent 5px) 100% 100%/12px 12px no-repeat}
+.board h2{font-family:var(--pirate);font-weight:400;font-size:clamp(32px,4.5vw,44px);line-height:1;margin:0}
+.note{color:var(--brown);font-weight:600;margin:4px 0 16px;font-size:15px}
+
+/* PROFILE */
+.profile{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.avatar{width:88px;height:88px;border:var(--line);border-radius:12px;box-shadow:3px 3px 0 var(--ink);background:var(--paper);object-fit:cover}
+.profile .who{min-width:0}
+.profile .name{font-family:var(--title);font-size:clamp(28px,4vw,40px);line-height:1;color:var(--yellow);-webkit-text-stroke:.05em var(--ink);paint-order:stroke fill}
+.chip{display:inline-flex;align-items:center;gap:6px;margin-top:8px;background:var(--paper);border:2px solid var(--ink);border-radius:999px;padding:0 10px;font-weight:700;font-size:14px}
+.chip i{width:9px;height:9px;border-radius:50%;background:#9aa3ad;border:1.5px solid var(--ink)}
+.chip.on i{background:var(--mint)}
+
+/* TILES */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:12px;margin-top:20px}
+.stat{background:var(--paper);border:var(--line);border-radius:10px;padding:8px 12px 10px;box-shadow:3px 3px 0 var(--ink);min-width:0}
+.stat .l{display:block;font-size:12px;font-weight:700;color:var(--brown);text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+.stat .n{display:block;font-family:var(--mono);font-weight:700;font-size:clamp(20px,2.4vw,26px);line-height:1.2;font-variant-numeric:tabular-nums;white-space:nowrap}
+.stat .s{display:block;font-size:13px;font-weight:600;color:var(--brown)}
+.stat.main{background:var(--yellow)}
+
+/* CHART */
+.chart{position:relative;background:var(--paper);border:var(--line);border-radius:10px;padding:12px 12px 6px;box-shadow:3px 3px 0 var(--ink)}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.chart .gl{stroke:var(--grid);stroke-width:1}
+.chart .ax{fill:var(--brown);font:600 17px var(--body)}
+.chart .ln{fill:none;stroke:var(--blue);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.chart .ar{fill:var(--blue);opacity:.15}
+.chart .pt{fill:var(--blue);stroke:var(--paper);stroke-width:2}
+.chart .xh{stroke:var(--ink);stroke-width:1;stroke-dasharray:3 3}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:#fff;border-radius:8px;padding:4px 10px;font:600 13px var(--body);white-space:nowrap;transform:translate(-50%,-110%)}
+.tip b{font-family:var(--mono)}
+.empty{background:rgba(255,248,235,.6);border:2.5px dashed var(--brown);border-radius:10px;padding:14px 16px;font-weight:600;color:var(--brown)}
+
+/* BARS */
+.bars{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.bars li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center}
+.bars .g{font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bars .h{font-family:var(--mono);font-weight:700;font-size:15px;font-variant-numeric:tabular-nums}
+.bars .track{grid-column:1 / -1;height:14px;background:rgba(255,248,235,.6);border:2px solid var(--ink);border-radius:999px;overflow:hidden}
+.bars .fill{display:block;height:100%;background:var(--blue);border-radius:0 4px 4px 0}
+
+/* SETUP STEPS (shown until the first data arrives) */
+.steps{margin:0;padding-left:1.4em;display:grid;gap:10px;font-weight:500}
+.steps b{font-weight:700}
+.steps code{font-family:var(--mono);font-size:14px;background:var(--paper);border:2px solid var(--ink);border-radius:6px;padding:0 6px}
+
+
+/* RANK BADGES */
+.rankrow{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.premier{display:inline-flex;align-items:center;gap:10px;background:var(--ink);border:var(--line);border-radius:10px;padding:8px 18px 8px 10px;box-shadow:3px 3px 0 rgba(0,0,0,.35);transform:skewX(-10deg)}
+.premier > *{transform:skewX(10deg)}
+.premier .bar{width:8px;align-self:stretch;border-radius:3px;background:var(--tier)}
+.premier .val{font-family:var(--mono);font-weight:700;font-size:clamp(30px,5vw,44px);line-height:1;color:var(--tier);white-space:nowrap;font-variant-numeric:tabular-nums}
+.premier .val small{font-size:.6em}
+.lvl{width:72px;height:72px;flex:none;border-radius:50%;border:var(--line);background:conic-gradient(var(--lv) calc(var(--p) * 1%), rgba(255,255,255,.55) 0);display:grid;place-items:center;box-shadow:3px 3px 0 var(--ink)}
+.lvl span{width:52px;height:52px;border-radius:50%;background:var(--ink);color:var(--lv);display:grid;place-items:center;font:700 26px var(--mono)}
+.big{display:block;font-family:var(--mono);font-weight:700;font-size:clamp(28px,4vw,38px);line-height:1;white-space:nowrap}
+.big-l{display:block;font-size:12px;font-weight:700;color:var(--brown);text-transform:uppercase;letter-spacing:.04em;margin-top:4px}
+.results{display:flex;gap:5px;flex-wrap:wrap;margin-top:14px;list-style:none;padding:0}
+.results li{width:28px;height:28px;border-radius:6px;border:2px solid var(--ink);display:grid;place-items:center;font:700 13px var(--mono)}
+.results .w{background:var(--mint)}
+.results .l{background:#E9A0A0}
+.ext{display:inline-block;margin-top:16px;background:var(--yellow);border:var(--line);border-radius:999px;padding:4px 16px;font:700 15px var(--display);box-shadow:2px 2px 0 var(--ink)}
+.ext:hover{transform:translate(-1px,-1px)}
+.skills{list-style:none;margin:18px 0 0;padding:0;display:grid;gap:8px}
+.skills li{display:grid;grid-template-columns:110px minmax(0,1fr) 38px;gap:10px;align-items:center;font-weight:700;font-size:15px}
+.skills .track{height:12px;background:rgba(255,248,235,.6);border:2px solid var(--ink);border-radius:999px;overflow:hidden}
+.skills .fill{display:block;height:100%;background:var(--blue)}
+.skills .v{font-family:var(--mono);text-align:right}
+.matches{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:6px}
+.matches li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;background:rgba(255,248,235,.6);border:2px solid var(--ink);border-radius:8px;padding:5px 10px;font-weight:600;font-size:15px}
+.matches .res{width:24px;height:24px;border-radius:6px;border:2px solid var(--ink);display:grid;place-items:center;font:700 12px var(--mono)}
+.matches .src{font-size:12px;font-weight:700;color:var(--brown);text-transform:uppercase;letter-spacing:.04em;margin-left:6px}
+.matches .sc{font-family:var(--mono);font-weight:700;white-space:nowrap}
+.source{font-size:13px;font-weight:600;color:var(--brown);margin-top:12px}
+footer{text-align:center;padding-block:0 48px}
+footer a{display:inline-block;border:var(--line);border-radius:6px;padding:6px 20px;font-family:var(--pirate);font-size:22px;box-shadow:3px 3px 0 var(--ink)}
+footer a:hover{background:var(--yellow)}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav class="nav">
+    <a class="logo" href="./" aria-label="Till startsidan"><img src="bilder/logo.png" alt="LoomBoom logga"></a>
+    <ul>
+      <li><a class="wood" href="./">Start</a></li>
+      <li><a class="wood" href="konst.html">Konstgalleri</a></li>
+      <li><a class="wood" href="installningar.html">Inställningar</a></li>
+      <li><a class="wood" href="statistik.html" aria-current="page">Statistik</a></li>
+    </ul>
+  </nav>
+
+  <header class="head">
+    <h1>Statistik</h1>
+    <p class="lead">Premier, FACEIT, Esplay och min speltid på Steam. Sidan uppdateras automatiskt varje timme.</p>
+    <span class="updated" id="updated" hidden><span class="dot" aria-hidden="true"></span><span id="updated-text"></span></span>
+  </header>
+
+  <main class="boards" id="boards">
+    <section class="board wood full" id="setup-board">
+      <h2>Statistiken startar snart</h2>
+      <p class="note">Här visas min Steam-statistik så fort den har hämtats första gången.</p>
+      <ol class="steps">
+        <li>Skaffa en Steam Web API-nyckel på <b>steamcommunity.com/dev/apikey</b>.</li>
+        <li>Logga in på <b>leetify.com</b> med Steam, så att mina Premier-matcher läses in.</li>
+        <li>Skaffa en FACEIT-nyckel på <b>developers.faceit.com</b> (en "Server side"-nyckel).</li>
+        <li>Lägg in <code>STEAM_API_KEY</code>, <code>STEAM_ID</code> och <code>FACEIT_API_KEY</code> under <b>Settings → Secrets and variables → Actions</b> i GitHub-repot.</li>
+        <li>Gå till fliken <b>Actions</b>, välj <b>Uppdatera statistik</b> och tryck <b>Run workflow</b>.</li>
+      </ol>
+    </section>
+  </main>
+
+  <footer><a class="wood" href="./">← Tillbaka till startsidan</a></footer>
+</div>
+
+<script>
+// Om sidan inte visar ny statistik efter en uppdatering: skriv ditt repo här,
+// t.ex. "LooomBooom/looombooom.github.io", så hämtas filerna direkt från GitHub.
+var GITHUB_REPO = "";
+var BRANCH = "main";
+
+(function(){
+  var base = GITHUB_REPO ? "https://raw.githubusercontent.com/" + GITHUB_REPO + "/" + BRANCH + "/" : "";
+  var bust = "?t=" + Math.floor(Date.now() / 300000);
+  var boards = document.getElementById("boards");
+
+  function esc(t){ return String(t).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+  var nf = new Intl.NumberFormat("sv-SE");
+  var nf1 = new Intl.NumberFormat("sv-SE",{maximumFractionDigits:1});
+  function n(v){ return v==null ? "–" : nf.format(v); }
+  function h(v){ return v==null ? "–" : nf1.format(v) + " h"; }
+  function pct(a,b){ return (a==null||!b) ? "–" : nf1.format(a/b*100) + " %"; }
+  function ratio(a,b){ return (a==null||!b) ? "–" : (a/b).toFixed(2).replace(".",","); }
+  function ago(iso){
+    var m = Math.round((Date.now() - new Date(iso).getTime())/60000);
+    if (m < 1) return "nyss";
+    if (m < 60) return "för " + m + " min sedan";
+    var hrs = Math.round(m/60);
+    if (hrs < 48) return "för " + hrs + " h sedan";
+    return "den " + new Date(iso).toLocaleDateString("sv-SE");
+  }
+  function tile(l, v, s, main){ return '<div class="stat'+(main?' main':'')+'"><span class="l">'+esc(l)+'</span><span class="n">'+esc(v)+'</span>'+(s?'<span class="s">'+esc(s)+'</span>':'')+'</div>'; }
+  function board(cls, title, note, inner){
+    var s = document.createElement("section"); s.className = "board wood " + cls;
+    s.innerHTML = '<h2>'+esc(title)+'</h2>'+(note?'<p class="note">'+esc(note)+'</p>':'')+inner;
+    boards.appendChild(s); return s;
+  }
+
+  function lineChart(el, pts, unit, what){
+    unit = unit || "";
+    if (pts.length < 2){ el.innerHTML = '<div class="empty">Grafen fylls på när statistiken har uppdaterats under några dagar.</div>'; return; }
+    var fmt = function(v){ return nf1.format(v) + unit; };
+    var W=640, H=240, L=56, R=12, T=14, B=34;
+    var ys = pts.map(function(p){return p.v;});
+    var lo = Math.min.apply(null, ys), hi = Math.max.apply(null, ys);
+    var step = Math.max(1, Math.pow(10, Math.floor(Math.log10(Math.max(1, hi-lo)))) );
+    lo = Math.floor(lo/step)*step; hi = Math.ceil(hi/step)*step; if (hi===lo) hi = lo + step;
+    var x = function(i){ return L + (W-L-R) * (i/(pts.length-1)); };
+    var y = function(v){ return T + (H-T-B) * (1 - (v-lo)/(hi-lo)); };
+    var ticks = [lo, (lo+hi)/2, hi];
+    var g = ticks.map(function(t){ return '<line class="gl" x1="'+L+'" x2="'+(W-R)+'" y1="'+y(t)+'" y2="'+y(t)+'"/><text class="ax" x="'+(L-6)+'" y="'+(y(t)+4)+'" text-anchor="end">'+nf.format(Math.round(t))+'</text>'; }).join("");
+    var d = pts.map(function(p,i){ return (i?"L":"M")+x(i).toFixed(1)+" "+y(p.v).toFixed(1); }).join(" ");
+    var area = d + " L"+x(pts.length-1).toFixed(1)+" "+(H-B)+" L"+L+" "+(H-B)+" Z";
+    var lab = '<text class="ax" x="'+L+'" y="'+(H-8)+'">'+esc(pts[0].d)+'</text><text class="ax" x="'+(W-R)+'" y="'+(H-8)+'" text-anchor="end">'+esc(pts[pts.length-1].d)+'</text>';
+    var last = pts[pts.length-1];
+    el.innerHTML = '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+esc(what)+' över tid, från '+fmt(pts[0].v)+' till '+fmt(last.v)+'">'+g+
+      '<path class="ar" d="'+area+'"/><path class="ln" d="'+d+'"/>'+lab+
+      '<line class="xh" id="xh" y1="'+T+'" y2="'+(H-B)+'" visibility="hidden"/>'+
+      '<circle class="pt" id="hp" r="5" visibility="hidden"/>'+
+      '<circle class="pt" cx="'+x(pts.length-1)+'" cy="'+y(last.v)+'" r="5"/>'+
+      '<rect id="hit" x="'+L+'" y="0" width="'+(W-L-R)+'" height="'+H+'" fill="transparent"/></svg><div class="tip" hidden></div>';
+    var svg = el.querySelector("svg"), tip = el.querySelector(".tip"), xh = svg.getElementById("xh"), hp = svg.getElementById("hp");
+    function show(evt){
+      var r = svg.getBoundingClientRect(), px = (evt.clientX - r.left) / r.width * W;
+      var i = Math.max(0, Math.min(pts.length-1, Math.round((px-L)/(W-L-R)*(pts.length-1))));
+      var cx = x(i), cy = y(pts[i].v);
+      xh.setAttribute("x1",cx); xh.setAttribute("x2",cx); xh.setAttribute("visibility","visible");
+      hp.setAttribute("cx",cx); hp.setAttribute("cy",cy); hp.setAttribute("visibility","visible");
+      tip.hidden = false; tip.style.left = (cx/W*r.width + 12) + "px"; tip.style.top = (cy/H*r.height + 12) + "px";
+      tip.innerHTML = esc(pts[i].d) + ": <b>" + fmt(pts[i].v) + "</b>";
+    }
+    function hide(){ tip.hidden = true; xh.setAttribute("visibility","hidden"); hp.setAttribute("visibility","hidden"); }
+    svg.addEventListener("pointermove", show); svg.addEventListener("pointerleave", hide);
+  }
+
+
+  var TIER=[[30000,"#FFD700"],[25000,"#EB4B4B"],[20000,"#F03CFF"],[15000,"#C166FF"],[10000,"#6A7DFF"],[5000,"#8CC6FF"],[0,"#B0C3D9"]];
+  function tierColor(v){ for(var i=0;i<TIER.length;i++) if(v>=TIER[i][0]) return TIER[i][1]; return "#B0C3D9"; }
+  function lvlColor(l){ return l>=10?"#FE1F00":l>=8?"#FF6309":l>=4?"#FFC800":l>=2?"#1CE400":"#EEEEEE"; }
+  var SRC={premier:"Premier",faceit:"FACEIT",matchmaking:"Matchmaking",matchmaking_competitive:"Competitive",matchmaking_wingman:"Wingman",renown:"Renown"};
+  function mapName(m){ if(!m) return "Okänd karta"; m=String(m).replace(/^(de|cs|ar)_/,""); return m.charAt(0).toUpperCase()+m.slice(1); }
+  function premierBadge(v){ return '<span class="premier" style="--tier:'+tierColor(v)+'"><span class="bar" aria-hidden="true"></span><span class="val">'+(v>=1000? nf.format(Math.floor(v/1000))+'<small>,'+String(v%1000).padStart(3,"0")+'</small>' : nf.format(v))+'</span></span>'; }
+  function premierBoard(L){
+    var skills=[["Sikte",L.rating.aim],["Positionering",L.rating.positioning],["Utility",L.rating.utility],["Clutch",L.rating.clutch],["Öppningsduell",L.rating.opening]].filter(function(x){return x[1]!=null;});
+    var res=function(o){ return o==="win"?'<span class="res" style="background:var(--mint)">V</span>':o==="loss"?'<span class="res" style="background:#E9A0A0">F</span>':'<span class="res" style="background:var(--paper)">O</span>'; };
+    board("","Premier","Från Leetify, som läser in mina matcher automatiskt.",
+      '<div class="rankrow">'+(L.premier? premierBadge(L.premier) : '<span class="empty">Ingen Premier-rating än</span>')+
+      '<div><span class="big">'+(L.winrate!=null? nf1.format(L.winrate*100)+' %':'–')+'</span><span class="big-l">Vinstprocent</span></div>'+
+      '<div><span class="big">'+n(L.totalMatches)+'</span><span class="big-l">Matcher</span></div></div>'+
+      (skills.length? '<ul class="skills">'+skills.map(function(x){ var v=Math.max(0,Math.min(100,Math.round(x[1]))); return '<li><span>'+esc(x[0])+'</span><span class="track"><span class="fill" style="width:'+v+'%"></span></span><span class="v">'+v+'</span></li>'; }).join("")+'</ul>' : '')+
+      (L.recent&&L.recent.length? '<ul class="matches">'+L.recent.slice(0,5).map(function(m){
+        var sc = Array.isArray(m.score)? m.score.join("–") : (m.score||"");
+        return '<li>'+res(m.outcome)+'<span>'+esc(mapName(m.map))+'<span class="src">'+esc(SRC[m.source]||m.source||"")+'</span></span><span class="sc">'+esc(sc)+'</span></li>'; }).join("")+'</ul>' : '')+
+      '<a class="ext" href="'+esc(L.url)+'" target="_blank" rel="noopener">Se mer på Leetify →</a>');
+  }
+  function faceitBoard(F){
+    var p = F.level? Math.min(100, F.level*10) : 0;
+    board("","FACEIT", F.nickname? "Spelar som "+F.nickname+"." : "",
+      '<div class="rankrow"><span class="lvl" style="--lv:'+lvlColor(F.level||1)+';--p:'+p+'" role="img" aria-label="FACEIT nivå '+esc(F.level)+'"><span>'+esc(F.level||"–")+'</span></span>'+
+      '<div><span class="big">'+n(F.elo)+'</span><span class="big-l">Elo</span></div></div>'+
+      '<div class="stats">'+tile("Matcher", n(F.matches))+tile("Vinstprocent", F.winrate!=null? nf1.format(F.winrate)+" %":"–")+
+        tile("K/D", F.kd!=null? F.kd.toFixed(2).replace(".",","):"–")+tile("Headshots", F.hs!=null? nf1.format(F.hs)+" %":"–")+
+        tile("Längsta vinstsvit", n(F.longestStreak))+'</div>'+
+      (F.recent&&F.recent.length? '<ul class="results" aria-label="Senaste matcherna">'+F.recent.map(function(w){return '<li class="'+(w?'w':'l')+'">'+(w?'V':'F')+'</li>';}).join("")+'</ul>' : '')+
+      (F.url? '<a class="ext" href="'+esc(F.url)+'" target="_blank" rel="noopener">Se profilen på FACEIT →</a>' : ''));
+  }
+  function esplayBoard(E){
+    var rows=(E.varden||[]).filter(function(r){return r[1]!=null && r[1]!=="";});
+    board("","Esplay", rows.length? (E.uppdaterad? "Uppdaterad "+E.uppdaterad+"." : "") : "Esplay har ingen öppen statistik att hämta, så siffrorna här fyller jag i själv.",
+      (rows.length? '<div class="stats">'+rows.map(function(r,i){return tile(r[0], String(r[1]), "", i===0);}).join("")+'</div>' : '')+
+      '<a class="ext" href="'+esc(E.profil)+'" target="_blank" rel="noopener">Se min Esplay-profil →</a>');
+  }
+  function render(S, hist){
+    document.getElementById("setup-board").remove();
+    var up = document.getElementById("updated"); up.hidden = false;
+    document.getElementById("updated-text").textContent = "Uppdaterad " + ago(S.updated);
+
+    var P = S.player || {};
+    var cs = (S.tracked||[]).find(function(t){return t.appid===730;}) || {};
+    var lc = (S.tracked||[]).find(function(t){return t.appid===1966720;}) || {};
+    var prof = board("full","Steam","",
+      '<div class="profile">'+(P.avatar?'<img class="avatar" src="'+esc(P.avatar)+'" alt="" onerror="this.remove()">':'')+
+      '<div class="who"><div class="name">'+esc(P.name||"LoomBoom")+'</div>'+
+      '<span class="chip'+(P.online?' on':'')+'"><i aria-hidden="true"></i>'+(P.playing?'Spelar '+esc(P.playing):(P.online?'Online':'Offline'))+'</span></div></div>'+
+      '<div class="stats">'+
+        tile("CS2 totalt", h(cs.hours), cs.hours2w? h(cs.hours2w)+" senaste 2 veckorna" : "", true)+
+        tile("Lethal Company", h(lc.hours), lc.hours2w? h(lc.hours2w)+" senaste 2 veckorna" : "")+
+        tile("Steam-nivå", n(P.level))+
+        tile("Spel på Steam", n(S.library && S.library.count))+
+        tile("Speltid totalt", h(S.library && S.library.hours))+
+      '</div>');
+
+    var c = S.cs;
+    if (c){
+      board("full","Counter-Strike 2","Siffrorna kommer från Steams egen statistik för CS och räknar alla matcher sedan kontot skapades.",
+        '<div class="stats">'+
+          tile("K/D", ratio(c.kills,c.deaths), n(c.kills)+" kills / "+n(c.deaths)+" deaths", true)+
+          tile("Headshots", pct(c.headshots,c.kills), n(c.headshots)+" st")+
+          tile("Träffsäkerhet", pct(c.shotsHit,c.shotsFired), n(c.shotsHit)+" av "+n(c.shotsFired)+" skott")+
+          tile("Vunna matcher", n(c.matchesWon), c.matchesPlayed? "av "+n(c.matchesPlayed)+" spelade":"")+
+          tile("Vunna rundor", n(c.roundsWon), c.roundsPlayed? "av "+n(c.roundsPlayed)+" spelade":"")+
+          tile("MVP", n(c.mvps))+
+          tile("Skada totalt", n(c.damage))+
+        '</div>');
+    }
+
+    if (S.leetify) premierBoard(S.leetify);
+    if (S.faceit) faceitBoard(S.faceit);
+    if (ESPLAY) esplayBoard(ESPLAY);
+    var pp = (hist||[]).filter(function(p){return p.premier;}).map(function(p){return {d:p.date, v:p.premier};});
+    if (S.leetify && S.leetify.premier){ var pc = board("","Premier över tid","Min Premier-rating dag för dag.",'<div class="chart"></div>'); lineChart(pc.querySelector(".chart"), pp, "", "Premier-rating"); }
+    var pts = (hist||[]).filter(function(p){return p["730"]!=null;}).map(function(p){return {d:p.date, v:p["730"]};});
+    var ch = board("","Timmar i CS2","Total speltid dag för dag.",'<div class="chart" id="chart"></div>');
+    lineChart(ch.querySelector("#chart"), pts, " h", "Timmar i Counter-Strike 2");
+
+    var rec = (S.recent||[]).filter(function(g){return g.hours2w>0;});
+    var max = Math.max.apply(null, rec.map(function(g){return g.hours2w;}).concat([1]));
+    board("","Senaste 2 veckorna","Det jag har spelat mest på Steam nyligen.",
+      rec.length ? '<ul class="bars">'+rec.map(function(g){
+        return '<li><span class="g">'+esc(g.name)+'</span><span class="h">'+h(g.hours2w)+'</span><span class="track"><span class="fill" style="width:'+(g.hours2w/max*100).toFixed(1)+'%"></span></span></li>';
+      }).join("")+'</ul>' : '<div class="empty">Inga Steam-spel de senaste två veckorna.</div>');
+
+    var src = document.createElement("p"); src.className = "source";
+    src.textContent = "Källor: Steam Web API, Leetify och FACEIT. Esplay fylls i för hand.";
+    boards.lastElementChild.appendChild(src);
+  }
+
+  var ESPLAY = null;
+  Promise.all([
+    fetch(base + "data/esplay.json" + bust).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; }),
+    fetch(base + "data/stats.json" + bust).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; }),
+    fetch(base + "data/history.json" + bust).then(function(r){ return r.ok ? r.json() : []; }).catch(function(){ return []; })
+  ]).then(function(res){
+    ESPLAY = res[0];
+    if (res[1] && res[1].updated) render(res[1], res[2]);
+    else if (ESPLAY) esplayBoard(ESPLAY);
+  });
+})();
+</script>
+</body>
+</html>
