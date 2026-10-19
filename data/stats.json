@@ -1,23 +1,23 @@
 {
-  "updated": "2026-10-19T15:40:24.535Z",
+  "updated": "2026-10-19T21:06:35.463Z",
   "player": {
     "name": "LoomBoom",
     "avatar": "https://avatars.steamstatic.com/9e8af0555fb3fccfbf72c94ccf72d9da34206af7_full.jpg",
     "url": "https://steamcommunity.com/id/LoomBoom/",
     "online": true,
-    "playing": "Cactus Simulator",
+    "playing": "Overcooked! 2",
     "level": 25
   },
   "library": {
     "count": 53,
-    "hours": 7159.8
+    "hours": 7164.6
   },
   "tracked": [
     {
       "appid": 730,
       "name": "Counter-Strike 2",
-      "hours": 6550.4,
-      "hours2w": 44.2
+      "hours": 6553.1,
+      "hours2w": 47
     },
     {
       "appid": 1966720,
@@ -30,20 +30,20 @@
     {
       "appid": 1883580,
       "name": "Cactus Simulator",
-      "hours2w": 100.7,
-      "hours": 100.7
+      "hours2w": 102.1,
+      "hours": 102.1
     },
     {
       "appid": 730,
       "name": "Counter-Strike 2",
-      "hours2w": 44.2,
-      "hours": 6550.4
+      "hours2w": 47,
+      "hours": 6553.1
     },
     {
       "appid": 728880,
       "name": "Overcooked! 2",
-      "hours2w": 18.5,
-      "hours": 18.5
+      "hours2w": 20.5,
+      "hours": 20.5
     },
     {
       "appid": 652980,
@@ -65,36 +65,58 @@
     }
   ],
   "cs": {
-    "kills": 184361,
-    "deaths": 165125,
-    "headshots": 77675,
-    "shotsFired": 3171040,
+    "kills": 184385,
+    "deaths": 165186,
+    "headshots": 77685,
+    "shotsFired": 3171573,
     "shotsHit": 333517,
-    "roundsWon": 99056,
-    "roundsPlayed": 190602,
+    "roundsWon": 99067,
+    "roundsPlayed": 190666,
     "matchesWon": 5045,
-    "matchesPlayed": 9995,
-    "mvps": 32476,
-    "damage": 26269880
+    "matchesPlayed": 9997,
+    "mvps": 32480,
+    "damage": 26273438
   },
   "leetify": {
     "url": "https://leetify.com/app/profile/76561199030446550",
     "premier": null,
-    "leetifyRating": 4.29,
+    "leetifyRating": 4.109999999999999,
     "faceitLevel": 10,
     "faceitElo": 2184,
     "wingman": 18,
     "renown": null,
     "winrate": 0.6,
-    "totalMatches": 3315,
+    "totalMatches": 3317,
     "rating": {
-      "aim": 83.6457,
-      "positioning": 78.5236,
-      "utility": 53.4348,
-      "clutch": 0.0802,
-      "opening": 0.0478
+      "aim": 82.3814,
+      "positioning": 74.8571,
+      "utility": 55.3785,
+      "clutch": 0.0833,
+      "opening": 0.0468
     },
     "recent": [
+      {
+        "date": "2026-10-19T17:58:13.000Z",
+        "map": "de_cache",
+        "source": "esplay",
+        "outcome": "loss",
+        "score": [
+          6,
+          13
+        ],
+        "rating": -0.057
+      },
+      {
+        "date": "2026-10-19T16:32:23.000Z",
+        "map": "de_anubis",
+        "source": "esplay",
+        "outcome": "loss",
+        "score": [
+          5,
+          13
+        ],
+        "rating": 0.0372
+      },
       {
         "date": "2026-10-19T01:12:40.000Z",
         "map": "de_nuke",
@@ -160,28 +182,6 @@
           2
         ],
         "rating": 0.0534
-      },
-      {
-        "date": "2026-10-16T23:09:06.000Z",
-        "map": "de_ancient",
-        "source": "esplay",
-        "outcome": "win",
-        "score": [
-          13,
-          11
-        ],
-        "rating": 0.0229
-      },
-      {
-        "date": "2026-10-16T22:22:55.000Z",
-        "map": "de_vertigo",
-        "source": "esplay",
-        "outcome": "loss",
-        "score": [
-          10,
-          13
-        ],
-        "rating": 0.0167
       }
     ]
   },
@@ -308,7 +308,7 @@
   "perfect": {
     "count": 10,
     "gamesWithAchievements": 39,
-    "unlocked": 1080,
+    "unlocked": 1081,
     "total": 2480,
     "games": [
       {
@@ -369,7 +369,7 @@
         "appid": 730,
         "name": "Counter-Strike 2",
         "achievements": 1,
-        "hours": 6550.4
+        "hours": 6553.1
       }
     ]
   },
