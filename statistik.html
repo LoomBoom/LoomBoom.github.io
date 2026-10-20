@@ -170,6 +170,29 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,100px);line
 .prog i{display:block;height:100%;background:var(--yellow)}
 /* FORTNITE */
 .fn-modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));gap:12px;margin-top:14px}
+
+/* ESPLAY EXTRA */
+.hbars{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:8px}
+.hbars li{display:grid;grid-template-columns:110px minmax(0,1fr) auto;gap:10px;align-items:center;font-weight:700;font-size:15px}
+.hbars .track{height:14px;background:rgba(255,248,235,.6);border:2px solid var(--ink);border-radius:999px;overflow:hidden}
+.hbars .fill{display:block;height:100%;background:var(--blue);border-radius:0 4px 4px 0}
+.hbars .v{font-family:var(--mono);font-size:14px;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.hbars .v small{font:600 12px var(--body);color:var(--brown);margin-left:6px}
+.tbl-wrap{overflow-x:auto;margin-top:14px;background:var(--paper);border:var(--line);border-radius:10px;box-shadow:3px 3px 0 var(--ink)}
+.tbl{width:100%;border-collapse:collapse;font-size:15px}
+.tbl th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--brown);text-align:right;padding:8px 12px;border-bottom:2px solid var(--ink);white-space:nowrap}
+.tbl th:first-child,.tbl td:first-child{text-align:left}
+.tbl td{padding:7px 12px;text-align:right;font-family:var(--mono);font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;border-top:1px dashed rgba(74,44,18,.3)}
+.tbl td:first-child{font-family:var(--body)}
+.tbl tr.best td{background:rgba(250,224,82,.35)}
+.heat-wrap{overflow-x:auto;margin-top:14px;background:var(--paper);border:var(--line);border-radius:10px;padding:12px;box-shadow:3px 3px 0 var(--ink)}
+.heat{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,12px);gap:3px;width:max-content}
+.heat i{width:12px;height:12px;border-radius:3px;background:#EEE6D8;display:block}
+.heat i.l1{background:#B8E2F4}.heat i.l2{background:#6CC4EC}.heat i.l3{background:#20ACE4}.heat i.l4{background:#0B6E99}
+.heat i.out{visibility:hidden}
+.heat-leg{display:flex;align-items:center;gap:4px;margin-top:10px;font:600 12px var(--body);color:var(--brown)}
+.heat-leg i{width:12px;height:12px;border-radius:3px;display:inline-block}
+.months{display:flex;gap:0;font:600 11px var(--body);color:var(--brown);margin-bottom:4px;width:max-content}
 .source{font-size:13px;font-weight:600;color:var(--brown);margin-top:12px}
 footer{text-align:center;padding-block:0 48px}
 footer a{display:inline-block;border:var(--line);border-radius:6px;padding:6px 20px;font-family:var(--pirate);font-size:22px;box-shadow:3px 3px 0 var(--ink)}
@@ -313,12 +336,39 @@ var BRANCH = "main";
       (F.recent&&F.recent.length? '<ul class="results" aria-label="Senaste matcherna">'+F.recent.map(function(w){return '<li class="'+(w?'w':'l')+'">'+(w?'V':'F')+'</li>';}).join("")+'</ul>' : '')+
       (F.url? '<a class="ext" href="'+esc(F.url)+'" target="_blank" rel="noopener">Se profilen på FACEIT →</a>' : ''));
   }
-  function esplayBoard(E){
-    var rows=(E.varden||[]).filter(function(r){return r[1]!=null && r[1]!=="";});
-    board("","Esplay", rows.length? (E.uppdaterad? "Uppdaterad "+E.uppdaterad+"." : "") : "Esplay har ingen öppen statistik att hämta, så siffrorna här fyller jag i själv.",
+  function esplayBoard(E, A){
+    var rows=(E&&E.varden||[]).filter(function(r){return r[1]!=null && r[1]!=="";});
+    var link=(A&&A.url)||(E&&E.profil)||"https://esplay.com/loomboom";
+    if(A){
+      var kd = A.deaths? (A.kills/A.deaths).toFixed(2).replace(".",",") : "–";
+      var wr = A.matches? nf1.format(A.wins/A.matches*100)+" %" : "–";
+      var hs = A.kills? nf1.format(A.headshots/A.kills*100)+" %" : "–";
+      var adr = A.rounds? Math.round(A.damage/A.rounds) : null;
+      var M=A.modes||{};
+      board("full","Esplay","Där jag spelar som "+(A.username||"LoomBoom")+".",
+        '<div class="stats" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))">'+
+          (A.rating!=null? tile("Rating", n(A.rating), "", true) : '')+
+          (A.rating==null && A.history && A.history.length && A.history[A.history.length-1].elo!=null? tile("Elo", n(Math.round(A.history[A.history.length-1].elo)), "snitt senaste månaden", true) : '')+
+          tile("Matcher", n(A.matches), n(A.wins)+" V · "+n(A.losses)+" F"+(A.ties? " · "+n(A.ties)+" O":""))+
+          tile("Vinstprocent", wr)+
+          tile("K/D", kd, n(A.kills)+" kills · "+n(A.assists)+" assists")+
+          tile("Headshots", hs, n(A.headshots)+" st")+
+          (adr!=null? tile("ADR", n(adr), "skada per runda") : '')+
+          (A.level!=null? tile("Nivå", n(A.level)) : '')+
+        '</div>'+
+        ((M.mm||M.gather||M.tournament)? '<div class="stats">'+
+          (M.mm!=null? tile("Matchmaking", n(M.mm), "matcher"):'')+
+          (M.gather!=null? tile("Gathers", n(M.gather), (M.gathersCreated? n(M.gathersCreated)+" skapade av mig":"matcher")):'')+
+          (M.tournament!=null? tile("Turneringar", n(M.tournament), "matcher"):'')+
+        '</div>' : '')+
+        '<a class="ext" href="'+esc(link)+'" target="_blank" rel="noopener">Se min Esplay-profil →</a>');
+      return;
+    }
+    board("","Esplay", rows.length? (E.uppdaterad? "Uppdaterad "+E.uppdaterad+"." : "") : "Esplay-statistiken visas här när den har hämtats.",
       (rows.length? '<div class="stats">'+rows.map(function(r,i){return tile(r[0], String(r[1]), "", i===0);}).join("")+'</div>' : '')+
-      '<a class="ext" href="'+esc(E.profil)+'" target="_blank" rel="noopener">Se min Esplay-profil →</a>');
+      '<a class="ext" href="'+esc(link)+'" target="_blank" rel="noopener">Se min Esplay-profil →</a>');
   }
+
 
   function chessBoard(C, hist){
     var MODE={rapid:"Rapid",blitz:"Blitz",bullet:"Bullet",daily:"Daily"};
@@ -369,6 +419,98 @@ var BRANCH = "main";
       '<div class="fn-modes">'+m("Solo",F.solo)+m("Duo",F.duo)+m("Squad",F.squad)+'</div>'+
       '<a class="ext" href="https://fortnitetracker.com/profile/all/'+encodeURIComponent(F.name||"LooomBooom")+'" target="_blank" rel="noopener">Se mer på Fortnite Tracker →</a>');
   }
+
+  // Fyll i namnen när du vet vilken karta och vilket vapen varje nummer är
+  var ESPLAY_MAPS = {1:"Ancient",2:"Anubis",3:"Dust II",4:"Inferno",5:"Mirage",6:"Nuke",7:"Vertigo",9:"Overpass",12:"Train",44:"Cbble",45:"Tuscan",46:"Thera",47:"Season",74:"Old Cache",102:"Cache"};
+  var ESPLAY_WEAPONS = {1:"Kniv",2:"Zeus x27",3:"P2000",4:"USP-S",5:"Glock-18",6:"Dual Berettas",7:"P250",9:"Five-SeveN",10:"Desert Eagle",12:"Tec-9",13:"PP-Bizon",14:"MP5-SD",15:"M249",16:"MAC-10",17:"MAG-7",18:"MP9",19:"Negev",20:"Nova",21:"P90",24:"XM1014",25:"Galil AR",26:"FAMAS",27:"M4A4",28:"AK-47",29:"AUG",30:"AWP",31:"SCAR-20",32:"SG 553",33:"SSG 08",34:"G3SG1",35:"Flashbang",36:"HE-granat",37:"Smoke",38:"Brandgranat",40:"Molotov",41:"M4A1-S",42:"MP7"};
+  var MON=["jan","feb","mar","apr","maj","jun","jul","aug","sep","okt","nov","dec"];
+  function monthLabel(m){ m=String(m); return MON[parseInt(m.slice(4),10)-1]+" -"+m.slice(2,4); }
+  function pctf(v){ return v==null? "–" : nf1.format(v*100)+" %"; }
+  function hbar(label, frac, val, sub){
+    var w=Math.max(0,Math.min(100,frac*100));
+    return '<li><span>'+esc(label)+'</span><span class="track"><span class="fill" style="width:'+w.toFixed(1)+'%"></span></span><span class="v">'+esc(val)+(sub?'<small>'+esc(sub)+'</small>':'')+'</span></li>';
+  }
+
+  function recordsBoard(Rc){
+    var mp=function(k){ var r=Rc[k]; return r&&r.map!=null? (ESPLAY_MAPS[r.map]||("karta "+r.map)) : ""; };
+    var v=function(k){ return Rc[k]? Rc[k].v : null; };
+    var mins=function(sec){ return sec==null? "–" : Math.round(sec/60)+" min"; };
+    var T=[];
+    if(v("most_kills")!=null) T.push(tile("Flest kills", n(v("most_kills")), "på "+mp("most_kills"), true));
+    if(v("highest_kd")!=null) T.push(tile("Bästa K/D", (v("highest_kd")/100).toFixed(2).replace(".",","), "på "+mp("highest_kd")));
+    if(v("highest_elo")!=null) T.push(tile("Högsta elo", n(v("highest_elo"))));
+    if(v("longest_win_streak")!=null) T.push(tile("Längsta vinstsvit", n(v("longest_win_streak"))+" matcher"));
+    if(v("best_comeback")!=null) T.push(tile("Bästa comeback", n(v("best_comeback"))+" rundor", "upphämtat på "+mp("best_comeback")));
+    if(v("most_clutches")!=null) T.push(tile("Flest clutchar", n(v("most_clutches")), "i en match"));
+    if(v("most_aces")!=null) T.push(tile("Flest aces", n(v("most_aces")), "i en match"));
+    if(v("longest_match")!=null) T.push(tile("Längsta match", mins(v("longest_match")), "på "+mp("longest_match")));
+    if(v("shortest_match")!=null) T.push(tile("Kortaste match", mins(v("shortest_match")), "på "+mp("shortest_match")));
+    if(v("most_deaths")!=null) T.push(tile("Flest deaths", n(v("most_deaths")), "på "+mp("most_deaths")));
+    if(v("longest_lose_streak")!=null) T.push(tile("Längsta förlustsvit", n(v("longest_lose_streak"))+" matcher"));
+    if(v("lowest_elo")!=null) T.push(tile("Lägsta elo", n(v("lowest_elo"))));
+    if(T.length) board("full","Rekord","Mina bästa (och sämsta) matcher på Esplay.",'<div class="stats" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,215px),1fr))">'+T.join("")+'</div>');
+  }
+  function esplayExtra(A){
+    var H=(A.history||[]).filter(function(h){return h.elo!=null;});
+    if(H.length){
+      var last=H[H.length-1], peak=Math.max.apply(null,H.map(function(h){return h.eloMax||h.elo;}));
+      var eb=board("","Esplay-elo","Snittet för varje månad, de senaste 18 månaderna.",
+        '<div class="stats">'+tile("Elo just nu", n(Math.round(last.elo)), "snitt "+monthLabel(last.month), true)+tile("Högsta elo", n(peak))+'</div><div class="chart" style="margin-top:14px"></div>');
+      lineChart(eb.querySelector(".chart"), H.map(function(h){return {d:monthLabel(h.month), v:Math.round(h.elo)};}), "", "Esplay-elo");
+    }
+    if(A.records) recordsBoard(A.records);
+    var R=A.recent;
+    if(R && R.kills!=null){
+      var hg={}; (R.hitgroup_hits||[]).forEach(function(x){hg[x.hitgroup]=x.hits;});
+      var parts=[["Huvud",hg[1]||0],["Bröst",hg[2]||0],["Mage",hg[3]||0],["Armar",(hg[4]||0)+(hg[5]||0)],["Ben",(hg[6]||0)+(hg[7]||0)]];
+      var tot=parts.reduce(function(a,p){return a+p[1];},0)||1;
+      var games=(R.wins||0)+(R.losses||0)+(R.ties||0);
+      board("","Senaste "+games+" matcherna","Hur formen ser ut just nu.",
+        '<div class="stats">'+tile("Vinster", n(R.wins)+" – "+n(R.losses), "", true)+tile("K/D", R.deaths? (R.kills/R.deaths).toFixed(2).replace(".",","):"–")+
+          tile("ADR", R.rounds? n(Math.round(R.damage_dealt/R.rounds)):"–")+tile("Headshots", R.kills? nf1.format(R.headshots/R.kills*100)+" %":"–")+'</div>'+
+        '<ul class="hbars" aria-label="Var mina träffar hamnar">'+parts.map(function(p){return hbar(p[0], p[1]/tot, nf1.format(p[1]/tot*100)+" %");}).join("")+'</ul>');
+    }
+    var E=A.entry, Cl=(A.clutches||[]).slice().sort(function(a,b){return a.opponents-b.opponents;});
+    if((E&&E.kills!=null) || Cl.length){
+      var ep = E&&(E.kills+E.deaths)? E.kills/(E.kills+E.deaths) : null;
+      board("","Entry & clutchar","Första duellen i rundan, och när jag är sist kvar.",
+        (E? '<div class="stats">'+tile("Vunna entry-dueller", pctf(ep), n(E.kills)+" vunna av "+n(E.kills+E.deaths), true)+'</div>' : '')+
+        (Cl.length? '<ul class="hbars" aria-label="Vunna clutchar">'+Cl.map(function(c){ var t=c.success+c.fails; return hbar("1 mot "+c.opponents, t? c.success/t:0, t? nf1.format(c.success/t*100)+" %":"–", n(c.success)+" av "+n(t)); }).join("")+'</ul>' : ''));
+    }
+    var Mp=(A.maps||[]).filter(function(m){return (m.wins+m.losses)>0;}).map(function(m){ var g=m.wins+m.losses; return {name:ESPLAY_MAPS[m.map_id]||("Karta "+m.map_id), g:g, wr:m.wins/g, kd:m.deaths? m.kills/m.deaths:0, w:m.wins, l:m.losses}; }).sort(function(a,b){return b.g-a.g;});
+    if(Mp.length){
+      var bestWr=Math.max.apply(null,Mp.filter(function(m){return m.g>=20;}).map(function(m){return m.wr;}).concat([0]));
+      board("","Kartor","Gul rad är kartan där jag vinner mest (minst 20 matcher).",
+        '<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Karta</th><th>Matcher</th><th>V – F</th><th>Vinst</th><th>K/D</th></tr></thead><tbody>'+
+        Mp.map(function(m){ return '<tr'+(m.g>=20&&m.wr===bestWr?' class="best"':'')+'><td>'+esc(m.name)+'</td><td>'+n(m.g)+'</td><td>'+n(m.w)+' – '+n(m.l)+'</td><td>'+nf1.format(m.wr*100)+' %</td><td>'+m.kd.toFixed(2).replace(".",",")+'</td></tr>'; }).join("")+
+        '</tbody></table></div>');
+    }
+    var Wp=(A.weapons||[]).slice(0,6);
+    if(Wp.length){
+      var mx=Wp[0].kills||1;
+      board("","Vapen","Mina sex vapen med flest kills.",
+        '<ul class="hbars">'+Wp.map(function(w){ var hs=w.kills? Math.round(w.headshots/w.kills*100):0; return hbar(ESPLAY_WEAPONS[w.weapon_id]||("Vapen "+w.weapon_id), w.kills/mx, n(w.kills), hs+" % HS"); }).join("")+'</ul>');
+    }
+    var Ac=A.activity||[];
+    if(Ac.length){
+      var map={}; Ac.forEach(function(x){map[x[0]]=x[1];});
+      var end=new Date(), start=new Date(end); start.setDate(start.getDate()-364); start.setDate(start.getDate()-((start.getDay()+6)%7));
+      var cells="", months="", total=0, days=0, lastM=-1, col=0;
+      for(var d=new Date(start); d<=end || ((d.getDay()+6)%7)!==0; d.setDate(d.getDate()+1)){
+        var key=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+        var v=map[key]||0, wd=(d.getDay()+6)%7;
+        if(wd===0){ if(d.getMonth()!==lastM){ months+='<span style="width:'+15+'px;overflow:visible;white-space:nowrap">'+MON[d.getMonth()]+'</span>'; lastM=d.getMonth(); } else months+='<span style="width:15px"></span>'; col++; }
+        if(d>end){ cells+='<i class="out"></i>'; continue; }
+        total+=v; if(v) days++;
+        var lv=v===0?"":v<=2?"l1":v<=5?"l2":v<=10?"l3":"l4";
+        cells+='<i class="'+lv+'" title="'+key+': '+v+' matcher"></i>';
+      }
+      board("full","Aktivitet","Matcher på Esplay det senaste året. Varje ruta är en dag.",
+        '<div class="stats">'+tile("Matcher senaste året", n(total), "", true)+tile("Dagar jag spelat", n(days))+tile("Flest på en dag", n(Math.max.apply(null,Ac.map(function(x){return x[1];}))))+'</div>'+
+        '<div class="heat-wrap"><div class="months" aria-hidden="true">'+months+'</div><div class="heat" role="img" aria-label="'+n(total)+' matcher fördelade på '+n(days)+' dagar">'+cells+'</div>'+
+        '<div class="heat-leg">Färre <i style="background:#EEE6D8"></i><i style="background:#B8E2F4"></i><i style="background:#6CC4EC"></i><i style="background:#20ACE4"></i><i style="background:#0B6E99"></i> Fler</div></div>');
+    }
+  }
   function render(S, hist){
     document.getElementById("setup-board").remove();
     var up = document.getElementById("updated"); up.hidden = false;
@@ -405,7 +547,8 @@ var BRANCH = "main";
 
     if (S.leetify) premierBoard(S.leetify);
     if (S.faceit) faceitBoard(S.faceit);
-    if (ESPLAY) esplayBoard(ESPLAY);
+    if (S.esplay || ESPLAY) esplayBoard(ESPLAY, S.esplay);
+    if (S.esplay) esplayExtra(S.esplay);
     if (S.fortnite) fortniteBoard(S.fortnite);
     if (S.perfect) perfectBoard(S.perfect);
     if (S.chess) chessBoard(S.chess, hist);
@@ -423,7 +566,7 @@ var BRANCH = "main";
       }).join("")+'</ul>' : '<div class="empty">Inga Steam-spel de senaste två veckorna.</div>');
 
     var src = document.createElement("p"); src.className = "source";
-    src.textContent = "Källor: Steam Web API, Leetify, FACEIT, Fortnite-API.com och chess.com. Esplay fylls i för hand.";
+    src.textContent = "Källor: Steam Web API, Leetify, FACEIT, Esplay, Fortnite-API.com och chess.com.";
     boards.lastElementChild.appendChild(src);
   }
 

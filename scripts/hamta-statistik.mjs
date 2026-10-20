@@ -226,6 +226,68 @@ if (process.env.FORTNITE_API_KEY) {
   }
 }
 
+// Esplay via deras interna API (inofficiellt, kan sluta fungera)
+let esplay = null;
+try {
+  const ename = (process.env.ESPLAY_USERNAME || "LoomBoom").trim();
+  const eh = { "User-Agent": "LoomBoom-hemsida (loomboom.se)", Accept: "application/json" };
+  const ej = async (u) => { const r = await fetch(u, { headers: eh }); if (!r.ok) throw new Error(u.split("?")[0] + " svarade " + r.status); return r.json(); };
+  const P = await ej(`https://esplay.com/api/profile/get?username=${encodeURIComponent(ename)}&game_stats=1&game_id=1&level_history=1`);
+  let C = {};
+  try { C = await ej(`https://esplay.com/api/stats/user/career?id=${P.id}&game_id=1`); } catch (e) { console.warn("Esplay career:", e.message); }
+  const cs = P.cs_fields || {}, gs = P.game_stats || {};
+  const opt = async (path) => { try { return await ej("https://esplay.com/api/stats/" + path); } catch (e) { console.warn("Esplay", path.split("?")[0], e.message); return null; } };
+  const id = P.id;
+  const [eMaps, eWeapons, eClutch, eEntry, eHist, eRecent, eAct, eRec] = await Promise.all([
+    opt(`user/maps?id=${id}&game_id=1`),
+    opt(`user/weapons?id=${id}&game_id=1`),
+    opt(`user/clutches?id=${id}`),
+    opt(`user/entry_success?id=${id}&game_id=1`),
+    opt(`history/all?id=${id}&game_id=1&months=18`),
+    opt(`user/recent?id=${id}&game_id=1&weapon_id=null`),
+    opt(`user/activity?id=${id}&game_id=1`),
+    opt(`user/records?user_id=${id}&game_id=1`)
+  ]);
+  const records = {};
+  if (eRec) for (const [k, r] of Object.entries(eRec)) if (r && r.v != null) records[k] = { v: r.v, map: r.match?.map_id ?? null };
+  // Månadshistorik som sorterad lista
+  let history = [];
+  if (eHist && eHist.elo) {
+    const months = new Set();
+    for (const k of Object.keys(eHist)) for (const m of Object.keys(eHist[k] || {})) months.add(m);
+    history = [...months].sort().map((m) => ({
+      month: m,
+      elo: eHist.elo?.[m] ?? null, eloMin: eHist.elo_min?.[m] ?? null, eloMax: eHist.elo_max?.[m] ?? null,
+      kd: eHist.kdr?.[m] ?? null, adr: eHist.adr?.[m] ?? null, hs: eHist.headshots?.[m] ?? null,
+      entry: eHist.opening_success?.[m] ?? null, matches: eHist.matches?.[m] ?? 0
+    })).filter((h) => h.matches > 0 || h.elo != null);
+  }
+  const activity = eAct ? Object.entries(eAct).map(([d, v]) => [d, v?.matches_played || 0]).sort((a, b) => a[0].localeCompare(b[0])) : [];
+  const lv = Array.isArray(P.level_history) && P.level_history.length ? P.level_history[P.level_history.length - 1].level : null;
+  const num = (v) => (typeof v === "number" ? v : null);
+  esplay = {
+    username: P.username || ename,
+    url: `https://esplay.com/${encodeURIComponent((P.username || ename).toLowerCase())}`,
+    level: lv,
+    rating: num(gs.elo) ?? num(gs.rating) ?? num(gs.points) ?? null,
+    matches: num(gs.matches), wins: num(gs.wins), losses: num(gs.losses), ties: num(gs.ties),
+    kills: num(cs.kills), deaths: num(cs.deaths), assists: num(cs.assists), headshots: num(cs.headshots),
+    rounds: num(cs.rounds), damage: num(cs.damage_dealt),
+    longestStreak: num(P.longest_play_streak), clips: num(P.clip_count),
+    maps: Array.isArray(eMaps) ? eMaps : [],
+    weapons: Array.isArray(eWeapons) ? eWeapons.filter((w) => w.kills > 0).sort((a, b) => b.kills - a.kills).slice(0, 10) : [],
+    clutches: Array.isArray(eClutch) ? eClutch : [],
+    entry: eEntry ? { kills: eEntry.opening_kills ?? null, deaths: eEntry.opening_deaths ?? null } : null,
+    history,
+    recent: eRecent ? { wins: eRecent.wins, losses: eRecent.losses, ties: eRecent.ties, ...(eRecent.game_fields || {}) } : null,
+    activity,
+    records,
+    modes: { mm: num(C.mm_matches), gather: num(C.gather_matches), tournament: num(C.tournament_matches), gathersCreated: num(C.gathers_created) }
+  };
+} catch (e) {
+  console.warn("Kunde inte hämta Esplay:", e.message);
+}
+
 const stats = {
   updated: new Date().toISOString(),
   player: {
@@ -253,7 +315,8 @@ const stats = {
   faceit,
   chess,
   perfect,
-  fortnite
+  fortnite,
+  esplay
 };
 
 await mkdir("data", { recursive: true });
@@ -269,6 +332,7 @@ if (leetify?.premier) point.premier = leetify.premier;
 if (faceit?.elo) point.faceitElo = faceit.elo;
 if (fortnite?.overall?.wins != null) point.fortniteWins = fortnite.overall.wins;
 if (perfect) point.perfect = perfect.count;
+if (esplay?.rating != null) point.esplayRating = esplay.rating;
 for (const m of chess?.modes || []) if (m.rating) point["chess_" + m.label.toLowerCase()] = m.rating;
 history = history.filter((h) => h.date !== day);
 history.push(point);
