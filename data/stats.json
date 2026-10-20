@@ -1,23 +1,23 @@
 {
-  "updated": "2026-10-20T17:12:52.457Z",
+  "updated": "2026-10-20T20:39:13.739Z",
   "player": {
     "name": "LoomBoom",
     "avatar": "https://avatars.steamstatic.com/9e8af0555fb3fccfbf72c94ccf72d9da34206af7_full.jpg",
     "url": "https://steamcommunity.com/id/LoomBoom/",
     "online": true,
-    "playing": null,
+    "playing": "Counter-Strike 2",
     "level": 25
   },
   "library": {
     "count": 53,
-    "hours": 7166.5
+    "hours": 7168.9
   },
   "tracked": [
     {
       "appid": 730,
       "name": "Counter-Strike 2",
-      "hours": 6553.1,
-      "hours2w": 45.3
+      "hours": 6555.6,
+      "hours2w": 47.2
     },
     {
       "appid": 1966720,
@@ -36,13 +36,13 @@
     {
       "appid": 730,
       "name": "Counter-Strike 2",
-      "hours2w": 45.3,
-      "hours": 6553.1
+      "hours2w": 47.2,
+      "hours": 6555.6
     },
     {
       "appid": 728880,
       "name": "Overcooked! 2",
-      "hours2w": 22.4,
+      "hours2w": 22.1,
       "hours": 22.4
     },
     {
@@ -65,36 +65,80 @@
     }
   ],
   "cs": {
-    "kills": 184385,
-    "deaths": 165186,
-    "headshots": 77685,
-    "shotsFired": 3171573,
+    "kills": 184450,
+    "deaths": 165235,
+    "headshots": 77725,
+    "shotsFired": 3172679,
     "shotsHit": 333517,
-    "roundsWon": 99067,
-    "roundsPlayed": 190666,
-    "matchesWon": 5045,
-    "matchesPlayed": 9997,
-    "mvps": 32480,
-    "damage": 26273438
+    "roundsWon": 99105,
+    "roundsPlayed": 190737,
+    "matchesWon": 5047,
+    "matchesPlayed": 10001,
+    "mvps": 32492,
+    "damage": 26283293
   },
   "leetify": {
     "url": "https://leetify.com/app/profile/76561199030446550",
-    "premier": null,
-    "leetifyRating": 4.109999999999999,
+    "premier": 20716,
+    "leetifyRating": 3.61,
     "faceitLevel": 10,
     "faceitElo": 2184,
     "wingman": 18,
     "renown": null,
     "winrate": 0.6,
-    "totalMatches": 3317,
+    "totalMatches": 3321,
     "rating": {
-      "aim": 82.3814,
-      "positioning": 74.8571,
-      "utility": 55.3785,
-      "clutch": 0.0833,
-      "opening": 0.0468
+      "aim": 79.9546,
+      "positioning": 70.5402,
+      "utility": 51.7914,
+      "clutch": 0.0872,
+      "opening": 0.0354
     },
     "recent": [
+      {
+        "date": "2026-10-20T19:10:19.000Z",
+        "map": "de_cache",
+        "source": "matchmaking",
+        "outcome": "win",
+        "score": [
+          13,
+          5
+        ],
+        "rating": 0.0797
+      },
+      {
+        "date": "2026-10-20T18:46:13.000Z",
+        "map": "de_anubis",
+        "source": "matchmaking",
+        "outcome": "loss",
+        "score": [
+          1,
+          13
+        ],
+        "rating": -0.0411
+      },
+      {
+        "date": "2026-10-20T17:53:08.000Z",
+        "map": "de_dust2",
+        "source": "matchmaking",
+        "outcome": "loss",
+        "score": [
+          11,
+          13
+        ],
+        "rating": -0.0222
+      },
+      {
+        "date": "2026-10-20T17:28:18.000Z",
+        "map": "de_anubis",
+        "source": "matchmaking",
+        "outcome": "win",
+        "score": [
+          13,
+          2
+        ],
+        "rating": 0.0346
+      },
       {
         "date": "2026-10-19T17:58:13.000Z",
         "map": "de_cache",
@@ -138,50 +182,6 @@
           17
         ],
         "rating": 0.0607
-      },
-      {
-        "date": "2026-10-18T23:08:26.000Z",
-        "map": "de_nuke",
-        "source": "esplay",
-        "outcome": "win",
-        "score": [
-          8,
-          2
-        ],
-        "rating": 0.0492
-      },
-      {
-        "date": "2026-10-17T23:26:58.000Z",
-        "map": "de_anubis",
-        "source": "esplay",
-        "outcome": "loss",
-        "score": [
-          6,
-          13
-        ],
-        "rating": 0.0326
-      },
-      {
-        "date": "2026-10-17T19:58:23.000Z",
-        "map": "de_vertigo",
-        "source": "esplay",
-        "outcome": "win",
-        "score": [
-          13,
-          9
-        ],
-        "rating": 0.0352
-      },
-      {
-        "date": "2026-10-17T19:27:52.000Z",
-        "map": "de_ancient",
-        "source": "esplay",
-        "outcome": "win",
-        "score": [
-          13,
-          2
-        ],
-        "rating": 0.0534
       }
     ]
   },
@@ -369,7 +369,7 @@
         "appid": 730,
         "name": "Counter-Strike 2",
         "achievements": 1,
-        "hours": 6553.1
+        "hours": 6555.6
       }
     ]
   },
