@@ -1,23 +1,23 @@
 {
-  "updated": "2026-10-22T23:26:04.038Z",
+  "updated": "2026-10-23T04:56:29.885Z",
   "player": {
     "name": "LoomBoom",
     "avatar": "https://avatars.steamstatic.com/9e8af0555fb3fccfbf72c94ccf72d9da34206af7_full.jpg",
     "url": "https://steamcommunity.com/id/LoomBoom/",
     "online": true,
-    "playing": "Counter-Strike 2",
+    "playing": null,
     "level": 25
   },
   "library": {
     "count": 53,
-    "hours": 7177.8
+    "hours": 7178.5
   },
   "tracked": [
     {
       "appid": 730,
       "name": "Counter-Strike 2",
-      "hours": 6564.4,
-      "hours2w": 52.4
+      "hours": 6565.2,
+      "hours2w": 53.1
     },
     {
       "appid": 1966720,
@@ -30,14 +30,14 @@
     {
       "appid": 1883580,
       "name": "Cactus Simulator",
-      "hours2w": 102.1,
+      "hours2w": 99,
       "hours": 102.1
     },
     {
       "appid": 730,
       "name": "Counter-Strike 2",
-      "hours2w": 52.4,
-      "hours": 6564.4
+      "hours2w": 53.1,
+      "hours": 6565.2
     },
     {
       "appid": 728880,
@@ -48,34 +48,34 @@
     {
       "appid": 652980,
       "name": "Loading Screen Simulator",
-      "hours2w": 9.9,
+      "hours2w": 7.1,
       "hours": 9.9
     },
     {
       "appid": 2923300,
       "name": "Banana",
-      "hours2w": 8.3,
+      "hours2w": 4.7,
       "hours": 8.3
     },
     {
       "appid": 3131610,
       "name": "Bread",
-      "hours2w": 4,
+      "hours2w": 1.7,
       "hours": 4
     }
   ],
   "cs": {
-    "kills": 184573,
-    "deaths": 165366,
-    "headshots": 77771,
-    "shotsFired": 3174203,
+    "kills": 184591,
+    "deaths": 165384,
+    "headshots": 77781,
+    "shotsFired": 3174621,
     "shotsHit": 333517,
-    "roundsWon": 99165,
-    "roundsPlayed": 190865,
-    "matchesWon": 5050,
-    "matchesPlayed": 10006,
-    "mvps": 32511,
-    "damage": 26301308
+    "roundsWon": 99179,
+    "roundsPlayed": 190895,
+    "matchesWon": 5051,
+    "matchesPlayed": 10007,
+    "mvps": 32512,
+    "damage": 26303445
   },
   "leetify": {
     "url": "https://leetify.com/app/profile/76561199030446550",
@@ -369,7 +369,7 @@
         "appid": 730,
         "name": "Counter-Strike 2",
         "achievements": 1,
-        "hours": 6564.4
+        "hours": 6565.2
       }
     ]
   },
