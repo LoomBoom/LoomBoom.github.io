@@ -74,9 +74,19 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,100px);line
     radial-gradient(circle, var(--nail) 0 3.5px, #9b7a55 4px, transparent 5px) 100% 0/12px 12px no-repeat,
     radial-gradient(circle, var(--nail) 0 3.5px, #9b7a55 4px, transparent 5px) 0 100%/12px 12px no-repeat,
     radial-gradient(circle, var(--nail) 0 3.5px, #9b7a55 4px, transparent 5px) 100% 100%/12px 12px no-repeat}
-.board-head{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.board-head{margin:0 0 6px;font:inherit}
+.fold{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:12px;width:100%;cursor:pointer;border-radius:8px}
+.fold:focus-visible{outline:3px dashed var(--amethyst);outline-offset:4px}
+.fold .t{font-family:var(--pirate);font-weight:400;font-size:clamp(32px,4.5vw,44px);line-height:1;flex:1 1 auto;min-width:0}
+.fold .chev{width:38px;height:38px;flex:none;border:var(--line);border-radius:50%;background:var(--paper);box-shadow:2px 2px 0 var(--ink);display:grid;place-items:center;transition:transform .2s}
+.fold .chev::before{content:"";width:10px;height:10px;border-right:3px solid var(--ink);border-bottom:3px solid var(--ink);transform:translateY(-2px) rotate(45deg)}
+.fold:hover .chev{background:var(--yellow)}
+.board.closed .chev{transform:rotate(-90deg)}
+.board.closed{padding-bottom:20px}
+.board.closed .board-head{margin-bottom:0}
+.toggle-all{margin-top:14px;font:700 15px var(--display);background:var(--paper);border:var(--line);border-radius:999px;padding:4px 16px;box-shadow:2px 2px 0 var(--ink);cursor:pointer}
+.toggle-all:hover{background:var(--yellow)}
 .badge{width:44px;height:44px;flex:none;border-radius:50%;border:var(--line);background:var(--c);display:grid;place-items:center;font-family:var(--title);font-size:20px;color:var(--ink);box-shadow:2px 2px 0 var(--ink)}
-.board h2{font-family:var(--pirate);font-weight:400;font-size:clamp(32px,4.5vw,44px);line-height:1;margin:0}
 .board .note{color:var(--brown);font-weight:600;margin:4px 0 14px;font-size:15px}
 
 .rows{list-style:none;margin:0;padding:0}
@@ -161,6 +171,7 @@ footer a:hover{background:var(--yellow)}
     <h1>Inställningar</h1>
     <p class="lead">Mina inställningar i spelen jag kör, och grejerna jag spelar och målar med.</p>
     <ul class="tabs" id="tabs" aria-label="Hoppa till"></ul>
+    <button type="button" class="toggle-all" id="toggle-all">Fäll ihop alla</button>
   </header>
 
   <main class="boards" id="boards"></main>
@@ -360,9 +371,21 @@ var OTHER = [
       return '<li><span class="k">'+esc(r[0])+'</span>'+vh+'</li>';
     }).join('');
   }
-  function head(short,color,name){ return '<div class="board-head"><span class="badge" style="--c:'+color+'" aria-hidden="true">'+esc(short)+'</span><h2>'+esc(name)+'</h2></div>'; }
+  function head(short,color,name){ return '<h2 class="board-head"><button type="button" class="fold" aria-expanded="true"><span class="badge" style="--c:'+color+'" aria-hidden="true">'+esc(short)+'</span><span class="t">'+esc(name)+'</span><span class="chev" aria-hidden="true"></span></button></h2>'; }
+  var CLOSED={}; try{ CLOSED=JSON.parse(localStorage.getItem('lb-closed')||'{}')||{}; }catch(e){}
+  function save(){ try{ localStorage.setItem('lb-closed', JSON.stringify(CLOSED)); }catch(e){} }
+  function setOpen(sec, open){
+    sec.classList.toggle('closed', !open);
+    sec.querySelector('.fold').setAttribute('aria-expanded', open?'true':'false');
+    sec.querySelector('.board-body').hidden = !open;
+    if(open) delete CLOSED[sec.id]; else CLOSED[sec.id]=1;
+  }
   function add(id,cls,html,name,color){
     var s=document.createElement('section'); s.className='board wood '+cls; s.id=id; s.innerHTML=html; boards.appendChild(s);
+    var h=s.querySelector('.board-head'), body=document.createElement('div'); body.className='board-body'; body.id=id+'-body';
+    while(h.nextSibling) body.appendChild(h.nextSibling);
+    s.appendChild(body); h.querySelector('.fold').setAttribute('aria-controls', body.id);
+    if(CLOSED[id]) setOpen(s,false);
     var li=document.createElement('li'); li.innerHTML='<a href="#'+id+'"><span class="dot" style="--c:'+color+'" aria-hidden="true"></span>'+esc(name)+'</a>'; tabs.appendChild(li);
   }
 
@@ -382,14 +405,25 @@ var OTHER = [
   if(D.skin) stats='<div class="mc-top"><figure class="skin"><img src="'+D.skin+'" alt="LoomBooms Minecraft-skin framifrån: brunt hår, gröna ögon, svart kavaj och ljusblå skjorta" width="160" height="320"><figcaption>Mitt skin</figcaption></figure>'+stats+'</div>';
   return stats+groups+codes;
   }
-  add('cs','full', head('CS','#20ACE4','Counter-Strike 2')+'<p class="note">Mitt main-spel. Tryck på en rubrik för att visa eller dölja den.</p>'+big(CS),'Counter-Strike 2','#20ACE4');
-  add('minecraft','full', head('MC','#73BB89','Minecraft')+'<p class="note">Bygga, gräva och överleva. Tryck på en rubrik för att visa eller dölja den.</p>'+big(MC),'Minecraft','#73BB89');
+  add('cs','full', head('CS','#20ACE4','Counter-Strike 2')+'<p class="note">Mitt main-spel. Tryck på en grupp för att visa eller dölja den.</p>'+big(CS),'Counter-Strike 2','#20ACE4');
+  add('minecraft','full', head('MC','#73BB89','Minecraft')+'<p class="note">Bygga, gräva och överleva. Tryck på en grupp för att visa eller dölja den.</p>'+big(MC),'Minecraft','#73BB89');
 
   OTHER.forEach(function(b){
     add(b.id,'', head(b.short,b.color,b.name)+'<p class="note">'+esc(b.note)+'</p><ul class="rows">'+rowsHtml(b.rows)+'</ul>', b.name, b.color);
   });
 
+  // Fäll ihop / öppna alla
+  var all=document.getElementById('toggle-all');
+  function syncAll(){ var anyOpen=!!boards.querySelector('.board:not(.closed)'); all.textContent = anyOpen? 'Fäll ihop alla' : 'Öppna alla'; }
+  all.addEventListener('click',function(){ var anyOpen=!!boards.querySelector('.board:not(.closed)'); boards.querySelectorAll('.board').forEach(function(b){ setOpen(b,!anyOpen); }); save(); syncAll(); });
+  boards.addEventListener('click',function(e){ if(e.target.closest('.fold')) syncAll(); });
+  // Klick på ett spel högst upp öppnar det
+  tabs.addEventListener('click',function(e){ var a=e.target.closest('a'); if(!a) return; var sec=document.getElementById(a.getAttribute('href').slice(1)); if(sec&&sec.classList.contains('closed')){ setOpen(sec,true); save(); syncAll(); } });
+  syncAll();
+
   boards.addEventListener('click',function(e){
+    var f=e.target.closest('.fold');
+    if(f){ var sec=f.closest('.board'); setOpen(sec, sec.classList.contains('closed')); save(); return; }
     var btn=e.target.closest('.copy'); if(!btn) return;
     var el=document.getElementById(btn.dataset.target), text=el.textContent;
     function done(){ btn.textContent='Kopierad!'; setTimeout(function(){btn.textContent='Kopiera';},1600); }
