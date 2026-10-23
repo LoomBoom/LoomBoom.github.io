@@ -175,29 +175,42 @@ try {
 // 100 % avklarade spel: kollar achievements för alla spel jag har spelat
 let perfect = null;
 try {
-  const played = games.filter((g) => (g.playtime_forever || 0) > 0).slice(0, 300);
-  const list = [];
-  let withAch = 0, unlocked = 0, total = 0;
-  for (let i = 0; i < played.length; i += 8) {
-    const batch = played.slice(i, i + 8);
-    const res = await Promise.all(batch.map(async (g) => {
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  // Alla spel jag äger plus de jag spelat nyligen (fångar även spel som inte syns i biblioteket)
+  const pool = new Map();
+  for (const g of games) pool.set(g.appid, g);
+  for (const g of recent.response?.games || []) if (!pool.has(g.appid)) pool.set(g.appid, g);
+  const played = [...pool.values()].filter((g) => (g.playtime_forever || 0) > 0 || (g.playtime_2weeks || 0) > 0);
+  const getAch = async (g) => {
+    for (let tryNo = 0; tryNo < 3; tryNo++) {
       try {
         const url = new URL("https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v1/");
         url.searchParams.set("key", KEY); url.searchParams.set("steamid", steamid); url.searchParams.set("appid", g.appid);
-        const r = await fetch(url); if (!r.ok) return null;
+        const r = await fetch(url);
+        if (r.status === 429 || r.status >= 500) { await sleep(1500 * (tryNo + 1)); continue; }
+        if (!r.ok) return null; // spelet har inga achievements
         const a = (await r.json()).playerstats?.achievements || [];
         if (!a.length) return null;
         return { g, done: a.filter((x) => x.achieved === 1).length, all: a.length };
-      } catch { return null; }
-    }));
+      } catch { await sleep(1000); }
+    }
+    console.warn("Kunde inte läsa achievements för", g.name || g.appid);
+    return null;
+  };
+  const list = [];
+  let withAch = 0, unlocked = 0, total = 0;
+  for (let i = 0; i < played.length; i += 4) {
+    const res = await Promise.all(played.slice(i, i + 4).map(getAch));
     for (const x of res) {
       if (!x) continue;
       withAch++; unlocked += x.done; total += x.all;
-      if (x.done === x.all) list.push({ appid: x.g.appid, name: x.g.name, achievements: x.all, hours: hours(x.g.playtime_forever) });
+      if (x.done === x.all) list.push({ appid: x.g.appid, name: x.g.name || String(x.g.appid), achievements: x.all, hours: hours(x.g.playtime_forever) });
     }
+    await sleep(300);
   }
   list.sort((a, b) => b.achievements - a.achievements);
   perfect = { count: list.length, gamesWithAchievements: withAch, unlocked, total, games: list };
+  console.log(`100 %: ${list.length} av ${withAch} spel med achievements (${played.length} spelade spel kollade)`);
 } catch (e) {
   console.warn("Kunde inte räkna achievements:", e.message);
 }
