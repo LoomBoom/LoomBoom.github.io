@@ -112,7 +112,10 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,100px);line
 .stat .l{display:block;font-size:12px;font-weight:700;color:var(--brown);text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
 .stat .n{display:block;font-family:var(--mono);font-weight:700;font-size:clamp(17px,1.9vw,23px);line-height:1.2;font-variant-numeric:tabular-nums;white-space:nowrap}
 .stat.main{background:var(--yellow)}
-.groups{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,330px),1fr));gap:14px;align-items:start}
+.groups{display:flex;gap:14px;align-items:flex-start}
+.gcol{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:14px}
+.groups-wide{display:flex;flex-direction:column;gap:14px;margin-top:14px}
+@media (max-width:760px){.groups{flex-direction:column;align-items:stretch}.gcol{display:contents}}
 .grp{background:rgba(255,248,235,.55);border:2.5px solid var(--ink);border-radius:10px;min-width:0}
 .grp summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 14px;font-family:var(--pirate);font-size:26px;line-height:1.1}
 .grp summary::-webkit-details-marker{display:none}
@@ -372,8 +375,9 @@ var OTHER = [
     }).join('');
   }
   function head(short,color,name){ return '<h2 class="board-head"><button type="button" class="fold" aria-expanded="true"><span class="badge" style="--c:'+color+'" aria-hidden="true">'+esc(short)+'</span><span class="t">'+esc(name)+'</span><span class="chev" aria-hidden="true"></span></button></h2>'; }
-  var CLOSED={}; try{ CLOSED=JSON.parse(localStorage.getItem('lb-closed')||'{}')||{}; }catch(e){}
-  function save(){ try{ localStorage.setItem('lb-closed', JSON.stringify(CLOSED)); }catch(e){} }
+  // Alla spel börjar hopfällda, bara Setup är öppen
+  var CLOSED={};
+  function save(){}
   function setOpen(sec, open){
     sec.classList.toggle('closed', !open);
     sec.querySelector('.fold').setAttribute('aria-expanded', open?'true':'false');
@@ -385,7 +389,7 @@ var OTHER = [
     var h=s.querySelector('.board-head'), body=document.createElement('div'); body.className='board-body'; body.id=id+'-body';
     while(h.nextSibling) body.appendChild(h.nextSibling);
     s.appendChild(body); h.querySelector('.fold').setAttribute('aria-controls', body.id);
-    if(CLOSED[id]) setOpen(s,false);
+    if(id!=='setup') setOpen(s,false);
     var li=document.createElement('li'); li.innerHTML='<a href="#'+id+'"><span class="dot" style="--c:'+color+'" aria-hidden="true"></span>'+esc(name)+'</a>'; tabs.appendChild(li);
   }
 
@@ -393,9 +397,11 @@ var OTHER = [
 
   function big(D){
   var stats='<div class="stats">'+D.stats.map(function(x){return '<div class="stat'+(x[2]?' main':'')+'"><span class="l">'+esc(x[0])+'</span><span class="n">'+esc(x[1])+'</span></div>';}).join('')+'</div>';
-  var groups='<div class="groups">'+D.groups.map(function(g){
-    return '<details class="grp"'+(g.open?' open':'')+'><summary>'+esc(g.t)+'<span class="count">'+g.rows.length+' st</span></summary><ul class="rows">'+rowsHtml(g.rows)+'</ul></details>';
-  }).join('')+
+  var cols=['',''];
+  D.groups.forEach(function(g,i){
+    cols[i%2]+='<details class="grp" style="order:'+i+'"><summary>'+esc(g.t)+'<span class="count">'+g.rows.length+' st</span></summary><ul class="rows">'+rowsHtml(g.rows)+'</ul></details>';
+  });
+  var groups='<div class="groups"><div class="gcol">'+cols[0]+'</div><div class="gcol">'+cols[1]+'</div></div><div class="groups-wide">'+
     (D.keyGroups||(D.keys?[{t:"Tangenter",keys:D.keys}]:[])).map(function(G){return '<details class="grp wide"><summary>'+esc(G.t)+'<span class="count">'+G.keys.length+' st</span></summary><ul class="keys">'+
     G.keys.map(function(k){return '<li><span>'+esc(k[0])+'</span><kbd>'+esc(k[1])+'</kbd></li>';}).join('')+'</ul></details>';}).join('')+'</div>';
   var codes=(D.codes||[]).map(function(c,i){
