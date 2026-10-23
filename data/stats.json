@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-23T04:56:29.885Z",
+  "updated": "2026-10-23T10:08:05.831Z",
   "player": {
     "name": "LoomBoom",
     "avatar": "https://avatars.steamstatic.com/9e8af0555fb3fccfbf72c94ccf72d9da34206af7_full.jpg",
@@ -30,7 +30,7 @@
     {
       "appid": 1883580,
       "name": "Cactus Simulator",
-      "hours2w": 99,
+      "hours2w": 93.8,
       "hours": 102.1
     },
     {
@@ -46,16 +46,16 @@
       "hours": 22.4
     },
     {
-      "appid": 652980,
-      "name": "Loading Screen Simulator",
-      "hours2w": 7.1,
-      "hours": 9.9
-    },
-    {
       "appid": 2923300,
       "name": "Banana",
       "hours2w": 4.7,
       "hours": 8.3
+    },
+    {
+      "appid": 652980,
+      "name": "Loading Screen Simulator",
+      "hours2w": 1.9,
+      "hours": 9.9
     },
     {
       "appid": 3131610,
