@@ -204,13 +204,24 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,100px);line
   background:#FFF8EB;background:color-mix(in srgb, var(--c) 24%, #FFF8EB)}
 .game-head{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .game-head .badge{width:52px;height:52px;flex:none;border-radius:50%;border:var(--line);background:var(--c);display:grid;place-items:center;font:400 20px var(--title);color:var(--ink);box-shadow:2px 2px 0 var(--ink)}
-.game-head h2{font-family:var(--title);font-weight:400;font-size:clamp(32px,5.5vw,52px);line-height:1;margin:0;color:var(--c);-webkit-text-stroke:.05em var(--ink);paint-order:stroke fill;text-shadow:.04em .05em 0 var(--ink)}
+.game-head{margin:0;font:inherit}
+.gfold{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:14px;width:100%;cursor:pointer;border-radius:10px}
+.gfold:focus-visible{outline:3px dashed var(--amethyst);outline-offset:4px}
+.gfold .gt{flex:1 1 auto;min-width:0;font-family:var(--title);font-weight:400;font-size:clamp(32px,5.5vw,52px);line-height:1;color:var(--c);-webkit-text-stroke:.05em var(--ink);paint-order:stroke fill;text-shadow:.04em .05em 0 var(--ink)}
+.gfold .chev{width:42px;height:42px;flex:none;border:var(--line);border-radius:50%;background:var(--paper);box-shadow:2px 2px 0 var(--ink);display:grid;place-items:center;transition:transform .2s}
+.gfold .chev::before{content:"";width:11px;height:11px;border-right:3px solid var(--ink);border-bottom:3px solid var(--ink);transform:translateY(-2px) rotate(45deg)}
+.gfold:hover .chev{background:var(--yellow)}
+.game.closed > .game-head .chev,.sub.closed > .game-head .chev{transform:rotate(-90deg)}
+.game-body{margin-top:2px}
+.toggle-all{margin-top:14px;font:700 15px var(--display);background:var(--paper);border:var(--line);border-radius:999px;padding:4px 16px;box-shadow:2px 2px 0 var(--ink);cursor:pointer}
+.toggle-all:hover{background:var(--yellow)}
 .game-note{font-weight:600;color:#2c3a4a;margin:8px 0 18px;max-width:60ch}
 .game .boards{padding-block:0;gap:clamp(18px,2.4vw,26px)}
 .sub{grid-column:1 / -1;min-width:0;border:3px solid var(--ink);border-top:12px solid var(--c);border-radius:14px;box-shadow:4px 4px 0 var(--ink);padding:clamp(14px,2.2vw,22px);
   background:#FFF8EB;background:color-mix(in srgb, var(--c) 30%, #FFF8EB)}
 .sub .game-head .badge{width:40px;height:40px;font-size:16px}
-.sub .game-head h2{font-size:clamp(26px,4vw,38px)}
+.sub .gfold .gt{font-size:clamp(26px,4vw,38px)}
+.sub .gfold .chev{width:34px;height:34px}
 .sub .game-note{margin:6px 0 14px}
 .source{font-size:13px;font-weight:600;color:var(--brown);margin-top:12px}
 footer{text-align:center;padding-block:0 48px}
@@ -236,6 +247,7 @@ footer a:hover{background:var(--yellow)}
     <p class="lead">Premier, FACEIT, Esplay, Fortnite, schack och mina Steam-spel. Sidan uppdateras automatiskt varje timme.</p>
     <span class="updated" id="updated" hidden><span class="dot" aria-hidden="true"></span><span id="updated-text"></span></span>
     <ul class="tabs" id="tabs" aria-label="Hoppa till"></ul>
+    <button type="button" class="toggle-all" id="toggle-all" hidden>Fäll ihop alla</button>
   </header>
 
   <main class="boards" id="boards">
@@ -291,7 +303,8 @@ var BRANCH = "main";
   // En stor färgad ruta för ett spel (eller en mindre ruta inuti, sub = true)
   function group(id, title, short, color, note, parent, sub){
     var g = document.createElement("section"); g.className = sub ? "sub" : "game"; g.id = id; g.style.setProperty("--c", color);
-    g.innerHTML = '<div class="game-head"><span class="badge" aria-hidden="true">'+esc(short)+'</span><h2>'+esc(title)+'</h2></div>'+(note?'<p class="game-note">'+esc(note)+'</p>':'')+'<div class="boards"></div>';
+    g.innerHTML = '<h2 class="game-head"><button type="button" class="gfold" aria-expanded="true" aria-controls="'+id+'-body"><span class="badge" aria-hidden="true">'+esc(short)+'</span><span class="gt">'+esc(title)+'</span><span class="chev" aria-hidden="true"></span></button></h2>'+
+      '<div class="game-body" id="'+id+'-body">'+(note?'<p class="game-note">'+esc(note)+'</p>':'')+'<div class="boards"></div></div>';
     (parent||boards).appendChild(g);
     if(!sub){ var li=document.createElement("li"); li.innerHTML='<a href="#'+id+'"><span class="dot" style="--c:'+color+'" aria-hidden="true"></span>'+esc(title)+'</a>'; document.getElementById("tabs").appendChild(li); }
     return g.querySelector(".boards");
@@ -549,6 +562,26 @@ var BRANCH = "main";
     var cs = (S.tracked||[]).find(function(t){return t.appid===730;}) || {};
     var lc = (S.tracked||[]).find(function(t){return t.appid===1966720;}) || {};
 
+    /* ---------- STEAM ---------- */
+    target = group("steam","Steam","S","#66C0F4","Min profil och alla mina spel på Steam.");
+    board("full","Profil","",
+      '<div class="profile">'+(P.avatar?'<img class="avatar" src="'+esc(P.avatar)+'" alt="" onerror="this.remove()">':'')+
+      '<div class="who"><div class="name">'+esc(P.name||"LoomBoom")+'</div>'+
+      '<span class="chip'+(P.online?' on':'')+'"><i aria-hidden="true"></i>'+(P.playing?'Spelar '+esc(P.playing):(P.online?'Online':'Offline'))+'</span></div></div>'+
+      '<div class="stats">'+
+        tile("Speltid totalt", h(S.library && S.library.hours), "", true)+
+        tile("Spel på Steam", n(S.library && S.library.count))+
+        tile("Steam-nivå", n(P.level))+
+        tile("Lethal Company", h(lc.hours), lc.hours2w? h(lc.hours2w)+" senaste 2 veckorna" : "")+
+      '</div>');
+    if (S.perfect) perfectBoard(S.perfect);
+    var rec = (S.recent||[]).filter(function(g){return g.hours2w>0;});
+    var max = Math.max.apply(null, rec.map(function(g){return g.hours2w;}).concat([1]));
+    board("full","Senaste 2 veckorna","Det jag har spelat mest på Steam nyligen.",
+      rec.length ? '<ul class="bars">'+rec.map(function(g){
+        return '<li><span class="g">'+esc(g.name)+'</span><span class="h">'+h(g.hours2w)+'</span><span class="track"><span class="fill" style="width:'+(g.hours2w/max*100).toFixed(1)+'%"></span></span></li>';
+      }).join("")+'</ul>' : '<div class="empty">Inga Steam-spel de senaste två veckorna.</div>');
+
     /* ---------- COUNTER-STRIKE 2 ---------- */
     var CSg = group("cs","Counter-Strike 2","CS","#F2A541","Mitt main-spel. Allmän statistik från Steam, och sedan Premier, FACEIT och Esplay var för sig.");
     target = CSg;
@@ -586,32 +619,23 @@ var BRANCH = "main";
       if (S.esplay) esplayExtra(S.esplay);
     }
 
-    /* ---------- STEAM ---------- */
-    target = group("steam","Steam","S","#66C0F4","Min profil och alla mina spel på Steam.");
-    board("full","Profil","",
-      '<div class="profile">'+(P.avatar?'<img class="avatar" src="'+esc(P.avatar)+'" alt="" onerror="this.remove()">':'')+
-      '<div class="who"><div class="name">'+esc(P.name||"LoomBoom")+'</div>'+
-      '<span class="chip'+(P.online?' on':'')+'"><i aria-hidden="true"></i>'+(P.playing?'Spelar '+esc(P.playing):(P.online?'Online':'Offline'))+'</span></div></div>'+
-      '<div class="stats">'+
-        tile("Speltid totalt", h(S.library && S.library.hours), "", true)+
-        tile("Spel på Steam", n(S.library && S.library.count))+
-        tile("Steam-nivå", n(P.level))+
-        tile("Lethal Company", h(lc.hours), lc.hours2w? h(lc.hours2w)+" senaste 2 veckorna" : "")+
-      '</div>');
-    if (S.perfect) perfectBoard(S.perfect);
-    var rec = (S.recent||[]).filter(function(g){return g.hours2w>0;});
-    var max = Math.max.apply(null, rec.map(function(g){return g.hours2w;}).concat([1]));
-    board("full","Senaste 2 veckorna","Det jag har spelat mest på Steam nyligen.",
-      rec.length ? '<ul class="bars">'+rec.map(function(g){
-        return '<li><span class="g">'+esc(g.name)+'</span><span class="h">'+h(g.hours2w)+'</span><span class="track"><span class="fill" style="width:'+(g.hours2w/max*100).toFixed(1)+'%"></span></span></li>';
-      }).join("")+'</ul>' : '<div class="empty">Inga Steam-spel de senaste två veckorna.</div>');
-
     /* ---------- FORTNITE ---------- */
     if (S.fortnite){ target = group("fortnite","Fortnite","FN","#B07CC6",""); fortniteBoard(S.fortnite); }
 
     /* ---------- SCHACK ---------- */
     if (S.chess){ target = group("schack","Schack","♞","#8DB86A",""); chessBoard(S.chess, hist); }
     target = null;
+
+    // Fälla ihop / öppna
+    function setOpen(g, open){ g.classList.toggle("closed", !open); g.querySelector(":scope > .game-head .gfold").setAttribute("aria-expanded", open?"true":"false"); g.querySelector(":scope > .game-body").hidden = !open; }
+    var all = document.getElementById("toggle-all"); all.hidden = false;
+    function syncAll(){ all.textContent = boards.querySelector(".game:not(.closed)") ? "Fäll ihop alla" : "Öppna alla"; }
+    boards.addEventListener("click", function(e){ var f = e.target.closest(".gfold"); if(!f) return; var g = f.closest(".game, .sub"); setOpen(g, g.classList.contains("closed")); syncAll(); });
+    all.addEventListener("click", function(){ var anyOpen = !!boards.querySelector(".game:not(.closed)"); boards.querySelectorAll(".game").forEach(function(g){ setOpen(g, !anyOpen); }); syncAll(); });
+    // Allt börjar hopfällt utom Steam
+    boards.querySelectorAll(".game, .sub").forEach(function(g){ if(g.id !== "steam") setOpen(g, false); });
+    syncAll();
+    document.getElementById("tabs").addEventListener("click", function(e){ var a = e.target.closest("a"); if(!a) return; var g = document.getElementById(a.getAttribute("href").slice(1)); if(g && g.classList.contains("closed")){ setOpen(g, true); syncAll(); } });
 
     var src = document.createElement("p"); src.className = "source";
     src.textContent = "Källor: Steam Web API, Leetify, FACEIT, Esplay, Fortnite-API.com och chess.com.";
