@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-24T01:38:24.970Z",
+  "updated": "2026-10-24T07:21:14.424Z",
   "player": {
     "name": "LoomBoom",
     "avatar": "https://avatars.steamstatic.com/9e8af0555fb3fccfbf72c94ccf72d9da34206af7_full.jpg",
@@ -30,7 +30,7 @@
     {
       "appid": 1883580,
       "name": "Cactus Simulator",
-      "hours2w": 78.3,
+      "hours2w": 72.6,
       "hours": 102.1
     },
     {
@@ -48,7 +48,7 @@
     {
       "appid": 2923300,
       "name": "Banana",
-      "hours2w": 1.3,
+      "hours2w": 0.5,
       "hours": 8.4
     }
   ],
