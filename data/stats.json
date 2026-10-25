@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-25T11:38:58.060Z",
+  "updated": "2026-10-25T16:27:43.603Z",
   "player": {
     "name": "LoomBoom",
     "avatar": "https://avatars.steamstatic.com/9e8af0555fb3fccfbf72c94ccf72d9da34206af7_full.jpg",
@@ -36,19 +36,19 @@
     {
       "appid": 1883580,
       "name": "Cactus Simulator",
-      "hours2w": 44.3,
+      "hours2w": 39.5,
       "hours": 102.1
     },
     {
       "appid": 728880,
       "name": "Overcooked! 2",
-      "hours2w": 10.5,
+      "hours2w": 9.7,
       "hours": 22.4
     },
     {
       "appid": 2923300,
       "name": "Banana",
-      "hours2w": 0.4,
+      "hours2w": 0.2,
       "hours": 8.4
     }
   ],
