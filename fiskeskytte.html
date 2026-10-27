@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LoomBoom Fiskeskytte</title>
+<meta name="description" content="Sikta och träffa LoomBooms målade havsdjur. 60 sekunder, så många poäng du kan.">
+<link rel="icon" href="bilder/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Pirata+One&family=Fredoka:wght@500;600;700&family=Figtree:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: a full-screen dive. The painted sea is a world bigger than the screen; the crosshair stays centred and the world pans under it (CS-style). HUD and menus are the site's nailed wood planks. */
+:root{
+  color-scheme: light;
+  --water:#2a6cf5;
+  --paper:#ffffff;
+  --ink:#121826;
+  --brown:#4a2c12;
+  --wood:#D39A5D;
+  --wood-2:#C0834A;
+  --nail:#3A2614;
+  --yellow:#FAE052;
+  --bubble:#22D3D6;
+  --mint:#73BB89;
+  --line:3px solid var(--ink);
+  --pirate:"Pirata One", "Fredoka", Georgia, serif;
+  --title:"Luckiest Guy", "Fredoka", "Arial Black", sans-serif;
+  --display:"Fredoka", "Trebuchet MS", system-ui, sans-serif;
+  --body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;overflow:hidden;background:var(--water);color:var(--ink);font-family:var(--body);overscroll-behavior:none}
+a{color:inherit;text-decoration:none}
+[hidden]{display:none!important}
+:focus-visible{outline:3px dashed var(--yellow);outline-offset:3px}
+canvas{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:crosshair}
+
+.wood{background:repeating-linear-gradient(181deg, rgba(91,58,28,.14) 0 1px, transparent 1px 6px), repeating-linear-gradient(179deg, rgba(255,235,200,.12) 0 2px, transparent 2px 13px), linear-gradient(var(--wood), var(--wood-2))}
+
+/* HUD */
+.hud{position:fixed;left:0;right:0;top:0;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;pointer-events:none;
+  padding:calc(12px + env(safe-area-inset-top,0px)) max(12px, env(safe-area-inset-right,0px)) 0 max(12px, env(safe-area-inset-left,0px))}
+.chip{border:var(--line);border-radius:8px;box-shadow:3px 3px 0 var(--ink);padding:4px 14px 6px;text-align:center;min-width:96px}
+.chip .l{display:block;font:700 11px var(--body);text-transform:uppercase;letter-spacing:.06em;color:var(--brown)}
+.chip .n{display:block;font:700 26px/1.1 var(--mono);font-variant-numeric:tabular-nums}
+.chip.time .n.low{color:#B0201F}
+.hud .mid{display:flex;gap:10px}
+.back{pointer-events:auto;align-self:flex-start;border:var(--line);border-radius:6px;padding:4px 12px;font:400 19px var(--pirate);box-shadow:2px 2px 0 var(--ink)}
+.back:hover{background:var(--yellow)}
+
+/* OVERLAYS */
+.overlay{position:fixed;inset:0;display:grid;place-items:center;background:rgba(18,24,38,.45);
+  padding:max(16px, env(safe-area-inset-top,0px)) max(16px, env(safe-area-inset-right,0px)) max(16px, env(safe-area-inset-bottom,0px)) max(16px, env(safe-area-inset-left,0px));overflow:auto}
+.card{position:relative;width:min(560px,100%);border:var(--line);border-radius:12px;box-shadow:inset 0 0 0 9px rgba(120,76,36,.45), inset 0 0 0 11px rgba(58,38,20,.55), 8px 8px 0 var(--ink);padding:28px clamp(20px,4vw,34px) 26px;text-align:center}
+.card::before{content:"";position:absolute;inset:5px;pointer-events:none;
+  background:
+    radial-gradient(circle, var(--nail) 0 3.5px, #9b7a55 4px, transparent 5px) 0 0/12px 12px no-repeat,
+    radial-gradient(circle, var(--nail) 0 3.5px, #9b7a55 4px, transparent 5px) 100% 0/12px 12px no-repeat,
+    radial-gradient(circle, var(--nail) 0 3.5px, #9b7a55 4px, transparent 5px) 0 100%/12px 12px no-repeat,
+    radial-gradient(circle, var(--nail) 0 3.5px, #9b7a55 4px, transparent 5px) 100% 100%/12px 12px no-repeat}
+h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-height:1;margin:0;color:var(--yellow);-webkit-text-stroke:.05em var(--ink);paint-order:stroke fill;text-shadow:.045em .05em 0 var(--ink)}
+.card p{margin:10px auto 0;max-width:42ch;font-weight:600;color:#3a2410}
+.targets{list-style:none;margin:18px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.targets li{background:rgba(255,248,235,.75);border:2.5px solid var(--ink);border-radius:8px;padding:6px 4px 5px;display:grid;justify-items:center;gap:2px;min-width:0}
+.targets img{height:34px;width:auto;max-width:100%;object-fit:contain}
+.targets b{font:700 14px var(--mono)}
+.targets span{font:600 11px var(--body);color:var(--brown);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.btn{margin-top:20px;font:400 30px var(--title);color:var(--ink);background:var(--yellow);border:var(--line);border-radius:999px;padding:8px 34px 6px;box-shadow:4px 4px 0 var(--ink);cursor:pointer}
+.btn:hover{transform:translate(-1px,-2px);box-shadow:5px 6px 0 var(--ink)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.sens{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:16px;font:700 14px var(--body)}
+.sens input{width:160px;accent-color:var(--ink)}
+.sens output{font:700 14px var(--mono);min-width:3ch;text-align:left}
+.hint{font-size:13px!important;color:var(--brown)!important}
+.best{display:inline-block;margin-top:12px;background:var(--paper);border:2.5px solid var(--ink);border-radius:999px;padding:2px 14px;font:700 14px var(--body)}
+.result{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:18px}
+.result div{background:var(--paper);border:var(--line);border-radius:10px;box-shadow:3px 3px 0 var(--ink);padding:6px 8px 8px}
+.result .l{display:block;font:700 11px var(--body);text-transform:uppercase;letter-spacing:.05em;color:var(--brown)}
+.result .n{display:block;font:700 26px var(--mono)}
+.result div:first-child{background:var(--yellow)}
+.newbest{display:inline-block;margin-top:12px;font:400 22px var(--title);color:var(--yellow);-webkit-text-stroke:1.5px var(--ink);paint-order:stroke fill}
+.toolbar{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.toolbar a{margin-top:20px;align-self:center;font:400 20px var(--pirate);border:var(--line);border-radius:6px;padding:6px 16px;box-shadow:3px 3px 0 var(--ink)}
+.toolbar a:hover{background:var(--yellow)}
+@media (max-width:440px){.targets{grid-template-columns:repeat(4,minmax(0,1fr))}.chip{min-width:74px;padding:3px 8px 5px}.chip .n{font-size:20px}.back{font-size:16px}}
+</style>
+</head>
+<body>
+
+<canvas id="c" aria-label="Spelplan: havet med simmande djur. Siktet är i mitten."></canvas>
+
+<div class="hud" id="hud" hidden>
+  <a class="back wood" href="./">← Hem</a>
+  <div class="mid">
+    <div class="chip wood"><span class="l">Poäng</span><span class="n" id="score">0</span></div>
+    <div class="chip wood time"><span class="l">Tid</span><span class="n" id="time">60</span></div>
+    <div class="chip wood"><span class="l">Träff</span><span class="n" id="acc">–</span></div>
+  </div>
+  <span style="width:84px" aria-hidden="true"></span>
+</div>
+
+<div class="overlay" id="start">
+  <div class="card wood" role="dialog" aria-labelledby="t1">
+    <h1 id="t1">Fiskeskytte</h1>
+    <p>Rör musen för att titta runt i havet. Siktet stannar i mitten. Klicka när ett djur är i siktet. Du har 60 sekunder.</p>
+    <ul class="targets" id="targets"></ul>
+    <div class="sens"><label for="sens">Känslighet</label><input type="range" id="sens" min="0.4" max="3" step="0.1" value="1.2"><output id="sensv" for="sens">1.2</output></div>
+    <button class="btn" type="button" id="go">Starta</button>
+    <p class="hint">Tryck Esc för att pausa. På mobil drar du med fingret och trycker för att skjuta.</p>
+    <span class="best" id="best1" hidden></span>
+  </div>
+</div>
+
+<div class="overlay" id="pause" hidden>
+  <div class="card wood" role="dialog" aria-labelledby="t2">
+    <h1 id="t2">Pausat</h1>
+    <p>Klicka för att fortsätta dyka.</p>
+    <button class="btn" type="button" id="resume">Fortsätt</button>
+    <div class="toolbar"><a class="wood" href="./">Till startsidan</a></div>
+  </div>
+</div>
+
+<div class="overlay" id="end" hidden>
+  <div class="card wood" role="dialog" aria-labelledby="t3">
+    <h1 id="t3">Tiden är ute!</h1>
+    <div class="result">
+      <div><span class="l">Poäng</span><span class="n" id="r-score">0</span></div>
+      <div><span class="l">Träffar</span><span class="n" id="r-hits">0</span></div>
+      <div><span class="l">Träffsäkerhet</span><span class="n" id="r-acc">–</span></div>
+    </div>
+    <span class="newbest" id="newbest" hidden>Nytt rekord!</span>
+    <br><span class="best" id="best2"></span>
+    <br><button class="btn" type="button" id="again">Spela igen</button>
+    <div class="toolbar"><a class="wood" href="./">Till startsidan</a></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  /* ---------- Inställningar ---------- */
+  var ROUND = 60;                 // sekunder per runda
+  var WORLD = 2700;               // havsbilden är 2700 x 2700
+  var SKY = 0.07, SAND = 0.875;   // andel av höjden: vattenytan och sandkanten
+
+  // Djuren: bild, bredd i världen, fart, poäng, var de simmar, hur ofta de dyker upp, och åt vilket håll bilden tittar
+  var TYPES = {
+    haj:       {img:"haj",       name:"Hammarhaj",    w:520, speed:[230,320], pts:10, y:[0.14,0.62], weight:3,   face:-1},
+    manet:     {img:"manet",     name:"Manet",        w:340, speed:[50,80],   pts:15, y:[0.20,0.70], weight:2,   face:0, bob:1},
+    blackfisk: {img:"blackfisk", name:"Bläckfisk",    w:400, speed:[80,120],  pts:20, y:[0.45,0.78], weight:2,   face:1, wave:1},
+    blasfisk:  {img:"blasfisk",  name:"Blåsfisk",     w:170, speed:[140,200], pts:25, y:[0.15,0.78], weight:3,   face:-1, wave:1},
+    krabba:    {img:"krabba",    name:"Krabba",       w:150, speed:[90,130],  pts:30, y:[0.93,0.95], weight:2,   face:0, walk:1},
+    peek:      {img:"blackfisk-tang", name:"Gömd bläckfisk", w:420, pts:40, weight:1, peek:1},
+    mas:       {img:"mas",       name:"Mås",          w:150, speed:[360,460], pts:50, y:[0.015,0.05], weight:1, face:1},
+    snacka:    {img:"snacka",    name:"Snäcka",       w:120, pts:100, weight:0.6, shell:1}
+  };
+  var ORDER = ["haj","manet","blackfisk","blasfisk","krabba","peek","mas","snacka"];
+
+  /* ---------- Bilder ---------- */
+  var IMGS = {}, MASKS = {}, loaded = 0, need = 0;
+  var bg = new Image(); bg.src = "bilder/hav-spel.webp";
+  var cross = new Image(); cross.src = "bilder/spel/sikte.png";
+  ORDER.forEach(function(k){
+    var t = TYPES[k]; if (IMGS[t.img]) return;
+    var im = new Image(); need++;
+    im.onload = function(){ loaded++; makeMask(t.img, im); };
+    im.src = "bilder/spel/" + t.img + ".png"; IMGS[t.img] = im;
+  });
+  // Pixelmask så att man bara träffar själva djuret, inte den genomskinliga kanten
+  function makeMask(key, im){
+    try{
+      var c = document.createElement("canvas"); c.width = im.naturalWidth; c.height = im.naturalHeight;
+      var x = c.getContext("2d"); x.drawImage(im, 0, 0);
+      MASKS[key] = { w:c.width, h:c.height, d:x.getImageData(0,0,c.width,c.height).data };
+    }catch(e){ MASKS[key] = null; }
+  }
+
+  // Poänglistan på startskärmen
+  var tl = document.getElementById("targets");
+  ORDER.forEach(function(k){
+    var t = TYPES[k], li = document.createElement("li");
+    li.innerHTML = '<img src="bilder/spel/'+t.img+'.png" alt=""><b>'+t.pts+'</b><span>'+t.name+'</span>';
+    tl.appendChild(li);
+  });
+
+  /* ---------- Canvas ---------- */
+  var cv = document.getElementById("c"), ctx = cv.getContext("2d");
+  var W = 0, H = 0, DPR = 1, S = 1;  // S = hur många skärmpixlar en världspixel blir
+  function resize(){
+    DPR = Math.min(2, window.devicePixelRatio || 1);
+    W = window.innerWidth; H = window.innerHeight;
+    cv.width = Math.round(W*DPR); cv.height = Math.round(H*DPR);
+    S = Math.max(H/(WORLD*0.5), W/WORLD);   // visar ungefär halva havets höjd åt gången
+    clampCam();
+  }
+  window.addEventListener("resize", resize);
+
+  /* ---------- Kamera ---------- */
+  var cam = {x: WORLD/2, y: WORLD*0.42};
+  function clampCam(){
+    var hw = W/S/2, hh = H/S/2;
+    cam.x = Math.max(hw, Math.min(WORLD-hw, cam.x));
+    cam.y = Math.max(hh, Math.min(WORLD-hh, cam.y));
+  }
+  function toScreen(x, y){ return [(x-cam.x)*S + W/2, (y-cam.y)*S + H/2]; }
+
+  /* ---------- Spelläge ---------- */
+  var state = "menu", score = 0, shots = 0, hits = 0, left = ROUND, last = 0;
+  var animals = [], fx = [], spawnT = 0, locked = false, fallback = false, pointer = {x:0,y:0,in:false};
+  var sens = 1.2;
+  try{ var sv = parseFloat(localStorage.getItem("fisk-sens")); if (sv>0) sens = sv; }catch(e){}
+  var best = 0; try{ best = parseInt(localStorage.getItem("fisk-best")||"0",10)||0; }catch(e){}
+  var sensEl = document.getElementById("sens"), sensV = document.getElementById("sensv");
+  sensEl.value = sens; sensV.textContent = sens.toFixed(1);
+  sensEl.addEventListener("input", function(){ sens = parseFloat(sensEl.value); sensV.textContent = sens.toFixed(1); try{ localStorage.setItem("fisk-sens", sens); }catch(e){} });
+  function showBest(){ ["best1","best2"].forEach(function(id){ var e=document.getElementById(id); e.hidden = !best; e.textContent = "Rekord: " + best + " poäng"; }); }
+  showBest();
+
+  function rnd(a,b){ return a + Math.random()*(b-a); }
+  function pickType(){
+    var tot = 0; ORDER.forEach(function(k){ tot += TYPES[k].weight; });
+    var r = Math.random()*tot;
+    for (var i=0;i<ORDER.length;i++){ r -= TYPES[ORDER[i]].weight; if (r<=0) return ORDER[i]; }
+    return ORDER[0];
+  }
+  function spawn(){
+    var k = pickType(), t = TYPES[k], im = IMGS[t.img];
+    if (!im || !im.naturalWidth) return;
+    if ((t.peek || t.shell) && animals.some(function(a){ return a.k===k; })) return;
+    var w = t.w, h = w * im.naturalHeight / im.naturalWidth, a = {k:k, t:t, w:w, h:h, age:0, hit:0};
+    if (t.peek){ a.x = rnd(w*0.6, WORLD-w*0.6); a.baseY = WORLD + h*0.05; a.life = 3.2; }
+    else if (t.shell){ a.x = rnd(200, WORLD-200); a.y = WORLD*rnd(0.93,0.965) - h/2; a.life = 3.5; }
+    else {
+      a.dir = Math.random()<0.5 ? 1 : -1;
+      a.speed = rnd(t.speed[0], t.speed[1]);
+      a.x = a.dir>0 ? -w : WORLD + w;
+      a.y0 = WORLD*rnd(t.y[0], t.y[1]);
+      if (t.walk) a.y0 -= h/2;
+      a.phase = Math.random()*6.28;
+    }
+    animals.push(a);
+  }
+  function update(dt){
+    left -= dt;
+    if (left <= 0){ left = 0; return finish(); }
+    spawnT -= dt;
+    var cap = 9;
+    if (spawnT <= 0 && animals.length < cap){ spawn(); spawnT = rnd(0.45, 0.9); }
+    // Kanten-panorering när muslåset inte fungerar
+    if (fallback && pointer.in){
+      var ex = pointer.x/W - .5, ey = pointer.y/H - .5, dz = .32;
+      if (Math.abs(ex) > dz) cam.x += Math.sign(ex)*(Math.abs(ex)-dz)*2600*dt*sens;
+      if (Math.abs(ey) > dz) cam.y += Math.sign(ey)*(Math.abs(ey)-dz)*2600*dt*sens;
+      clampCam();
+    }
+    for (var i=animals.length-1;i>=0;i--){
+      var a = animals[i], t = a.t; a.age += dt;
+      if (a.hit){ a.hit += dt; if (a.hit > 0.35) animals.splice(i,1); continue; }
+      if (t.peek){
+        var p = a.age/a.life, rise = p<0.2 ? p/0.2 : p>0.8 ? (1-p)/0.2 : 1;
+        a.y = a.baseY - a.h*0.62*Math.max(0,rise) + a.h/2;
+        if (a.age > a.life) animals.splice(i,1);
+        continue;
+      }
+      if (t.shell){ if (a.age > a.life) animals.splice(i,1); continue; }
+      a.x += a.dir * a.speed * dt;
+      a.y = a.y0;
+      if (t.bob) a.y += Math.sin(a.age*1.6 + a.phase) * 60;
+      if (t.wave) a.y += Math.sin(a.age*2.4 + a.phase) * 22;
+      if (t.walk) a.y += Math.abs(Math.sin(a.age*9)) * -3;
+      if ((a.dir>0 && a.x > WORLD + a.w) || (a.dir<0 && a.x < -a.w)) animals.splice(i,1);
+    }
+    for (var j=fx.length-1;j>=0;j--){ var f = fx[j]; f.age += dt; if (f.age > f.life) fx.splice(j,1); }
+    hud();
+  }
+  function flipOf(a){ var t=a.t; if (!t.face || a.dir===undefined) return false; return t.face !== a.dir; }
+  function hitTest(wx, wy){
+    for (var i=animals.length-1;i>=0;i--){
+      var a = animals[i]; if (a.hit) continue;
+      var lx = (wx - (a.x - a.w/2)) / a.w, ly = (wy - (a.y - a.h/2)) / a.h;
+      if (lx<0||ly<0||lx>1||ly>1) continue;
+      if (flipOf(a)) lx = 1-lx;
+      var m = MASKS[a.t.img];
+      if (m){
+        var px = Math.min(m.w-1, Math.floor(lx*m.w)), py = Math.min(m.h-1, Math.floor(ly*m.h));
+        // lite förlåtande: kolla en liten ruta runt träffpunkten
+        var r = Math.max(2, Math.round(m.w*0.012)), ok = false;
+        for (var dy=-r; dy<=r && !ok; dy+=r) for (var dx=-r; dx<=r && !ok; dx+=r){
+          var qx = px+dx, qy = py+dy; if (qx<0||qy<0||qx>=m.w||qy>=m.h) continue;
+          if (m.d[(qy*m.w+qx)*4+3] > 40) ok = true;
+        }
+        if (!ok) continue;
+      } else if (lx<.12||lx>.88||ly<.12||ly>.88) continue;
+      return a;
+    }
+    return null;
+  }
+  function shoot(){
+    if (state !== "play") return;
+    shots++;
+    var a = hitTest(cam.x, cam.y);
+    if (a){
+      a.hit = 0.0001; hits++; score += a.t.pts;
+      fx.push({type:"txt", x:cam.x, y:cam.y - 40, txt:"+"+a.t.pts, age:0, life:0.9});
+      for (var i=0;i<12;i++){ var ang = Math.random()*6.28, sp = rnd(120,320);
+        fx.push({type:"bub", x:cam.x, y:cam.y, vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp - 60, r:rnd(8,20), age:0, life:rnd(.5,.9)}); }
+    } else {
+      fx.push({type:"bub", x:cam.x, y:cam.y, vx:0, vy:-80, r:12, age:0, life:.5});
+    }
+    hud();
+  }
+  var elScore = document.getElementById("score"), elTime = document.getElementById("time"), elAcc = document.getElementById("acc");
+  function accText(){ return shots ? Math.round(hits/shots*100) + "%" : "–"; }
+  function hud(){
+    elScore.textContent = score;
+    var s = Math.ceil(left); elTime.textContent = s; elTime.classList.toggle("low", s <= 10);
+    elAcc.textContent = accText();
+  }
+
+  /* ---------- Rita ---------- */
+  function drawBubble(x, y, r, alpha){
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = "#22D3D6"; ctx.strokeStyle = "#121826"; ctx.lineWidth = Math.max(1.5, r*0.18);
+    ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = "#ffffff"; ctx.beginPath(); ctx.arc(x + r*0.3, y - r*0.3, r*0.28, 0, 6.2832); ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+  function draw(){
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    ctx.fillStyle = "#2a6cf5"; ctx.fillRect(0,0,W,H);
+    var o = toScreen(0,0);
+    if (bg.complete && bg.naturalWidth) ctx.drawImage(bg, o[0], o[1], WORLD*S, WORLD*S);
+    for (var i=0;i<animals.length;i++){
+      var a = animals[i], im = IMGS[a.t.img], p = toScreen(a.x, a.y), w = a.w*S, h = a.h*S;
+      if (p[0] < -w || p[0] > W + w || p[1] < -h || p[1] > H + h) continue;
+      ctx.save(); ctx.translate(p[0], p[1]);
+      if (a.t.shell){ var fa = Math.min(1, a.age*3, (a.life-a.age)*3); ctx.globalAlpha = Math.max(0,fa); ctx.rotate(Math.sin(a.age*5)*0.06); }
+      if (a.hit){ var k = 1 + a.hit*1.2; ctx.scale(k,k); ctx.globalAlpha = Math.max(0, 1 - a.hit/0.35); }
+      if (flipOf(a)) ctx.scale(-1,1);
+      if (a.t.peek){ // tången döljer nederkanten: klipp vid havsbotten
+        ctx.restore(); ctx.save();
+        var bottom = toScreen(0, WORLD)[1];
+        ctx.beginPath(); ctx.rect(-1e4, -1e4, 3e4, bottom + 1e4); ctx.clip();
+        ctx.translate(p[0], p[1]);
+        if (a.hit){ var k2 = 1 + a.hit*1.2; ctx.scale(k2,k2); ctx.globalAlpha = Math.max(0, 1 - a.hit/0.35); }
+      }
+      ctx.drawImage(im, -w/2, -h/2, w, h);
+      ctx.restore();
+    }
+    for (var j=0;j<fx.length;j++){
+      var f = fx[j], q = f.age/f.life, sp = toScreen(f.x + (f.vx||0)*f.age, f.y + (f.vy||0)*f.age - (f.type==="txt" ? f.age*120 : 0));
+      if (f.type === "bub") drawBubble(sp[0], sp[1], f.r*S*1.6, 1 - q);
+      else {
+        ctx.globalAlpha = 1 - q*q;
+        ctx.font = "400 " + Math.round(34) + "px 'Luckiest Guy', 'Arial Black', sans-serif";
+        ctx.textAlign = "center"; ctx.lineJoin = "round"; ctx.lineWidth = 6; ctx.strokeStyle = "#121826"; ctx.fillStyle = "#FAE052";
+        ctx.strokeText(f.txt, sp[0], sp[1]); ctx.fillText(f.txt, sp[0], sp[1]);
+        ctx.globalAlpha = 1;
+      }
+    }
+    // Siktet i mitten
+    var cs = 54;
+    if (cross.complete && cross.naturalWidth){
+      ctx.save(); ctx.shadowColor = "rgba(18,24,38,.6)"; ctx.shadowBlur = 0; ctx.shadowOffsetX = 2; ctx.shadowOffsetY = 2;
+      ctx.drawImage(cross, W/2 - cs/2, H/2 - cs/2, cs, cs); ctx.restore();
+    }
+  }
+
+  /* ---------- Loop ---------- */
+  function frame(t){
+    var dt = Math.min(0.05, (t - (last || t))/1000); last = t;
+    if (state === "play") update(dt);
+    draw();
+    requestAnimationFrame(frame);
+  }
+
+  /* ---------- Styrning ---------- */
+  function wantLock(){
+    fallback = false;
+    try{
+      var r = cv.requestPointerLock && cv.requestPointerLock();
+      if (r && r.catch) r.catch(function(){ fallback = true; });
+      if (!cv.requestPointerLock) fallback = true;
+    }catch(e){ fallback = true; }
+    setTimeout(function(){ if (!locked) fallback = true; }, 400);
+  }
+  document.addEventListener("pointerlockchange", function(){
+    locked = document.pointerLockElement === cv;
+    if (locked) fallback = false;
+    else if (state === "play" && !fallback) pause();
+  });
+  document.addEventListener("pointerlockerror", function(){ fallback = true; });
+  document.addEventListener("mousemove", function(e){
+    pointer.x = e.clientX; pointer.y = e.clientY; pointer.in = true;
+    if (state !== "play") return;
+    if (locked){ cam.x += e.movementX * sens / S; cam.y += e.movementY * sens / S; clampCam(); }
+  });
+  document.addEventListener("mouseleave", function(){ pointer.in = false; });
+  cv.addEventListener("mousedown", function(e){
+    if (e.button !== 0) return;
+    if (state === "play"){ if (!locked && !fallback) wantLock(); shoot(); }
+  });
+  // Mobil: dra för att titta, tryck för att skjuta
+  var touch = null;
+  cv.addEventListener("touchstart", function(e){ if (state!=="play") return; var t=e.changedTouches[0]; touch = {x:t.clientX, y:t.clientY, sx:t.clientX, sy:t.clientY, moved:0}; e.preventDefault(); }, {passive:false});
+  cv.addEventListener("touchmove", function(e){ if (!touch) return; var t=e.changedTouches[0]; var dx=t.clientX-touch.x, dy=t.clientY-touch.y;
+    cam.x -= dx*sens/S; cam.y -= dy*sens/S; clampCam(); touch.x=t.clientX; touch.y=t.clientY; touch.moved += Math.abs(dx)+Math.abs(dy); e.preventDefault(); }, {passive:false});
+  cv.addEventListener("touchend", function(e){ if (touch && touch.moved < 10) shoot(); touch = null; e.preventDefault(); }, {passive:false});
+  document.addEventListener("keydown", function(e){ if (e.key === "Escape" && state === "play" && fallback) pause(); });
+
+  /* ---------- Skärmar ---------- */
+  var elStart = document.getElementById("start"), elPause = document.getElementById("pause"), elEnd = document.getElementById("end"), elHud = document.getElementById("hud");
+  function begin(){
+    score = 0; shots = 0; hits = 0; left = ROUND; animals = []; fx = []; spawnT = 0;
+    cam.x = WORLD/2; cam.y = WORLD*0.42; clampCam();
+    for (var i=0;i<4;i++){ spawn(); var a = animals[animals.length-1]; if (a && a.dir) a.x = rnd(400, WORLD-400); }
+    state = "play"; elStart.hidden = true; elEnd.hidden = true; elPause.hidden = true; elHud.hidden = false; hud();
+    wantLock();
+  }
+  function pause(){ if (state !== "play") return; state = "pause"; elPause.hidden = false; }
+  function resume(){ elPause.hidden = true; state = "play"; last = 0; wantLock(); }
+  function finish(){
+    state = "end";
+    try{ document.exitPointerLock && document.exitPointerLock(); }catch(e){}
+    var nb = score > best; if (nb){ best = score; try{ localStorage.setItem("fisk-best", best); }catch(e){} }
+    document.getElementById("r-score").textContent = score;
+    document.getElementById("r-hits").textContent = hits;
+    document.getElementById("r-acc").textContent = accText();
+    document.getElementById("newbest").hidden = !nb;
+    showBest(); elEnd.hidden = false;
+  }
+  document.getElementById("go").addEventListener("click", begin);
+  document.getElementById("again").addEventListener("click", begin);
+  document.getElementById("resume").addEventListener("click", resume);
+
+  resize();
+  requestAnimationFrame(frame);
+  // Djur som simmar i bakgrunden på startskärmen
+  setInterval(function(){
+    if (state !== "menu") return;
+    if (animals.length < 5) spawn();
+  }, 900);
+  (function idle(t){
+    if (state === "menu"){
+      var now = performance.now(), dt = 0.016;
+      for (var i=animals.length-1;i>=0;i--){ var a = animals[i];
+        a.age += dt;
+        if (a.t.peek || a.t.shell){ if (a.age > (a.life||3)) animals.splice(i,1); else if (a.t.peek){ var p=a.age/a.life, rise=p<0.2?p/0.2:p>0.8?(1-p)/0.2:1; a.y=a.baseY-a.h*0.62*Math.max(0,rise)+a.h/2; } continue; }
+        a.x += a.dir*a.speed*dt; a.y = a.y0 + (a.t.bob? Math.sin(a.age*1.6+a.phase)*60:0) + (a.t.wave? Math.sin(a.age*2.4+a.phase)*22:0);
+        if ((a.dir>0 && a.x > WORLD + a.w) || (a.dir<0 && a.x < -a.w)) animals.splice(i,1);
+      }
+    }
+    requestAnimationFrame(idle);
+  })();
+})();
+</script>
+</body>
+</html>

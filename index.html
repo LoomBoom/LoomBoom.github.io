@@ -45,9 +45,19 @@ a{color:inherit;text-decoration:none}
 
 /* OCEAN LAYER */
 .ocean{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
-.ocean img{display:block;width:100%;height:auto;min-height:100%;object-fit:cover;will-change:transform}
+.sky{position:relative;will-change:transform}
+.ocean img{display:block;width:100%;height:auto;min-height:100vh;object-fit:cover}
+/* Molnet som gömmer måsen (positionen räknad från havsbilden, 1920 x 5400) */
+.cloud{all:unset;position:absolute;left:4.3229%;top:0.7593%;width:17.0833%;aspect-ratio:328/155;pointer-events:auto;cursor:pointer;
+  transition:transform 1.4s cubic-bezier(.45,0,.2,1), opacity 1.4s ease;filter:drop-shadow(3px 4px 0 rgba(18,24,38,.25))}
+.cloud img{width:100%;height:100%;min-height:0;display:block;animation:drift 6s ease-in-out infinite}
+@keyframes drift{0%,100%{transform:translateX(0)}50%{transform:translateX(3%)}}
+.cloud:hover img{transform:scale(1.04)}
+.cloud:focus-visible{outline:3px dashed var(--jasmine);outline-offset:6px;border-radius:40%}
+.cloud.away{transform:translateX(-130%) translateY(-25%);opacity:0}
 
-.page{position:relative;z-index:1}
+.page{position:relative;z-index:1;pointer-events:none}
+.page a,.page button,.page .panel,.page .hi,.page footer .gg{pointer-events:auto}
 .wrap{max-width:900px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
 
 /* TOP (over the sky) */
@@ -136,12 +146,14 @@ footer .gg{position:relative;width:min(380px,100%);border:var(--line);border-rad
 footer .gg b{font-family:var(--pirate);font-weight:400;font-size:32px;color:var(--ink);display:block;line-height:1.1}
 footer .gg span{font-size:14px;color:#4a2c12;font-weight:600}
 
-@media (prefers-reduced-motion:reduce){h1 span,.seabub{animation:none}.bub,.btn,.preview img{transition:none}}
+@media (prefers-reduced-motion:reduce){h1 span,.seabub,.cloud img{animation:none}.cloud{transition:opacity .3s}.bub,.btn,.preview img{transition:none}}
 </style>
 </head>
 <body>
 
-<div class="ocean" aria-hidden="true"><img id="ocean" src="bilder/ocean.webp" alt=""></div>
+<div class="ocean"><div class="sky" id="sky"><img id="ocean" src="bilder/ocean.webp" alt="" aria-hidden="true">
+  <button type="button" class="cloud" id="cloud" aria-label="Flytta på molnet"><img src="bilder/moln.png" alt=""></button>
+</div></div>
 
 <div class="page">
   <div class="wrap">
@@ -151,6 +163,7 @@ footer .gg span{font-size:14px;color:#4a2c12;font-weight:600}
         <li><a href="konst.html">Konstgalleri</a></li>
         <li><a href="installningar.html">Inställningar</a></li>
         <li><a href="statistik.html">Statistik</a></li>
+        <li><a href="fiskeskytte.html">Fiskeskytte</a></li>
         <li><a href="#om">Om mig</a></li>
       </ul>
     </nav>
@@ -218,12 +231,12 @@ footer .gg span{font-size:14px;color:#4a2c12;font-weight:600}
 
 <script>
 (function(){
-  var img = document.getElementById('ocean');
+  var img = document.getElementById('ocean'), sky = document.getElementById('sky'), oceanEl = sky.parentNode;
   var ticking = false;
   var panels = Array.prototype.slice.call(document.querySelectorAll('[data-creature]'));
   function update(){
     ticking = false;
-    var vh = img.parentNode.offsetHeight;
+    var vh = oceanEl.offsetHeight;
     var max = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
     var H = img.offsetHeight;
     var range = Math.max(0, H - vh);
@@ -247,7 +260,7 @@ footer .gg span{font-size:14px;color:#4a2c12;font-weight:600}
       }
     }
     if (pts.length < 2) off = 0;
-    img.style.transform = 'translate3d(0,' + (-off).toFixed(1) + 'px,0)';
+    sky.style.transform = 'translate3d(0,' + (-off).toFixed(1) + 'px,0)';
   }
   function req(){ if(!ticking){ ticking = true; requestAnimationFrame(update); } }
   window.addEventListener('scroll', req, {passive:true});
@@ -256,6 +269,15 @@ footer .gg span{font-size:14px;color:#4a2c12;font-weight:600}
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(update);
   update();
 })();
+  // Molnet glider undan när man klickar, och kommer tillbaka efter en stund
+  var cloud = document.getElementById('cloud'), back = null;
+  cloud.addEventListener('click', function(){
+    var away = !cloud.classList.contains('away');
+    cloud.classList.toggle('away', away);
+    cloud.setAttribute('aria-label', away ? 'Hämta tillbaka molnet' : 'Flytta på molnet');
+    clearTimeout(back);
+    if (away) back = setTimeout(function(){ cloud.classList.remove('away'); cloud.setAttribute('aria-label','Flytta på molnet'); }, 6000);
+  });
 </script>
 
 </body>
