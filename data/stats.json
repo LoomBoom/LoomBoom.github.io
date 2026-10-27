@@ -1,23 +1,23 @@
 {
-  "updated": "2026-10-27T18:46:16.424Z",
+  "updated": "2026-10-27T22:58:54.239Z",
   "player": {
     "name": "LoomBoom",
     "avatar": "https://avatars.steamstatic.com/9e8af0555fb3fccfbf72c94ccf72d9da34206af7_full.jpg",
     "url": "https://steamcommunity.com/id/LoomBoom/",
-    "online": false,
-    "playing": null,
+    "online": true,
+    "playing": "Overcooked! 2",
     "level": 25
   },
   "library": {
     "count": 53,
-    "hours": 7194.5
+    "hours": 7196.7
   },
   "tracked": [
     {
       "appid": 730,
       "name": "Counter-Strike 2",
-      "hours": 6581.1,
-      "hours2w": 53.3
+      "hours": 6583.3,
+      "hours2w": 52.6
     },
     {
       "appid": 1966720,
@@ -30,8 +30,8 @@
     {
       "appid": 730,
       "name": "Counter-Strike 2",
-      "hours2w": 53.3,
-      "hours": 6581.1
+      "hours2w": 52.6,
+      "hours": 6583.3
     },
     {
       "appid": 728880,
@@ -42,7 +42,7 @@
     {
       "appid": 1883580,
       "name": "Cactus Simulator",
-      "hours2w": 3.4,
+      "hours2w": 2.6,
       "hours": 102.1
     },
     {
@@ -53,36 +53,69 @@
     }
   ],
   "cs": {
-    "kills": 184971,
-    "deaths": 165873,
-    "headshots": 77968,
-    "shotsFired": 3180288,
+    "kills": 185050,
+    "deaths": 165918,
+    "headshots": 78004,
+    "shotsFired": 3181411,
     "shotsHit": 333517,
-    "roundsWon": 99364,
-    "roundsPlayed": 191388,
-    "matchesWon": 5057,
-    "matchesPlayed": 10020,
-    "mvps": 32563,
-    "damage": 26357702
+    "roundsWon": 99400,
+    "roundsPlayed": 191452,
+    "matchesWon": 5059,
+    "matchesPlayed": 10023,
+    "mvps": 32578,
+    "damage": 26367904
   },
   "leetify": {
     "url": "https://leetify.com/app/profile/76561199030446550",
-    "premier": 20716,
-    "leetifyRating": 4.14,
+    "premier": 21330,
+    "leetifyRating": 4.89,
     "faceitLevel": 10,
     "faceitElo": 2184,
     "wingman": 18,
     "renown": null,
-    "winrate": 0.4333,
-    "totalMatches": 3344,
+    "winrate": 0.5,
+    "totalMatches": 3347,
     "rating": {
-      "aim": 81.3267,
-      "positioning": 72.2405,
-      "utility": 49.6871,
-      "clutch": 0.1149,
-      "opening": 0.0319
+      "aim": 80.785,
+      "positioning": 76.4238,
+      "utility": 50.8969,
+      "clutch": 0.1355,
+      "opening": 0.0471
     },
     "recent": [
+      {
+        "date": "2026-10-27T20:20:12.000Z",
+        "map": "de_anubis",
+        "source": "matchmaking",
+        "outcome": "win",
+        "score": [
+          13,
+          7
+        ],
+        "rating": 0.0601
+      },
+      {
+        "date": "2026-10-27T19:34:14.000Z",
+        "map": "de_nuke",
+        "source": "matchmaking",
+        "outcome": "win",
+        "score": [
+          13,
+          8
+        ],
+        "rating": 0.1598
+      },
+      {
+        "date": "2026-10-27T18:55:34.000Z",
+        "map": "de_anubis",
+        "source": "matchmaking",
+        "outcome": "loss",
+        "score": [
+          10,
+          13
+        ],
+        "rating": 0.0341
+      },
       {
         "date": "2026-10-27T01:11:21.000Z",
         "map": "de_vertigo",
@@ -137,39 +170,6 @@
           13
         ],
         "rating": 0.0522
-      },
-      {
-        "date": "2026-10-25T22:05:05.000Z",
-        "map": "de_anubis",
-        "source": "esplay",
-        "outcome": "win",
-        "score": [
-          13,
-          6
-        ],
-        "rating": 0.0268
-      },
-      {
-        "date": "2026-10-25T00:09:40.000Z",
-        "map": "de_vertigo",
-        "source": "esplay",
-        "outcome": "loss",
-        "score": [
-          14,
-          16
-        ],
-        "rating": -0.0179
-      },
-      {
-        "date": "2026-10-24T23:37:15.000Z",
-        "map": "de_vertigo",
-        "source": "esplay",
-        "outcome": "win",
-        "score": [
-          13,
-          6
-        ],
-        "rating": 0.0316
       }
     ]
   },
@@ -363,7 +363,7 @@
         "appid": 730,
         "name": "Counter-Strike 2",
         "achievements": 1,
-        "hours": 6581.1
+        "hours": 6583.3
       }
     ]
   },
