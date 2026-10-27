@@ -141,8 +141,8 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
 (function(){
   /* ---------- Inställningar ---------- */
   var ROUND = 60;                 // sekunder per runda
-  var WORLD = 2700;               // havsbilden är 2700 x 2700
-  var SKY = 0.07, SAND = 0.875;   // andel av höjden: vattenytan och sandkanten
+  var WW = 4000, WH = 2250;       // havsbilden är 4000 x 2250 i spelet
+  var FRAME = 46;                 // träramen runt havet (i världspixlar)
 
   // Djuren: bild, bredd i världen, fart, poäng, var de simmar, hur ofta de dyker upp, och åt vilket håll bilden tittar
   var TYPES = {
@@ -191,17 +191,17 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
     DPR = Math.min(2, window.devicePixelRatio || 1);
     W = window.innerWidth; H = window.innerHeight;
     cv.width = Math.round(W*DPR); cv.height = Math.round(H*DPR);
-    S = Math.max(H/(WORLD*0.5), W/WORLD);   // visar ungefär halva havets höjd åt gången
+    S = H/(WH*0.55);   // visar drygt halva havets höjd åt gången
     clampCam();
   }
   window.addEventListener("resize", resize);
 
   /* ---------- Kamera ---------- */
-  var cam = {x: WORLD/2, y: WORLD*0.42};
+  var cam = {x: WW/2, y: WH*0.42};
+  // Siktet (mitten av skärmen) kan nå ända ut till kanten av havet
   function clampCam(){
-    var hw = W/S/2, hh = H/S/2;
-    cam.x = Math.max(hw, Math.min(WORLD-hw, cam.x));
-    cam.y = Math.max(hh, Math.min(WORLD-hh, cam.y));
+    cam.x = Math.max(0, Math.min(WW, cam.x));
+    cam.y = Math.max(0, Math.min(WH, cam.y));
   }
   function toScreen(x, y){ return [(x-cam.x)*S + W/2, (y-cam.y)*S + H/2]; }
 
@@ -229,13 +229,13 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
     if (!im || !im.naturalWidth) return;
     if ((t.peek || t.shell) && animals.some(function(a){ return a.k===k; })) return;
     var w = t.w, h = w * im.naturalHeight / im.naturalWidth, a = {k:k, t:t, w:w, h:h, age:0, hit:0};
-    if (t.peek){ a.x = rnd(w*0.6, WORLD-w*0.6); a.baseY = WORLD + h*0.05; a.life = 3.2; }
-    else if (t.shell){ a.x = rnd(200, WORLD-200); a.y = WORLD*rnd(0.93,0.965) - h/2; a.life = 3.5; }
+    if (t.peek){ a.x = rnd(w*0.6, WW-w*0.6); a.baseY = WH + h*0.05; a.life = 3.2; }
+    else if (t.shell){ a.x = rnd(200, WW-200); a.y = WH*rnd(0.93,0.965) - h/2; a.life = 3.5; }
     else {
       a.dir = Math.random()<0.5 ? 1 : -1;
       a.speed = rnd(t.speed[0], t.speed[1]);
-      a.x = a.dir>0 ? -w : WORLD + w;
-      a.y0 = WORLD*rnd(t.y[0], t.y[1]);
+      a.x = a.dir>0 ? -w : WW + w;
+      a.y0 = WH*rnd(t.y[0], t.y[1]);
       if (t.walk) a.y0 -= h/2;
       a.phase = Math.random()*6.28;
     }
@@ -245,7 +245,7 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
     left -= dt;
     if (left <= 0){ left = 0; return finish(); }
     spawnT -= dt;
-    var cap = 9;
+    var cap = 12;
     if (spawnT <= 0 && animals.length < cap){ spawn(); spawnT = rnd(0.45, 0.9); }
     // Kanten-panorering när muslåset inte fungerar
     if (fallback && pointer.in){
@@ -269,7 +269,7 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
       if (t.bob) a.y += Math.sin(a.age*1.6 + a.phase) * 60;
       if (t.wave) a.y += Math.sin(a.age*2.4 + a.phase) * 22;
       if (t.walk) a.y += Math.abs(Math.sin(a.age*9)) * -3;
-      if ((a.dir>0 && a.x > WORLD + a.w) || (a.dir<0 && a.x < -a.w)) animals.splice(i,1);
+      if ((a.dir>0 && a.x > WW + a.w) || (a.dir<0 && a.x < -a.w)) animals.splice(i,1);
     }
     for (var j=fx.length-1;j>=0;j--){ var f = fx[j]; f.age += dt; if (f.age > f.life) fx.splice(j,1); }
     hud();
@@ -328,9 +328,25 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
   }
   function draw(){
     ctx.setTransform(DPR,0,0,DPR,0,0);
-    ctx.fillStyle = "#2a6cf5"; ctx.fillRect(0,0,W,H);
-    var o = toScreen(0,0);
-    if (bg.complete && bg.naturalWidth) ctx.drawImage(bg, o[0], o[1], WORLD*S, WORLD*S);
+    // Utanför havet: mörk djuphavsfärg med små bubblor
+    ctx.fillStyle = "#0E1F4D"; ctx.fillRect(0,0,W,H);
+    var o = toScreen(0,0), ww = WW*S, wh = WH*S, f = FRAME*S;
+    ctx.fillStyle = "rgba(34,211,214,.18)";
+    for (var bx = Math.floor((o[0]-W)/90)*90; bx < W+90; bx += 90){ for (var by = -90; by < H+90; by += 90){
+      var jx = ((bx*7 + by*13) % 50 + 50) % 50, gx = bx + (o[0] % 90) + jx, gy = by + ((o[1]*0.6) % 90) + ((bx*3) % 40);
+      ctx.beginPath(); ctx.arc(gx, gy, 3 + (jx % 5), 0, 6.2832); ctx.fill(); } }
+    // Träram
+    ctx.fillStyle = "#121826"; ctx.fillRect(o[0]-f-4, o[1]-f-4, ww+2*f+8, wh+2*f+8);
+    var g = ctx.createLinearGradient(0, o[1]-f, 0, o[1]+wh+f); g.addColorStop(0,"#D39A5D"); g.addColorStop(1,"#C0834A");
+    ctx.fillStyle = g; ctx.fillRect(o[0]-f, o[1]-f, ww+2*f, wh+2*f);
+    ctx.strokeStyle = "rgba(91,58,28,.35)"; ctx.lineWidth = 1;
+    for (var ly = o[1]-f+5; ly < o[1]+wh+f; ly += 7){ ctx.beginPath(); ctx.moveTo(o[0]-f, ly); ctx.lineTo(o[0]+ww+f, ly+1); ctx.stroke(); }
+    ctx.fillStyle = "#3A2614";
+    [[o[0]-f/2,o[1]-f/2],[o[0]+ww+f/2,o[1]-f/2],[o[0]-f/2,o[1]+wh+f/2],[o[0]+ww+f/2,o[1]+wh+f/2]].forEach(function(n){ ctx.beginPath(); ctx.arc(n[0],n[1],Math.max(3,f*0.16),0,6.2832); ctx.fill(); });
+    ctx.fillStyle = "#121826"; ctx.fillRect(o[0]-3, o[1]-3, ww+6, wh+6);
+    ctx.fillStyle = "#2a6cf5"; ctx.fillRect(o[0], o[1], ww, wh);
+    if (bg.complete && bg.naturalWidth) ctx.drawImage(bg, o[0], o[1], ww, wh);
+    ctx.save(); ctx.beginPath(); ctx.rect(o[0], o[1], ww, wh); ctx.clip();
     for (var i=0;i<animals.length;i++){
       var a = animals[i], im = IMGS[a.t.img], p = toScreen(a.x, a.y), w = a.w*S, h = a.h*S;
       if (p[0] < -w || p[0] > W + w || p[1] < -h || p[1] > H + h) continue;
@@ -340,7 +356,7 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
       if (flipOf(a)) ctx.scale(-1,1);
       if (a.t.peek){ // tången döljer nederkanten: klipp vid havsbotten
         ctx.restore(); ctx.save();
-        var bottom = toScreen(0, WORLD)[1];
+        var bottom = toScreen(0, WH)[1];
         ctx.beginPath(); ctx.rect(-1e4, -1e4, 3e4, bottom + 1e4); ctx.clip();
         ctx.translate(p[0], p[1]);
         if (a.hit){ var k2 = 1 + a.hit*1.2; ctx.scale(k2,k2); ctx.globalAlpha = Math.max(0, 1 - a.hit/0.35); }
@@ -348,6 +364,7 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
       ctx.drawImage(im, -w/2, -h/2, w, h);
       ctx.restore();
     }
+    ctx.restore();
     for (var j=0;j<fx.length;j++){
       var f = fx[j], q = f.age/f.life, sp = toScreen(f.x + (f.vx||0)*f.age, f.y + (f.vy||0)*f.age - (f.type==="txt" ? f.age*120 : 0));
       if (f.type === "bub") drawBubble(sp[0], sp[1], f.r*S*1.6, 1 - q);
@@ -413,8 +430,8 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
   var elStart = document.getElementById("start"), elPause = document.getElementById("pause"), elEnd = document.getElementById("end"), elHud = document.getElementById("hud");
   function begin(){
     score = 0; shots = 0; hits = 0; left = ROUND; animals = []; fx = []; spawnT = 0;
-    cam.x = WORLD/2; cam.y = WORLD*0.42; clampCam();
-    for (var i=0;i<4;i++){ spawn(); var a = animals[animals.length-1]; if (a && a.dir) a.x = rnd(400, WORLD-400); }
+    cam.x = WW/2; cam.y = WH*0.42; clampCam();
+    for (var i=0;i<4;i++){ spawn(); var a = animals[animals.length-1]; if (a && a.dir) a.x = rnd(400, WW-400); }
     state = "play"; elStart.hidden = true; elEnd.hidden = true; elPause.hidden = true; elHud.hidden = false; hud();
     wantLock();
   }
@@ -448,7 +465,7 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
         a.age += dt;
         if (a.t.peek || a.t.shell){ if (a.age > (a.life||3)) animals.splice(i,1); else if (a.t.peek){ var p=a.age/a.life, rise=p<0.2?p/0.2:p>0.8?(1-p)/0.2:1; a.y=a.baseY-a.h*0.62*Math.max(0,rise)+a.h/2; } continue; }
         a.x += a.dir*a.speed*dt; a.y = a.y0 + (a.t.bob? Math.sin(a.age*1.6+a.phase)*60:0) + (a.t.wave? Math.sin(a.age*2.4+a.phase)*22:0);
-        if ((a.dir>0 && a.x > WORLD + a.w) || (a.dir<0 && a.x < -a.w)) animals.splice(i,1);
+        if ((a.dir>0 && a.x > WW + a.w) || (a.dir<0 && a.x < -a.w)) animals.splice(i,1);
       }
     }
     requestAnimationFrame(idle);
