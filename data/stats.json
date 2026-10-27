@@ -1,23 +1,23 @@
 {
-  "updated": "2026-10-27T13:16:26.634Z",
+  "updated": "2026-10-27T18:46:16.424Z",
   "player": {
     "name": "LoomBoom",
     "avatar": "https://avatars.steamstatic.com/9e8af0555fb3fccfbf72c94ccf72d9da34206af7_full.jpg",
     "url": "https://steamcommunity.com/id/LoomBoom/",
-    "online": true,
+    "online": false,
     "playing": null,
     "level": 25
   },
   "library": {
     "count": 53,
-    "hours": 7193.7
+    "hours": 7194.5
   },
   "tracked": [
     {
       "appid": 730,
       "name": "Counter-Strike 2",
-      "hours": 6580.3,
-      "hours2w": 54.6
+      "hours": 6581.1,
+      "hours2w": 53.3
     },
     {
       "appid": 1966720,
@@ -30,8 +30,8 @@
     {
       "appid": 730,
       "name": "Counter-Strike 2",
-      "hours2w": 54.6,
-      "hours": 6580.3
+      "hours2w": 53.3,
+      "hours": 6581.1
     },
     {
       "appid": 728880,
@@ -42,7 +42,7 @@
     {
       "appid": 1883580,
       "name": "Cactus Simulator",
-      "hours2w": 6.8,
+      "hours2w": 3.4,
       "hours": 102.1
     },
     {
@@ -53,17 +53,17 @@
     }
   ],
   "cs": {
-    "kills": 184967,
-    "deaths": 165863,
-    "headshots": 77965,
-    "shotsFired": 3180191,
+    "kills": 184971,
+    "deaths": 165873,
+    "headshots": 77968,
+    "shotsFired": 3180288,
     "shotsHit": 333517,
-    "roundsWon": 99360,
-    "roundsPlayed": 191378,
+    "roundsWon": 99364,
+    "roundsPlayed": 191388,
     "matchesWon": 5057,
     "matchesPlayed": 10020,
     "mvps": 32563,
-    "damage": 26356961
+    "damage": 26357702
   },
   "leetify": {
     "url": "https://leetify.com/app/profile/76561199030446550",
@@ -363,7 +363,7 @@
         "appid": 730,
         "name": "Counter-Strike 2",
         "achievements": 1,
-        "hours": 6580.3
+        "hours": 6581.1
       }
     ]
   },
