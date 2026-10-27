@@ -1,11 +1,11 @@
 {
-  "updated": "2026-10-26T20:32:02.277Z",
+  "updated": "2026-10-27T00:29:28.710Z",
   "player": {
     "name": "LoomBoom",
     "avatar": "https://avatars.steamstatic.com/9e8af0555fb3fccfbf72c94ccf72d9da34206af7_full.jpg",
     "url": "https://steamcommunity.com/id/LoomBoom/",
     "online": true,
-    "playing": null,
+    "playing": "Counter-Strike 2",
     "level": 25
   },
   "library": {
@@ -17,7 +17,7 @@
       "appid": 730,
       "name": "Counter-Strike 2",
       "hours": 6578.4,
-      "hours2w": 55.6
+      "hours2w": 52.7
     },
     {
       "appid": 1966720,
@@ -30,13 +30,13 @@
     {
       "appid": 730,
       "name": "Counter-Strike 2",
-      "hours2w": 55.6,
+      "hours2w": 52.7,
       "hours": 6578.4
     },
     {
       "appid": 1883580,
       "name": "Cactus Simulator",
-      "hours2w": 14.9,
+      "hours2w": 11,
       "hours": 102.1
     },
     {
@@ -48,7 +48,7 @@
     {
       "appid": 2923300,
       "name": "Banana",
-      "hours2w": 0.2,
+      "hours2w": 0.1,
       "hours": 8.4
     }
   ],
@@ -776,10 +776,6 @@
       ]
     },
     "activity": [
-      [
-        "2025-10-27",
-        3
-      ],
       [
         "2025-10-31",
         1
@@ -1839,6 +1835,10 @@
       [
         "2026-10-26",
         5
+      ],
+      [
+        "2026-10-27",
+        2
       ]
     ],
     "records": {},
