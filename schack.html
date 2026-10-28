@@ -151,6 +151,27 @@ h2{font-family:var(--pirate);font-weight:400;font-size:clamp(28px,4.5vw,36px);li
 .stat .v{color:#1F7A3F;font-weight:800}.stat .f{color:#B53A28;font-weight:800}.stat .r{color:#6D3E7E;font-weight:800}
 .stat tfoot td{background:linear-gradient(135deg,#FFF3A6,#FAE052);font-weight:800;border-top:2.5px solid var(--ink)}
 .stat-wrap{overflow-x:auto}
+.nasta{display:flex;align-items:center;gap:10px;margin:0;padding:6px 12px 6px 6px;width:fit-content;max-width:100%;border:2.5px solid var(--ink);border-radius:12px;box-shadow:2px 2px 0 var(--ink);background:linear-gradient(135deg,#D4F0FF,#9BD7F5);font-weight:600;font-size:15px}
+.nasta .pj{width:42px;flex:none}
+.stat-flikar{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.stat-flikar button{display:inline-flex;align-items:center;gap:6px;font:700 14px var(--display);border:2.5px solid var(--ink);border-radius:999px;padding:4px 14px;background:rgba(255,248,235,.9);box-shadow:2px 2px 0 var(--ink);cursor:pointer;color:var(--ink)}
+.stat-flikar button img{width:24px;height:24px;border-radius:50%;border:2px solid var(--ink);background:#fff;object-fit:cover;margin-left:-8px}
+.stat-flikar button[aria-selected="true"]{background:var(--ink);color:var(--yellow)}
+.stat-rutor{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+@media (max-width:820px){.stat-rutor{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.sr{display:grid;align-content:center;justify-items:center;text-align:center;gap:2px;padding:10px 6px;border:2.5px solid var(--ink);border-radius:12px;box-shadow:3px 3px 0 var(--ink);min-height:86px}
+.sr b{font:400 30px/1 var(--title);letter-spacing:.02em;color:var(--ink)}
+.sr span{font:700 13px/1.2 var(--display);color:#2a1a0a}
+.sr.gra{background:linear-gradient(135deg,#E3E7EC,#B9C2CC)}
+.sr.gron{background:linear-gradient(135deg,#C9EBC0,#73BB89)}
+.sr.rod{background:linear-gradient(135deg,#FFC2B8,#FF8A73)}
+.sr.lila{background:linear-gradient(135deg,#E6D4F5,#C99AD6)}
+.sr.gul{background:linear-gradient(135deg,#FFF3A6,#FAE052)}
+.sr.ljus{background:var(--ljus-ruta) url(bilder/schack/sand-ljus.png) center/cover}
+.sr.mork{background:var(--mork-ruta) url(bilder/schack/sand-mork.png) center/cover}
+.sr.eld{background:linear-gradient(135deg,#FFD08A,#F08A3C 60%,#E8553F)}
+.sr.eld b,.sr.eld span{color:#fff;text-shadow:1px 1px 0 rgba(18,24,38,.5)}
+.sr.eld b{-webkit-text-stroke:1px var(--ink);paint-order:stroke fill;color:#FAE052}
 .stat .sm{display:none}
 @media (max-width:560px){.stat .lg{display:none}.stat .sm{display:inline}.stat th,.stat td{padding:7px 6px}.stat td:first-child{max-width:130px}.stat td:first-child{overflow:hidden;text-overflow:ellipsis}}
 .procent{display:inline-block;min-width:3.6ch;padding:0 8px;border:2px solid var(--ink);border-radius:999px;background:#fff;font:700 13px var(--display)}
@@ -414,7 +435,7 @@ function poll(fn, ms){ stoppaPoll(); pollTimer = setTimeout(function(){ if (docu
 document.addEventListener("visibilitychange", function(){ if (!document.hidden && vy){ if (vy === "meny") laddaMeny(true); else if (parti) hamtaParti(true); } });
 
 /* ---------- MENYN ---------- */
-var menyData = null, valdVan = null, valdFarg = "slump";
+var menyData = null, valdVan = null, statVal = "alla";
 function vanner(){ var V = window.loomboomVanner, d = V && V.data(); return d ? d.vanner.filter(function(v){ return !v.jag; }) : null; }
 function laddaMeny(tyst){
   if (!tyst && !menyData) el("pag-lista").innerHTML = '<li class="tom">Laddar…</li>';
@@ -437,22 +458,24 @@ function ritaNy(){
   h += '<div class="ny-grid"><div><span class="etikett" id="vv-t">Välj en vän</span><ul class="vanval" role="radiogroup" aria-labelledby="vv-t">' + v.map(function(x, i){
     return '<li><input type="radio" name="van" id="van-' + i + '" value="' + esc(x.id) + '"' + (x.id === valdVan ? " checked" : "") + '><label for="van-' + i + '"><img src="' + esc(x.avatar) + '" alt="" referrerpolicy="no-referrer">' + esc(x.namn) + '</label></li>';
   }).join("") + '</ul></div>';
-  h += '<div><span class="etikett" id="fv-t">Din sida</span><div class="fargval" role="radiogroup" aria-labelledby="fv-t">' +
-    '<input type="radio" name="farg" id="f-vit" value="vit"' + (valdFarg === "vit" ? " checked" : "") + '><label for="f-vit">' + pjHTML("w", "k") + 'Ljus (börjar)</label>' +
-    '<input type="radio" name="farg" id="f-svart" value="svart"' + (valdFarg === "svart" ? " checked" : "") + '><label for="f-svart">' + pjHTML("b", "k") + 'Mörk</label>' +
-    '<input type="radio" name="farg" id="f-slump" value="slump"' + (valdFarg === "slump" ? " checked" : "") + '><label for="f-slump"><span class="slump" aria-hidden="true">?</span>Slumpa</label>' +
-    '</div></div>';
+  h += '<p class="nasta" id="nasta" role="status"></p>';
   h += '<div><button type="button" class="k gron stor" id="bjud">Bjud in till parti</button></div></div>';
   el("ny-innehall").innerHTML = h;
-  el("ny-innehall").querySelectorAll('input[name="van"]').forEach(function(i){ i.addEventListener("change", function(){ valdVan = i.value; }); });
-  el("ny-innehall").querySelectorAll('input[name="farg"]').forEach(function(i){ i.addEventListener("change", function(){ valdFarg = i.value; }); });
+  el("ny-innehall").querySelectorAll('input[name="van"]').forEach(function(i){ i.addEventListener("change", function(){ valdVan = i.value; visaNasta(); }); });
+  visaNasta();
   el("bjud").addEventListener("click", function(){
     var b = this; b.disabled = true; visaMsg("ny-msg", "");
-    api({ typ: "schack_bjud", id: valdVan, farg: valdFarg }).then(function(d){
+    api({ typ: "schack_bjud", id: valdVan }).then(function(d){
       visaMsg("ny-msg", "Inbjudan skickad! Partiet börjar när din vän tackar ja.");
       laddaMeny(true);
     }, function(e){ visaMsg("ny-msg", e.message, true); }).then(function(){ b.disabled = false; });
   });
+}
+// Ni byter sida varje parti. Första gången börjar den som bjuder in.
+function visaNasta(){
+  var n = el("nasta"); if (!n) return;
+  var farg = (menyData && menyData.nasta && menyData.nasta[valdVan]) || "w";
+  n.innerHTML = pjHTML(farg, "k") + '<span>Ni byter sida varje parti. Nästa parti blir du <b>' + (farg === "w" ? "ljus (vit) och börjar" : "mörk (svart)") + '</b>.</span>';
 }
 function visaMsg(id, t, fel){ var m = el(id); m.textContent = t; m.className = "msg" + (fel ? " fel" : ""); }
 
@@ -515,25 +538,43 @@ function kortHTML(p){
     '<span><span class="namn"><img src="' + esc(p.motstandare.avatar) + '" alt="" referrerpolicy="no-referrer"><span>mot ' + esc(p.motstandare.namn) + '</span></span>' +
     '<small>Du är ' + FARG[p.jag] + ' · ' + Math.ceil(p.antal / 2) + ' drag · ' + sedan(p.uppdaterad) + (p.status === "slut" && p.anledning ? ' · ' + (ANLEDNING[p.anledning] || "") : '') + '</small>' + lapp + '</span></a></li>';
 }
+function raknaStat(lista){
+  var st = { n: 0, v: 0, f: 0, r: 0, nw: 0, vw: 0, nb: 0, vb: 0, svit: 0 }, nu = 0;
+  lista.forEach(function(g){
+    st.n++; st[g.res]++;
+    if (g.farg === "w"){ st.nw++; if (g.res === "v") st.vw++; } else { st.nb++; if (g.res === "v") st.vb++; }
+    nu = g.res === "v" ? nu + 1 : 0; if (nu > st.svit) st.svit = nu;
+  });
+  return st;
+}
+function pct(a, b){ return b ? Math.round(a / b * 100) + "%" : "–"; }
 function ritaStat(){
-  var v = vanner() || [], S = {}, tot = { vinster: 0, forluster: 0, remier: 0 };
-  (menyData.statistik || []).forEach(function(s){ S[s.id] = s; });
+  var v = vanner() || [], H = menyData.historik || [];
   var namn = {}; menyData.partier.forEach(function(p){ namn[p.motstandare.id] = p.motstandare; });
   var ids = v.map(function(x){ return x.id; });
-  Object.keys(S).forEach(function(id){ if (ids.indexOf(id) < 0) ids.push(id); });
+  H.forEach(function(g){ if (ids.indexOf(g.mot) < 0) ids.push(g.mot); });
   if (!ids.length){ el("stat").innerHTML = '<p class="tom">Här ser du hur det har gått mot varje vän när ni har spelat klart några partier.</p>'; return; }
-  var rader = ids.map(function(id){
-    var p = v.find(function(x){ return x.id === id; }) || namn[id] || { id: id, namn: "Tidigare vän", avatar: "" };
-    var s = S[id] || { vinster: 0, forluster: 0, remier: 0 };
-    tot.vinster += s.vinster; tot.forluster += s.forluster; tot.remier += s.remier;
-    return { p: p, s: s, n: s.vinster + s.forluster + s.remier };
-  }).sort(function(a, b){ return b.n - a.n || a.p.namn.localeCompare(b.p.namn, "sv"); });
-  function pr(s){ var n = s.vinster + s.forluster + s.remier; return n ? Math.round((s.vinster + s.remier / 2) / n * 100) + "%" : "–"; }
-  el("stat").innerHTML = '<table class="stat"><thead><tr><th scope="col">Vän</th><th scope="col"><span class="lg">Partier</span><span class="sm" aria-hidden="true">#</span></th><th scope="col"><span class="lg">Vinster</span><span class="sm" aria-label="Vinster">V</span></th><th scope="col"><span class="lg">Förluster</span><span class="sm" aria-label="Förluster">F</span></th><th scope="col"><span class="lg">Remi</span><span class="sm" aria-label="Remi">R</span></th><th scope="col"><span class="lg">Poäng</span><span class="sm" aria-label="Poäng">%</span></th></tr></thead><tbody>' +
-    rader.map(function(r){
-      return '<tr><td>' + (r.p.avatar ? '<img src="' + esc(r.p.avatar) + '" alt="" referrerpolicy="no-referrer">' : '') + esc(r.p.namn) + '</td><td>' + r.n + '</td><td class="v">' + r.s.vinster + '</td><td class="f">' + r.s.forluster + '</td><td class="r">' + r.s.remier + '</td><td><span class="procent">' + pr(r.s) + '</span></td></tr>';
-    }).join("") + '</tbody><tfoot><tr><td>Totalt</td><td>' + (tot.vinster + tot.forluster + tot.remier) + '</td><td class="v">' + tot.vinster + '</td><td class="f">' + tot.forluster + '</td><td class="r">' + tot.remier + '</td><td><span class="procent">' + pr(tot) + '</span></td></tr></tfoot></table>' +
-    '<p style="margin:8px 0 0;font-size:13px;font-weight:600;color:#2a1a0a">V = vinster, F = förluster, R = remi. Poäng = vinster + halva remierna, delat med antal partier.</p>';
+  var person = function(id){ return v.find(function(x){ return x.id === id; }) || namn[id] || { id: id, namn: "Tidigare vän", avatar: "" }; };
+  if (statVal !== "alla" && ids.indexOf(statVal) < 0) statVal = "alla";
+  var flikar = '<div class="stat-flikar" role="tablist" aria-label="Välj vän"><button type="button" role="tab" data-s="alla" aria-selected="' + (statVal === "alla") + '">Alla vänner</button>' +
+    ids.map(function(id){ var p = person(id); return '<button type="button" role="tab" data-s="' + esc(id) + '" aria-selected="' + (statVal === id) + '">' + (p.avatar ? '<img src="' + esc(p.avatar) + '" alt="" referrerpolicy="no-referrer">' : '') + esc(p.namn) + '</button>'; }).join("") + '</div>';
+  var st = raknaStat(statVal === "alla" ? H : H.filter(function(g){ return g.mot === statVal; }));
+  var ruta = function(kl, varde, text){ return '<div class="sr ' + kl + '"><b>' + varde + '</b><span>' + text + '</span></div>'; };
+  var h = flikar + (st.n ? '' : '<p class="tom" style="margin-bottom:12px">Inga avslutade partier ' + (statVal === "alla" ? "än" : "mot " + esc(person(statVal).namn) + " än") + '. Statistiken fylls på när ni spelar klart.</p>') +
+    '<div class="stat-rutor">' +
+      ruta("gra", st.n, "Partier") +
+      ruta("gron", st.v, "Vinster") +
+      ruta("rod", st.f, "Förluster") +
+      ruta("lila", st.r, "Remi") +
+      ruta("gul stor", pct(st.v, st.n), "Vinst-%") +
+      ruta("ljus", pct(st.vw, st.nw), "Vinst-% som vit (ljus)") +
+      ruta("mork", pct(st.vb, st.nb), "Vinst-% som svart (mörk)") +
+      ruta("ljus", st.vw, "Vinster som vit (ljus)") +
+      ruta("mork", st.vb, "Vinster som svart (mörk)") +
+      ruta("eld stor", st.svit, "Längsta vinstsvit") +
+    '</div>';
+  el("stat").innerHTML = h;
+  el("stat").querySelectorAll("[data-s]").forEach(function(b){ b.addEventListener("click", function(){ statVal = b.getAttribute("data-s"); ritaStat(); var f = el("stat").querySelector('[data-s="' + statVal + '"]'); if (f) f.focus(); }); });
 }
 function alertMsg(t){ K.toast(t); }
 
