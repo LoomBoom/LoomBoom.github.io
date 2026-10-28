@@ -31,8 +31,8 @@
   --body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono:"JetBrains Mono", ui-monospace, Consolas, monospace;
   /* brädet */
-  --ljus-ruta:#CDEFFF;
-  --mork-ruta:#4C9FD6;
+  --ljus-ruta:#EFE4B0;
+  --mork-ruta:#B5AD86;
 }
 *{box-sizing:border-box}
 body{margin:0;background:linear-gradient(var(--sky), var(--sky-2) 60%, #7FC6E8) fixed;color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.5;overflow-x:hidden;min-height:100vh;
@@ -81,14 +81,13 @@ h2{font-family:var(--pirate);font-weight:400;font-size:clamp(28px,4.5vw,36px);li
 .msg{min-height:1.4em;margin:10px 0 0;font-weight:700;font-size:15px}
 .msg.fel{color:#9B1C1C}
 
-/* pjäser: djur på en bricka */
-.pj{position:relative;display:grid;place-items:center;width:84%;aspect-ratio:1;border-radius:50%;border:2.5px solid var(--ink);box-shadow:0 3px 0 rgba(18,24,38,.55)}
-.pj.w{background:radial-gradient(circle at 35% 30%,#FFFBE6,#FCE7A0 55%,#E9B949)}
-.pj.b{background:radial-gradient(circle at 35% 30%,#B699E6,#6D4BAF 55%,#3A2672)}
-.pj img{width:80%;height:80%;object-fit:contain;filter:drop-shadow(0 1px 0 rgba(18,24,38,.35));pointer-events:none;user-select:none;-webkit-user-drag:none}
+/* pjäser: LoomBooms målade djur, ljus och mörk version */
+.pj{position:relative;display:grid;place-items:center;width:100%;aspect-ratio:1}
+.pj img{width:88%;height:88%;object-fit:contain;filter:drop-shadow(0 3px 0 rgba(18,24,38,.28));pointer-events:none;user-select:none;-webkit-user-drag:none}
 .pj.b img{transform:scaleX(-1)}
-.pj.k::after{content:"";position:absolute;top:-9%;left:50%;width:42%;height:22%;transform:translateX(-50%);
+.pj.kung::after{content:"";position:absolute;top:-2%;left:50%;width:34%;height:18%;transform:translateX(-50%);
   background:linear-gradient(#FFE873,#F5B83D);border:2px solid var(--ink);clip-path:polygon(0 100%,0 20%,22% 60%,50% 0,78% 60%,100% 20%,100% 100%);border-radius:2px}
+.pj.b.kung::after{background:linear-gradient(#D9C8FF,#8E6BC9)}
 
 /* ---------- MENY ---------- */
 .ny-grid{display:grid;gap:14px}
@@ -136,8 +135,8 @@ h2{font-family:var(--pirate);font-weight:400;font-size:clamp(28px,4.5vw,36px);li
 .mini i{display:block;background:var(--ljus-ruta);position:relative}
 .mini i.m{background:var(--mork-ruta)}
 .mini i b{position:absolute;inset:16%;border-radius:50%;border:1px solid var(--ink)}
-.mini i b.w{background:#FCE7A0}.mini i b.b{background:#6D4BAF}
-.mini i b.k{inset:6%;box-shadow:0 0 0 1.5px #F5B83D}
+.mini i b.w{background:#F2A65A}.mini i b.b{background:#6D4BAF}
+.mini i b.kung{inset:6%;box-shadow:0 0 0 1.5px #F5B83D}
 
 .stat{width:100%;border-collapse:separate;border-spacing:0;border:2.5px solid var(--ink);border-radius:12px;overflow:hidden;box-shadow:3px 3px 0 var(--ink);background:rgba(212,240,255,.92);font-size:15px}
 .stat th,.stat td{padding:8px 10px;text-align:center;border-top:2px dashed rgba(18,24,38,.25);white-space:nowrap}
@@ -154,21 +153,26 @@ h2{font-family:var(--pirate);font-weight:400;font-size:clamp(28px,4.5vw,36px);li
 
 /* ---------- PARTI ---------- */
 .tillbaka{display:inline-flex;margin-bottom:14px}
-.spel{display:grid;grid-template-columns:minmax(0,600px) minmax(260px,1fr);gap:22px;align-items:start}
+.spel{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:22px;align-items:start}
+body.i-parti .wrap{max-width:1320px}
+body.i-parti header.head{display:none}
+.brade-ram{width:min(100%, max(320px, calc(100svh - 28px)));justify-self:center;scroll-margin-top:14px}
 @media (max-width:900px){.spel{grid-template-columns:minmax(0,1fr)}}
-.brade-ram{border:var(--line);border-radius:14px;padding:10px;box-shadow:6px 6px 0 var(--ink);background:linear-gradient(135deg,#20ACE4,#1E5FA8)}
+.brade-ram{border:var(--line);border-radius:14px;padding:10px;box-shadow:6px 6px 0 var(--ink);background:linear-gradient(135deg,#20ACE4,#1E5FA8);box-sizing:border-box}
 .brade{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));grid-template-rows:repeat(8,minmax(0,1fr));aspect-ratio:1;border:3px solid var(--ink);border-radius:6px;overflow:hidden;touch-action:manipulation;user-select:none}
-.ruta{position:relative;display:grid;place-items:center;border:0;padding:0;margin:0;background:var(--ljus-ruta);cursor:default;min-width:0;min-height:0}
-.ruta.m{background:var(--mork-ruta)}
+.ruta{position:relative;display:grid;place-items:center;border:0;padding:0;margin:0;cursor:default;min-width:0;min-height:0;
+  background:var(--ljus-ruta) url(bilder/schack/sand-ljus.png) center/cover}
+.ruta.m{background:var(--mork-ruta) url(bilder/schack/sand-mork.png) center/cover}
+.ruta::before{content:"";position:absolute;inset:0;pointer-events:none}
 .ruta.kan{cursor:pointer}
-.ruta.sist{background:#FFE98A}.ruta.m.sist{background:#E3C64B}
-.ruta.vald{background:#FFD23F}.ruta.m.vald{background:#E8B92A}
-.ruta.schack{background:radial-gradient(circle,#FF6B55 0 40%,#C7301E 75%)}
-.ruta .mal{position:absolute;width:30%;height:30%;border-radius:50%;background:rgba(18,24,38,.38);pointer-events:none}
-.ruta .mal.slag{width:92%;height:92%;background:none;border:4px solid rgba(18,24,38,.45)}
-.ruta .ko{position:absolute;font:700 11px var(--display);color:rgba(18,24,38,.6);pointer-events:none}
+.ruta.sist::before{background:rgba(250,224,82,.5)}
+.ruta.vald::before{background:rgba(255,190,30,.62);box-shadow:inset 0 0 0 3px rgba(18,24,38,.55)}
+.ruta.schack::before{background:radial-gradient(circle,rgba(255,80,60,.85) 0 35%,rgba(199,48,30,.55) 75%)}
+.ruta .pj{width:96%;z-index:1}
+.ruta .mal{position:absolute;z-index:2;width:28%;height:28%;border-radius:50%;background:rgba(32,172,228,.75);border:2px solid rgba(18,24,38,.6);pointer-events:none}
+.ruta .mal.slag{width:92%;height:92%;background:none;border:5px solid rgba(232,85,63,.85)}
+.ruta .ko{position:absolute;z-index:2;font:700 12px var(--display);color:rgba(58,38,20,.75);pointer-events:none}
 .ruta .ko.f{right:3px;bottom:1px}.ruta .ko.r{left:3px;top:1px}
-.ruta.m .ko{color:rgba(255,255,255,.8)}
 .ruta:focus-visible{outline:3px dashed var(--ink);outline-offset:-4px;z-index:2}
 
 .sida{display:grid;gap:14px}
@@ -178,9 +182,9 @@ h2{font-family:var(--pirate);font-weight:400;font-size:clamp(28px,4.5vw,36px);li
 .spelare .txt{flex:1;min-width:0}
 .spelare b{display:block;font:700 17px var(--display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .spelare small{font-weight:600;font-size:13px;color:#2a1a0a}
-.spelare .pj{width:34px;flex:none}
+.spelare .pj{width:40px;flex:none}
 .tagna{display:flex;flex-wrap:wrap;gap:1px;margin-top:2px;min-height:18px}
-.tagna img{width:18px;height:18px;object-fit:contain}
+.tagna img{width:22px;height:22px;object-fit:contain}
 .status{padding:10px 14px;border:2.5px solid var(--ink);border-radius:12px;box-shadow:3px 3px 0 var(--ink);font:700 17px var(--display);text-align:center;background:linear-gradient(135deg,#D4F0FF,#9BD7F5)}
 .status.min{background:linear-gradient(135deg,#FF8A73,#E8553F);color:#fff;text-shadow:1px 1px 0 rgba(18,24,38,.45)}
 .status.vinst{background:linear-gradient(135deg,#86CC9B,#2F9E5B);color:#fff;text-shadow:1px 1px 0 rgba(18,24,38,.45)}
@@ -195,7 +199,7 @@ h2{font-family:var(--pirate);font-weight:400;font-size:clamp(28px,4.5vw,36px);li
 .drag-lista .nr{color:#7a5a3a;text-align:right}
 .drag-lista span{display:inline-flex;align-items:center;gap:2px;padding:1px 4px;border-radius:5px}
 .drag-lista span.sista{background:#FFE98A}
-.drag-lista img{width:16px;height:16px;object-fit:contain}
+.drag-lista img{width:18px;height:18px;object-fit:contain}
 .drag-tom{grid-column:1/-1;font:600 13px var(--body);color:#2a1a0a;padding:4px}
 .atgarder{display:flex;gap:8px;flex-wrap:wrap}
 
@@ -317,15 +321,17 @@ import { Chess } from "./chess.js";
 
 /* ---------- Pjäserna: LoomBooms djur ---------- */
 var PJAS = {
-  k: { img: "snacka",    namn: "Kung (snäcka)" },
-  q: { img: "blackfisk", namn: "Dam (bläckfisk)" },
-  r: { img: "haj",       namn: "Torn (hammarhaj)" },
-  b: { img: "sjohast",   namn: "Löpare (sjöhäst)" },
-  n: { img: "mas",       namn: "Springare (mås)" },
-  p: { img: "krabba",    namn: "Bonde (krabba)" }
+  k: { img: "kung",    namn: "Kung (blåsfisk)" },
+  q: { img: "dam",     namn: "Dam (bläckfisk)" },
+  r: { img: "krabba",  namn: "Torn (krabba)" },
+  b: { img: "lopare",  namn: "Löpare (mås)" },
+  n: { img: "sjohast", namn: "Springare (sjöhäst)" },
+  p: { img: "mussla",  namn: "Bonde (mussla)" }
 };
+// bilder/schack/<djur>-ljus.png och <djur>-mork.png
+function bild(farg, typ){ return "bilder/schack/" + PJAS[typ].img + (farg === "w" ? "-ljus" : "-mork") + ".png"; }
 var FARG = { w: "ljus", b: "mörk" };
-function pjHTML(farg, typ){ return '<span class="pj ' + farg + (typ === "k" ? " k" : "") + '"><img src="bilder/spel/' + PJAS[typ].img + '.png" alt=""></span>'; }
+function pjHTML(farg, typ){ return '<span class="pj ' + farg + (typ === "k" ? " kung" : "") + '"><img src="' + bild(farg, typ) + '" alt=""></span>'; }
 function esc(t){ return String(t == null ? "" : t).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
 function sedan(t){
   var s = Math.max(0, (Date.now() - new Date(t).getTime()) / 1000);
@@ -353,6 +359,7 @@ function route(){
   var m = location.hash.match(/parti=([0-9a-f-]{36})/);
   el("utloggad").hidden = !!u; el("meny").hidden = !u || !!m; el("parti").hidden = !u || !m;
   stoppaPoll();
+  document.body.classList.toggle("i-parti", !!(u && m));
   if (!u){ vy = null; return; }
   if (m){ vy = "parti"; oppnaParti(m[1]); }
   else { vy = "meny"; laddaMeny(); }
@@ -424,7 +431,7 @@ function miniHTML(fen, jag){
   if (jag === "b") celler.reverse();
   return '<span class="mini" aria-hidden="true">' + celler.map(function(c){
     var m = (c[0] + c[1]) % 2 === 1, p = c[2];
-    return '<i' + (m ? ' class="m"' : '') + '>' + (p ? '<b class="' + (p === p.toUpperCase() ? "w" : "b") + (p.toLowerCase() === "k" ? " k" : "") + '"></b>' : '') + '</i>';
+    return '<i' + (m ? ' class="m"' : '') + '>' + (p ? '<b class="' + (p === p.toUpperCase() ? "w" : "b") + (p.toLowerCase() === "k" ? " kung" : "") + '"></b>' : '') + '</i>';
   }).join("") + '</span>';
 }
 function ritaMeny(){
@@ -501,6 +508,8 @@ function oppnaParti(id){
   el("sp-topp").innerHTML = ""; el("sp-botten").innerHTML = ""; el("atgarder").innerHTML = ""; el("remi-plats").innerHTML = ""; el("fraga-plats").innerHTML = ""; el("drag-lista").innerHTML = "";
   visaMsg("parti-msg", "");
   hamtaParti(false, id);
+  // Visa hela brädet direkt
+  setTimeout(function(){ var r = document.querySelector(".brade-ram"); if (r && window.innerWidth > 900) r.scrollIntoView({ block: "start", behavior: "auto" }); }, 50);
 }
 function hamtaParti(tyst, id){
   id = id || (parti && parti.id);
@@ -622,7 +631,7 @@ function tagnaPjaser(farg){
   var start = { p: 8, n: 2, b: 2, r: 2, q: 1 }, kvar = { p: 0, n: 0, b: 0, r: 0, q: 0 }, mot = farg === "w" ? "b" : "w";
   spel.board().forEach(function(r){ r.forEach(function(c){ if (c && c.color === mot && kvar[c.type] != null) kvar[c.type]++; }); });
   var h = "";
-  ["q","r","b","n","p"].forEach(function(t){ for (var i = 0; i < Math.max(0, start[t] - kvar[t]); i++) h += '<img src="bilder/spel/' + PJAS[t].img + '.png" alt="' + PJAS[t].namn + '">'; });
+  ["q","r","b","n","p"].forEach(function(t){ for (var i = 0; i < Math.max(0, start[t] - kvar[t]); i++) h += '<img src="' + bild(mot, t) + '" alt="' + PJAS[t].namn + '">'; });
   return h;
 }
 function ritaSpelare(){
@@ -646,19 +655,19 @@ function ritaStatus(){
   }
   var min = spel.turn() === jag;
   s.className = "status" + (min ? " min" : "");
-  s.innerHTML = (skickar ? "Skickar draget…" : min ? "Din tur!" : "Väntar på " + esc(mot.namn) + "…") + (spel.inCheck() ? '<small>' + (min ? "Din kung (snäckan) står i schack!" : "Schack!") + '</small>' : '<small>Senaste drag ' + sedan(parti.uppdaterad) + '</small>');
+  s.innerHTML = (skickar ? "Skickar draget…" : min ? "Din tur!" : "Väntar på " + esc(mot.namn) + "…") + (spel.inCheck() ? '<small>' + (min ? "Din kung (blåsfisken) står i schack!" : "Schack!") + '</small>' : '<small>Senaste drag ' + sedan(parti.uppdaterad) + '</small>');
 }
-function sanHTML(san){
+function sanHTML(san, farg){
   var m = san.match(/^([KQRBN])/);
-  var t = san.replace(/=([QRBN])/, function(_, x){ return '=' + '<img src="bilder/spel/' + PJAS[x.toLowerCase()].img + '.png" alt="' + PJAS[x.toLowerCase()].namn + '">'; });
-  if (m) t = '<img src="bilder/spel/' + PJAS[m[1].toLowerCase()].img + '.png" alt="' + PJAS[m[1].toLowerCase()].namn + '">' + t.slice(1);
+  var t = san.replace(/=([QRBN])/, function(_, x){ return '=' + '<img src="' + bild(farg, x.toLowerCase()) + '" alt="' + PJAS[x.toLowerCase()].namn + '">'; });
+  if (m) t = '<img src="' + bild(farg, m[1].toLowerCase()) + '" alt="' + PJAS[m[1].toLowerCase()].namn + '">' + t.slice(1);
   return t.replace("O-O-O", "Lång rockad").replace("O-O", "Kort rockad");
 }
 function ritaDrag(){
   var d = parti.drag, h = "";
   if (!d.length){ el("drag-lista").innerHTML = '<li class="drag-tom">Inga drag än. Ljus sida börjar.</li>'; return; }
   for (var i = 0; i < d.length; i += 2){
-    h += '<li><span class="nr">' + (i/2 + 1) + '.</span><span' + (i === d.length - 1 ? ' class="sista"' : '') + '>' + sanHTML(d[i]) + '</span><span' + (i + 1 === d.length - 1 ? ' class="sista"' : '') + '>' + (d[i+1] ? sanHTML(d[i+1]) : '') + '</span></li>';
+    h += '<li><span class="nr">' + (i/2 + 1) + '.</span><span' + (i === d.length - 1 ? ' class="sista"' : '') + '>' + sanHTML(d[i], "w") + '</span><span' + (i + 1 === d.length - 1 ? ' class="sista"' : '') + '>' + (d[i+1] ? sanHTML(d[i+1], "b") : '') + '</span></li>';
   }
   var l = el("drag-lista"); l.innerHTML = h; l.scrollTop = l.scrollHeight;
 }
