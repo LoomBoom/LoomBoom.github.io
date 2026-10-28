@@ -40,12 +40,21 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:
 .wood{background:repeating-linear-gradient(181deg, rgba(91,58,28,.14) 0 1px, transparent 1px 6px), repeating-linear-gradient(179deg, rgba(255,235,200,.12) 0 2px, transparent 2px 13px), linear-gradient(var(--wood), var(--wood-2))}
 
 /* HUD */
-.hud{position:fixed;left:0;right:0;top:0;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;pointer-events:none;
+.hud{position:fixed;left:0;right:0;top:0;display:flex;justify-content:center;align-items:flex-start;gap:10px;pointer-events:none;
   padding:calc(12px + env(safe-area-inset-top,0px)) max(12px, env(safe-area-inset-right,0px)) 0 max(12px, env(safe-area-inset-left,0px))}
 .chip{border:var(--line);border-radius:8px;box-shadow:3px 3px 0 var(--ink);padding:4px 14px 6px;text-align:center;min-width:96px}
 .chip .l{display:block;font:700 11px var(--body);text-transform:uppercase;letter-spacing:.06em;color:var(--brown)}
 .chip .n{display:block;font:700 26px/1.1 var(--mono);font-variant-numeric:tabular-nums}
 .chip.time .n.low{color:#B0201F}
+.chip.serie{min-width:118px;transition:background .2s}
+.chip.serie .n small{font-size:14px;color:var(--brown);margin-left:4px;white-space:nowrap}
+.chip .sm{display:none}
+@media (max-width:600px){.hud .mid{gap:6px}.chip,.chip.serie{min-width:0;padding:3px 9px 5px}.chip .n{font-size:19px}.chip .l{font-size:9px}.chip .lg{display:none}.chip .sm{display:inline}.chip.serie .n small{display:none}}
+.chip.serie.m1{background:#FAE052}.chip.serie.m2{background:#F5B83D}.chip.serie.m3{background:#F08A3C}.chip.serie.m4{background:#E8553F;color:#fff}
+.chip.serie.m4 .l,.chip.serie.m4 .n small{color:#fff}
+.chip.serie.pop{animation:pop .25s ease-out}
+@keyframes pop{50%{transform:scale(1.12)}}
+@media (prefers-reduced-motion:reduce){.chip.serie.pop{animation:none}}
 .hud .mid{display:flex;gap:10px}
 .back{pointer-events:auto;align-self:flex-start;border:var(--line);border-radius:6px;padding:4px 12px;font:400 19px var(--pirate);box-shadow:2px 2px 0 var(--ink)}
 .back:hover{background:var(--yellow)}
@@ -62,7 +71,7 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:
     radial-gradient(circle, var(--nail) 0 3.5px, #9b7a55 4px, transparent 5px) 100% 100%/12px 12px no-repeat}
 h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-height:1;margin:0;color:var(--yellow);-webkit-text-stroke:.05em var(--ink);paint-order:stroke fill;text-shadow:.045em .05em 0 var(--ink)}
 .card p{margin:10px auto 0;max-width:42ch;font-weight:600;color:#3a2410}
-.targets{list-style:none;margin:18px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.targets{list-style:none;margin:18px 0 0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
 .targets li{background:rgba(255,248,235,.75);border:2.5px solid var(--ink);border-radius:8px;padding:6px 4px 5px;display:grid;justify-items:center;gap:2px;min-width:0}
 .targets img{height:34px;width:auto;max-width:100%;object-fit:contain}
 .targets b{font:700 14px var(--mono)}
@@ -75,16 +84,28 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
 .sens output{font:700 14px var(--mono);min-width:3ch;text-align:left}
 .hint{font-size:13px!important;color:var(--brown)!important}
 .best{display:inline-block;margin-top:12px;background:var(--paper);border:2.5px solid var(--ink);border-radius:999px;padding:2px 14px;font:700 14px var(--body)}
-.result{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:18px}
+.result{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:18px}
 .result div{background:var(--paper);border:var(--line);border-radius:10px;box-shadow:3px 3px 0 var(--ink);padding:6px 8px 8px}
 .result .l{display:block;font:700 11px var(--body);text-transform:uppercase;letter-spacing:.05em;color:var(--brown)}
 .result .n{display:block;font:700 26px var(--mono)}
+.kills-t{margin:16px 0 0;font:700 12px var(--body);text-transform:uppercase;letter-spacing:.06em;color:var(--brown)}
+.kills{margin-top:8px!important;grid-template-columns:repeat(5,minmax(0,1fr))!important}
+.kills li.noll{opacity:.45}
+.kills b{font-size:16px!important}
+.combo{margin:12px auto 0;display:flex;flex-wrap:wrap;justify-content:center;gap:6px;padding:0;list-style:none}
+.combo li{background:rgba(255,248,235,.75);border:2px solid var(--ink);border-radius:999px;padding:1px 10px;font:700 12px var(--body);white-space:nowrap}
+.combo li b{font-family:var(--mono)}
+.btn:disabled{opacity:.5;cursor:default;transform:none!important;box-shadow:4px 4px 0 var(--ink)!important}
+.pmsg{min-height:1.3em;font-size:14px!important}
+.btn2{display:inline-block;margin:14px 6px 0;font:400 22px var(--pirate);color:var(--ink);border:var(--line);border-radius:6px;padding:4px 18px;box-shadow:3px 3px 0 var(--ink);cursor:pointer}
+.btn2:hover{background:var(--yellow)}
 .result div:first-child{background:var(--yellow)}
 .newbest{display:inline-block;margin-top:12px;font:400 22px var(--title);color:var(--yellow);-webkit-text-stroke:1.5px var(--ink);paint-order:stroke fill}
 .toolbar{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
 .toolbar a{margin-top:20px;align-self:center;font:400 20px var(--pirate);border:var(--line);border-radius:6px;padding:6px 16px;box-shadow:3px 3px 0 var(--ink)}
 .toolbar a:hover{background:var(--yellow)}
-@media (max-width:440px){.targets{grid-template-columns:repeat(4,minmax(0,1fr))}.chip{min-width:74px;padding:3px 8px 5px}.chip .n{font-size:20px}.back{font-size:16px}}
+@media (max-width:560px){.result{grid-template-columns:repeat(2,minmax(0,1fr))}.kills{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+@media (max-width:440px){.targets{grid-template-columns:repeat(3,minmax(0,1fr))}.chip.serie{min-width:90px}.chip{min-width:74px;padding:3px 8px 5px}.chip .n{font-size:20px}.back{font-size:16px}}
 
 /* TOPPLISTA */
 .rad{display:flex;gap:22px;align-items:flex-start;justify-content:center;width:min(940px,100%);flex-wrap:wrap}
@@ -94,12 +115,14 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
 .topp .konto-rad{display:flex;justify-content:center;margin-top:10px;min-height:34px}
 .topp .info{margin:10px 0 0;font:600 13px var(--body);color:#3a2410;text-align:center}
 .topp ol{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:5px}
-.topp li{display:grid;grid-template-columns:26px 26px minmax(0,1fr) auto;align-items:center;gap:8px;background:rgba(255,248,235,.8);border:2.5px solid var(--ink);border-radius:8px;padding:3px 8px 3px 6px}
+.topp li{display:grid;grid-template-columns:26px 26px minmax(0,1fr) auto auto;align-items:center;gap:8px;background:rgba(255,248,235,.8);border:2.5px solid var(--ink);border-radius:8px;padding:3px 8px 3px 6px}
 .topp li.jag{background:var(--yellow)}
 .topp li .nr{font:700 14px var(--mono);text-align:center}
 .topp li img{width:26px;height:26px;border-radius:50%;border:2px solid var(--ink);background:#fff;object-fit:cover}
 .topp li .n{font:700 14px var(--body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.topp li b{font:700 14px var(--mono)}
+.topp li b{font:700 14px var(--mono);text-align:right}
+.topp li .pr{font:600 12px var(--mono);color:var(--brown);min-width:4ch;text-align:right}
+.topp li.jag .pr{color:#4a2c12}
 .topp .tom{font:600 13px var(--body);color:var(--brown);text-align:center;padding:8px 0}
 .sparat{display:block;margin-top:10px;font:700 14px var(--body);color:#3a2410;min-height:1.3em}
 @media (max-width:1000px){.rad .card{flex-basis:100%}.topp{flex-basis:100%;width:min(560px,100%)}}
@@ -110,13 +133,12 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
 <canvas id="c" aria-label="Spelplan: havet med simmande djur. Siktet är i mitten."></canvas>
 
 <div class="hud" id="hud" hidden>
-  <a class="back wood" href="./">← Hem</a>
   <div class="mid">
     <div class="chip wood"><span class="l">Poäng</span><span class="n" id="score">0</span></div>
     <div class="chip wood time"><span class="l">Tid</span><span class="n" id="time">60</span></div>
-    <div class="chip wood"><span class="l">Träff</span><span class="n" id="acc">–</span></div>
+    <div class="chip wood serie" id="serie-chip"><span class="l"><span class="lg">Multiplikator</span><span class="sm">Multi</span></span><span class="n"><span id="mult">×1</span><small id="streak">0</small></span></div>
+    <div class="chip wood"><span class="l"><span class="lg">Träffsäkerhet</span><span class="sm">Träff</span></span><span class="n" id="acc">–</span></div>
   </div>
-  <span style="width:84px" aria-hidden="true"></span>
 </div>
 
 <div class="overlay" id="start">
@@ -125,9 +147,12 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
     <h1 id="t1">Fiskeskytte</h1>
     <p>Rör musen för att titta runt i havet. Siktet stannar i mitten. Klicka när ett djur är i siktet. Du har 60 sekunder.</p>
     <ul class="targets" id="targets"></ul>
+    <p class="hint" style="margin-top:14px">Träffa flera i rad utan att missa så växer multiplikatorn:</p>
+    <ul class="combo"><li>5 i rad <b>×1,25</b></li><li>10 <b>×1,5</b></li><li>15 <b>×1,75</b></li><li>20+ <b>×2</b></li></ul>
     <div class="sens"><label for="sens">Känslighet</label><input type="range" id="sens" min="0.4" max="3" step="0.1" value="1.2"><output id="sensv" for="sens">1.2</output></div>
     <button class="btn" type="button" id="go">Starta</button>
     <p class="hint">Tryck Esc för att pausa. På mobil drar du med fingret och trycker för att skjuta.</p>
+    <div class="toolbar"><a class="wood" href="./">← Till startsidan</a></div>
     <span class="best" id="best1" hidden></span>
   </div>
   <aside class="topp wood" id="topp" aria-labelledby="topp-t">
@@ -142,9 +167,10 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
 <div class="overlay" id="pause" hidden>
   <div class="card wood" role="dialog" aria-labelledby="t2">
     <h1 id="t2">Pausat</h1>
-    <p>Klicka för att fortsätta dyka.</p>
+    <p>Tryck mellanslag eller klicka på Fortsätt för att dyka vidare.</p>
     <button class="btn" type="button" id="resume">Fortsätt</button>
-    <div class="toolbar"><a class="wood" href="./">Till startsidan</a></div>
+    <p class="hint pmsg" id="pmsg" role="status"></p>
+    <div><button class="btn2 wood" type="button" id="restart">Börja om</button><a class="btn2 wood" href="./">Till startsidan</a></div>
   </div>
 </div>
 
@@ -156,7 +182,10 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
       <div><span class="l">Poäng</span><span class="n" id="r-score">0</span></div>
       <div><span class="l">Träffar</span><span class="n" id="r-hits">0</span></div>
       <div><span class="l">Träffsäkerhet</span><span class="n" id="r-acc">–</span></div>
+      <div><span class="l">Bästa serie</span><span class="n" id="r-serie">0</span></div>
     </div>
+    <p class="kills-t">Träffade djur</p>
+    <ul class="targets kills" id="kills"></ul>
     <span class="newbest" id="newbest" hidden>Nytt rekord!</span>
     <br><span class="best" id="best2"></span>
     <span class="sparat" id="sparat" role="status"></span>
@@ -182,9 +211,13 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
     krabba:    {img:"krabba",    name:"Krabba",       w:150, speed:[90,130],  pts:30, y:[0.93,0.95], weight:2,   face:0, walk:1},
     peek:      {img:"blackfisk-tang", name:"Gömd bläckfisk", w:420, pts:40, weight:1, peek:1},
     mas:       {img:"mas",       name:"Mås",          w:150, speed:[360,460], pts:50, y:[0.015,0.05], weight:1, face:1},
+    snabbmas:  {img:"mas",       name:"Snabb mås",    w:140, speed:[720,920], pts:100, y:[0.02,0.07], weight:0.5, face:1},
     snacka:    {img:"snacka",    name:"Snäcka",       w:120, pts:100, weight:0.6, shell:1}
   };
-  var ORDER = ["haj","manet","blackfisk","blasfisk","krabba","peek","mas","snacka"];
+  var ORDER = ["haj","manet","blackfisk","blasfisk","krabba","peek","mas","snabbmas","snacka"];
+  var TINT = "sepia(1) saturate(6) hue-rotate(-12deg) brightness(1.02)"; // gyllene färg för snabba måsen
+  function multOf(n){ return n>=20 ? 2 : n>=15 ? 1.75 : n>=10 ? 1.5 : n>=5 ? 1.25 : 1; }
+  function multTxt(m){ return "×" + String(m).replace(".", ","); }
 
   /* ---------- Bilder ---------- */
   var IMGS = {}, MASKS = {}, loaded = 0, need = 0;
@@ -209,7 +242,7 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
   var tl = document.getElementById("targets");
   ORDER.forEach(function(k){
     var t = TYPES[k], li = document.createElement("li");
-    li.innerHTML = '<img src="bilder/spel/'+t.img+'.png" alt=""><b>'+t.pts+'</b><span>'+t.name+'</span>';
+    li.innerHTML = '<img src="bilder/spel/'+t.img+'.png" alt=""'+(t.tint?' style="filter:'+TINT+'"':'')+'><b>'+t.pts+'</b><span>'+t.name+'</span>';
     tl.appendChild(li);
   });
 
@@ -236,7 +269,7 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
   function toScreen(x, y){ return [(x-cam.x)*S + W/2, (y-cam.y)*S + H/2]; }
 
   /* ---------- Spelläge ---------- */
-  var state = "menu", score = 0, shots = 0, hits = 0, left = ROUND, last = 0;
+  var state = "menu", score = 0, shots = 0, hits = 0, left = ROUND, last = 0, streak = 0, bestStreak = 0, kills = {}, usesLock = false, pausedAt = 0;
   var animals = [], fx = [], spawnT = 0, locked = false, fallback = false, pointer = {x:0,y:0,in:false};
   var sens = 1.2;
   try{ var sv = parseFloat(localStorage.getItem("fisk-sens")); if (sv>0) sens = sv; }catch(e){}
@@ -331,23 +364,33 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
     shots++;
     var a = hitTest(cam.x, cam.y);
     if (a){
-      a.hit = 0.0001; hits++; score += a.t.pts;
-      fx.push({type:"txt", x:cam.x, y:cam.y - 40, txt:"+"+a.t.pts, age:0, life:0.9});
+      a.hit = 0.0001; hits++; streak++; bestStreak = Math.max(bestStreak, streak);
+      kills[a.k] = (kills[a.k]||0) + 1;
+      var m = multOf(streak), got = Math.round(a.t.pts * m); score += got;
+      fx.push({type:"txt", x:cam.x, y:cam.y - 40, txt:"+"+got + (m>1 ? "  " + multTxt(m) : ""), age:0, life:0.9});
+      if (m > multOf(streak-1)) popChip();
       for (var i=0;i<12;i++){ var ang = Math.random()*6.28, sp = rnd(120,320);
         fx.push({type:"bub", x:cam.x, y:cam.y, vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp - 60, r:rnd(8,20), age:0, life:rnd(.5,.9)}); }
     } else {
       fx.push({type:"bub", x:cam.x, y:cam.y, vx:0, vy:-80, r:12, age:0, life:.5});
+      if (streak >= 5) fx.push({type:"txt", x:cam.x, y:cam.y - 40, txt:"Serien bröts!", age:0, life:0.9, red:1});
+      streak = 0;
     }
     hud();
   }
   var elScore = document.getElementById("score"), elTime = document.getElementById("time"), elAcc = document.getElementById("acc");
+  var elMult = document.getElementById("mult"), elStreak = document.getElementById("streak"), elSerie = document.getElementById("serie-chip");
+  function popChip(){ elSerie.classList.remove("pop"); void elSerie.offsetWidth; elSerie.classList.add("pop"); }
   function accText(){ return shots ? Math.round(hits/shots*100) + "%" : "–"; }
   // Skriv bara om siffrorna när de faktiskt ändras (sparar mycket arbete varje bildruta)
   var lastHud = "";
   function hud(){
-    var s = Math.ceil(left), a = accText(), key = score + "|" + s + "|" + a;
+    var s = Math.ceil(left), a = accText(), key = score + "|" + s + "|" + a + "|" + streak;
     if (key === lastHud) return; lastHud = key;
     elScore.textContent = score; elTime.textContent = s; elTime.classList.toggle("low", s <= 10); elAcc.textContent = a;
+    var m = multOf(streak), lv = m>=2 ? 4 : m>=1.75 ? 3 : m>=1.5 ? 2 : m>=1.25 ? 1 : 0;
+    elMult.textContent = multTxt(m); elStreak.textContent = streak + " i rad";
+    elSerie.className = "chip wood serie" + (lv ? " m" + lv : "") + (elSerie.classList.contains("pop") ? " pop" : "");
   }
 
   /* ---------- Rita ---------- */
@@ -362,12 +405,14 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
     var x = c.getContext("2d"); x.imageSmoothingQuality = "high"; x.drawImage(bg, 0, 0, tw, th);
     BGS = c; return c;
   }
-  function sprite(key, w, h){
-    var im = IMGS[key], pw = Math.max(1, Math.round(w*DPR)), ph = Math.max(1, Math.round(h*DPR)), id = key + pw;
+  function sprite(key, w, h, tint){
+    var im = IMGS[key], pw = Math.max(1, Math.round(w*DPR)), ph = Math.max(1, Math.round(h*DPR)), id = key + pw + (tint ? "t" : "");
     if (SPR[id]) return SPR[id];
     if (!im || !im.naturalWidth) return im;
     var c = document.createElement("canvas"); c.width = pw; c.height = ph;
-    var x = c.getContext("2d"); x.imageSmoothingQuality = "high"; x.drawImage(im, 0, 0, pw, ph);
+    var x = c.getContext("2d"); x.imageSmoothingQuality = "high";
+    if (tint){ try{ x.filter = TINT; }catch(e){} }
+    x.drawImage(im, 0, 0, pw, ph);
     SPR[id] = c; return c;
   }
   function drawBubble(x, y, r, alpha){
@@ -435,7 +480,12 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
         ctx.translate(p[0], p[1]);
         if (a.hit){ var k2 = 1 + a.hit*1.2; ctx.scale(k2,k2); ctx.globalAlpha = Math.max(0, 1 - a.hit/0.35); }
       }
-      ctx.drawImage(sprite(a.t.img, w, h), -w/2, -h/2, w, h);
+      var spr = sprite(a.t.img, w, h, a.t.tint);
+      if (a.t.trail && !a.hit){ // fartstreck bakom snabba måsen
+        for (var g=1; g<=3; g++){ ctx.globalAlpha = 0.22/g; ctx.drawImage(spr, -w/2 - g*w*0.32, -h/2, w, h); }
+        ctx.globalAlpha = 1;
+      }
+      ctx.drawImage(spr, -w/2, -h/2, w, h);
       ctx.restore();
     }
     ctx.restore();
@@ -445,7 +495,7 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
       else {
         ctx.globalAlpha = 1 - q*q;
         ctx.font = "400 " + Math.round(34) + "px 'Luckiest Guy', 'Arial Black', sans-serif";
-        ctx.textAlign = "center"; ctx.lineJoin = "round"; ctx.lineWidth = 6; ctx.strokeStyle = "#121826"; ctx.fillStyle = "#FAE052";
+        ctx.textAlign = "center"; ctx.lineJoin = "round"; ctx.lineWidth = 6; ctx.strokeStyle = "#121826"; ctx.fillStyle = f.red ? "#FF7A6B" : "#FAE052";
         ctx.strokeText(f.txt, sp[0], sp[1]); ctx.fillText(f.txt, sp[0], sp[1]);
         ctx.globalAlpha = 1;
       }
@@ -481,10 +531,10 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
   }
   document.addEventListener("pointerlockchange", function(){
     locked = document.pointerLockElement === cv;
-    if (locked) fallback = false;
+    if (locked){ fallback = false; usesLock = true; if (state === "pause") reallyResume(); }
     else if (state === "play" && !fallback) pause();
   });
-  document.addEventListener("pointerlockerror", function(){ fallback = true; });
+  document.addEventListener("pointerlockerror", function(){ if (state === "pause") lockFailed(); else fallback = true; });
   document.addEventListener("mousemove", function(e){
     pointer.x = e.clientX; pointer.y = e.clientY; pointer.in = true;
     if (state !== "play") return;
@@ -505,20 +555,44 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
   cv.addEventListener("touchmove", function(e){ if (!touch) return; var t=e.changedTouches[0]; var dx=t.clientX-touch.x, dy=t.clientY-touch.y;
     cam.x -= dx*sens/S; cam.y -= dy*sens/S; clampCam(); touch.x=t.clientX; touch.y=t.clientY; touch.moved += Math.abs(dx)+Math.abs(dy); e.preventDefault(); }, {passive:false});
   cv.addEventListener("touchend", function(e){ if (touch && touch.moved < 10) shoot(); touch = null; e.preventDefault(); }, {passive:false});
-  document.addEventListener("keydown", function(e){ if (e.key === "Escape" && state === "play" && fallback) pause(); });
+  document.addEventListener("keydown", function(e){
+    if (e.repeat) return;
+    if (e.key === "Escape" && state === "play" && fallback){ pause(); return; }
+    // Fortsätt med mellanslag eller Enter (men inte samma tryck som pausade)
+    if (state === "pause" && (e.key === " " || e.key === "Enter") && performance.now() - pausedAt > 350){
+      e.preventDefault(); resume();
+    }
+  });
 
   /* ---------- Skärmar ---------- */
   var elStart = document.getElementById("start"), elPause = document.getElementById("pause"), elEnd = document.getElementById("end"), elHud = document.getElementById("hud");
   function begin(){
-    score = 0; shots = 0; hits = 0; left = ROUND; animals = []; fx = []; spawnT = 0;
+    if (document.getElementById("again").disabled && state === "end") return;
+    score = 0; shots = 0; hits = 0; left = ROUND; animals = []; fx = []; spawnT = 0; streak = 0; bestStreak = 0; kills = {};
     cam.x = WW/2; cam.y = WH*0.42; clampCam();
     for (var i=0;i<4;i++){ spawn(); var a = animals[animals.length-1]; if (a && a.dir) a.x = rnd(400, WW-400); }
     TOPP.start();
     state = "play"; elStart.hidden = true; elEnd.hidden = true; elPause.hidden = true; elHud.hidden = false; hud();
     wantLock();
   }
-  function pause(){ if (state !== "play") return; state = "pause"; elPause.hidden = false; }
-  function resume(){ elPause.hidden = true; state = "play"; last = 0; wantLock(); }
+  var elPmsg = document.getElementById("pmsg");
+  function pause(){ if (state !== "play") return; state = "pause"; pausedAt = performance.now(); elPmsg.textContent = ""; elPause.hidden = false; }
+  function reallyResume(){ elPause.hidden = true; state = "play"; last = 0; }
+  function lockFailed(){
+    elPmsg.textContent = "Musen kunde inte låsas just nu. Vänta en sekund och försök igen.";
+  }
+  function resume(){
+    if (state !== "pause") return;
+    // Ingen muslåsning (t.ex. mobil): fortsätt direkt
+    if (!usesLock || !cv.requestPointerLock){ reallyResume(); if (!fallback) wantLock(); return; }
+    // Spelet fortsätter först när musen är låst igen (se pointerlockchange)
+    try{
+      var r = cv.requestPointerLock({ unadjustedMovement: true });
+      if (r && r.catch) r.catch(function(){
+        try{ var r2 = cv.requestPointerLock(); if (r2 && r2.catch) r2.catch(lockFailed); }catch(e){ lockFailed(); }
+      });
+    }catch(e){ lockFailed(); }
+  }
   function finish(){
     state = "end";
     try{ document.exitPointerLock && document.exitPointerLock(); }catch(e){}
@@ -526,13 +600,22 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
     document.getElementById("r-score").textContent = score;
     document.getElementById("r-hits").textContent = hits;
     document.getElementById("r-acc").textContent = accText();
+    document.getElementById("r-serie").textContent = bestStreak;
+    document.getElementById("kills").innerHTML = ORDER.map(function(k){
+      var t = TYPES[k], n = kills[k] || 0;
+      return '<li' + (n ? '' : ' class="noll"') + '><img src="bilder/spel/' + t.img + '.png" alt=""' + (t.tint ? ' style="filter:' + TINT + '"' : '') + '><b>' + n + '</b><span>' + t.name + '</span></li>';
+    }).join("");
+    // Spärra "Spela igen" en kort stund så att man inte råkar starta en ny runda direkt
+    var ag = document.getElementById("again"); ag.disabled = true;
+    setTimeout(function(){ ag.disabled = false; }, 1500);
     document.getElementById("newbest").hidden = !nb;
     showBest(); document.getElementById("rad2").appendChild(document.getElementById("topp")); elEnd.hidden = false;
     TOPP.klar(score, hits, shots);
   }
   document.getElementById("go").addEventListener("click", begin);
   document.getElementById("again").addEventListener("click", begin);
-  document.getElementById("resume").addEventListener("click", resume);
+  document.getElementById("resume").addEventListener("click", function(){ resume(false); });
+  document.getElementById("restart").addEventListener("click", function(){ elPause.hidden = true; begin(); });
 
   resize();
   requestAnimationFrame(frame);
@@ -569,7 +652,7 @@ var TOPP = (function(){
     elI.textContent = u ? "Dina rundor sparas på listan. Bara ditt bästa resultat räknas." : "Logga in med Discord för att komma med på listan.";
     if (!lista.length){ elL.innerHTML = '<li class="tom" style="display:block">Ingen har kommit med än. Bli först!</li>'; return; }
     elL.innerHTML = lista.map(function(r, i){
-      return '<li' + (u && u.id === r.id ? ' class="jag"' : '') + '><span class="nr">' + (i+1) + '</span><img src="' + esc(r.avatar) + '" alt="" referrerpolicy="no-referrer" loading="lazy"><span class="n">' + esc(r.namn) + '</span><b>' + r.poang + '</b></li>';
+      return '<li' + (u && u.id === r.id ? ' class="jag"' : '') + '><span class="nr">' + (i+1) + '</span><img src="' + esc(r.avatar) + '" alt="" referrerpolicy="no-referrer" loading="lazy"><span class="n">' + esc(r.namn) + '</span><b>' + r.poang + '</b><span class="pr" title="Träffsäkerhet">' + (r.skott ? Math.round(r.traffar / r.skott * 100) + '%' : '–') + '</span></li>';
     }).join("");
   }
   function hamta(){
