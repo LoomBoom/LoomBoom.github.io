@@ -142,6 +142,7 @@ h2{font-family:var(--pirate);font-weight:400;font-size:clamp(36px,5.5vw,50px);li
 .flikar button[aria-selected="true"]{background:var(--ink);color:var(--jasmine)}
 .flikar button:focus-visible{outline:3px dashed var(--jasmine);outline-offset:-6px}
 .tl-reset{margin:8px 0 0;font-weight:600;font-size:13px;color:#4a2c12;text-align:center;min-height:1.3em}
+.tl-reset .bi{width:20px;height:20px;vertical-align:-5px;margin-right:4px}
 .tl{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:6px}
 .tl li{display:grid;grid-template-columns:24px 30px minmax(0,1fr) auto auto;align-items:center;gap:10px;background:rgba(255,248,235,.8);border:2.5px solid var(--ink);border-radius:8px;padding:4px 10px 4px 8px}
 .tl li.tom{display:block;text-align:center;font-weight:600;font-size:14px;color:#4a2c12;padding:10px}
@@ -263,7 +264,7 @@ footer .gg span{font-size:14px;color:#4a2c12;font-weight:600}
   }
   function rita(){
     fV.setAttribute("aria-selected", flik === "vecka"); fA.setAttribute("aria-selected", flik === "alla");
-    elR.textContent = flik === "vecka" ? "Nollställs måndag 00:00 · om " + kvar() : "Alla tiders bästa resultat";
+    elR.innerHTML = flik === "vecka" ? "Nollställs måndag 00:00 · om " + kvar() + '<br><img src="bilder/bubbla.png" alt="" class="bi">Pris: 1:a 100 · 2:a 50 · 3:a 25 · 4–10: 10 bubblor' : "Alla tiders bästa resultat";
     if (!laddat) return;
     var rader = (flik === "vecka" ? data.vecka : data.lista).slice(0, 5);
     if (!rader.length){ elL.innerHTML = '<li class="tom">' + (flik === "vecka" ? "Ingen har spelat den här veckan än. Bli först!" : "Ingen har kommit med än. Bli först!") + '</li>'; return; }

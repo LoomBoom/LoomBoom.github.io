@@ -131,6 +131,9 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
 .topp li.jag .pr{color:#4a2c12}
 .topp .tom{font:600 13px var(--body);color:var(--brown);text-align:center;padding:8px 0}
 .sparat{display:block;margin-top:10px;font:700 14px var(--body);color:#3a2410;min-height:1.3em}
+.sparat .fick{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:8px}
+.sparat .fick span{display:inline-flex;align-items:center;gap:5px;background:#fff;border:2.5px solid var(--ink);border-radius:999px;padding:2px 12px 2px 4px;box-shadow:2px 2px 0 var(--ink)}
+.sparat .fick img,.topp .reset .bi{width:20px;height:20px;vertical-align:-5px;margin-right:3px}
 @media (max-width:1000px){.rad .card{flex-basis:100%}.topp{flex-basis:100%;width:min(560px,100%)}}
 </style>
 </head>
@@ -674,7 +677,7 @@ var TOPP = (function(){
     var u = k() && k().anvandare();
     elI.textContent = u ? "Dina rundor sparas på listan. Bara ditt bästa resultat räknas." : "Logga in med Discord för att komma med på listan.";
     fV.setAttribute("aria-selected", flik === "vecka"); fA.setAttribute("aria-selected", flik === "alla");
-    elR.textContent = flik === "vecka" ? "Nollställs måndag 00:00 · om " + kvar() : "Alla tiders bästa resultat";
+    elR.innerHTML = flik === "vecka" ? "Nollställs måndag 00:00 · om " + kvar() + '<br><img src="bilder/bubbla.png" alt="" class="bi">Pris: 1:a 100 · 2:a 50 · 3:a 25 · 4–10: 10' : "Alla tiders bästa resultat";
     var rader = flik === "vecka" ? vecka : lista;
     if (!rader.length){ elL.innerHTML = '<li class="tom" style="display:block">' + (flik === "vecka" ? "Ingen har spelat den här veckan än. Bli först!" : "Ingen har kommit med än. Bli först!") + '</li>'; return; }
     elL.innerHTML = rader.map(function(r, i){
@@ -708,6 +711,11 @@ var TOPP = (function(){
       elS.textContent = d.vplats
         ? "Sparat! Veckan: plats " + d.vplats + " (" + d.vbasta + " p). Genom tiderna: plats " + d.plats + " (" + d.basta + " p)."
         : "Sparat! Ditt bästa: " + d.basta + " poäng, plats " + d.plats + ".";
+      if (d.bubblor && d.bubblor.length){
+        elS.innerHTML = esc(elS.textContent) + '<span class="fick">' + d.bubblor.map(function(b){
+          return '<span><img src="bilder/bubbla.png" alt="">+' + b.antal + ' bubblor · ' + esc(b.text) + '</span>'; }).join("") + '</span>';
+      }
+      if (k().hamtaBubblor) k().hamtaBubblor();
     }).catch(function(){ elS.textContent = "Det gick inte att spara på topplistan den här gången."; });
   }
   if (k()) k().vidAndring(rita);
