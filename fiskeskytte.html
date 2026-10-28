@@ -119,7 +119,21 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
 .flikar button+button{border-left:2.5px solid var(--ink)}
 .flikar button[aria-selected="true"]{background:var(--ink);color:var(--yellow)}
 .flikar button:focus-visible{outline:3px dashed var(--yellow);outline-offset:-5px}
-.topp .reset{margin:6px 0 0;font:600 12px var(--body);color:var(--brown);text-align:center;min-height:1.2em}
+/* Veckans priser */
+.pris{margin:10px 0 0;display:grid;gap:7px}
+.pris .tid{display:flex;align-items:center;justify-content:center;gap:8px;border:2.5px solid #121826;border-radius:10px;box-shadow:2px 2px 0 #121826;padding:5px 10px;
+  background:linear-gradient(100deg,#91569D,#20ACE4);color:#fff;font:700 13px "Fredoka",system-ui,sans-serif;letter-spacing:.02em;text-transform:uppercase}
+.pris .tid b{font:400 19px/1 "Luckiest Guy","Fredoka",sans-serif;letter-spacing:.03em;color:#FAE052;-webkit-text-stroke:1px #121826;paint-order:stroke fill;text-transform:none;padding-top:2px}
+.pris ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.pris ul li{display:grid;grid-template-columns:none;justify-items:center;align-items:center;gap:1px;border:2.5px solid #121826;border-radius:9px;box-shadow:2px 2px 0 #121826;padding:3px 2px 4px;min-width:0}
+.pris ul li .p{font:400 15px/1.1 "Luckiest Guy","Fredoka",sans-serif;color:#121826;letter-spacing:.02em;white-space:nowrap}
+.pris ul li .v{display:inline-flex;align-items:center;gap:3px;font:700 15px/1 "Fredoka",system-ui,sans-serif;color:#121826;font-variant-numeric:tabular-nums}
+.pris ul li img{width:17px;height:17px;object-fit:contain;border:0;border-radius:0;background:none}
+.pris .g1{background:linear-gradient(160deg,#FFF3A6 0%,#FAE052 45%,#E2B22C 100%)}
+.pris .g2{background:linear-gradient(160deg,#FFFFFF 0%,#DCE2EA 50%,#AEB8C6 100%)}
+.pris .g3{background:linear-gradient(160deg,#FBD3AE 0%,#E9A66B 50%,#C47A3E 100%)}
+.pris .g4{background:linear-gradient(160deg,#D6F4E0 0%,#9DD8B0 50%,#73BB89 100%)}
+.pris .alla{margin:0;text-align:center;font:600 12px "Figtree",system-ui,sans-serif;color:#4a2c12}
 .topp ol{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:5px}
 .topp li{display:grid;grid-template-columns:26px 26px minmax(0,1fr) auto auto;align-items:center;gap:8px;background:rgba(255,248,235,.8);border:2.5px solid var(--ink);border-radius:8px;padding:3px 8px 3px 6px}
 .topp li.jag{background:var(--yellow)}
@@ -133,7 +147,7 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
 .sparat{display:block;margin-top:10px;font:700 14px var(--body);color:#3a2410;min-height:1.3em}
 .sparat .fick{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:8px}
 .sparat .fick span{display:inline-flex;align-items:center;gap:5px;background:#fff;border:2.5px solid var(--ink);border-radius:999px;padding:2px 12px 2px 4px;box-shadow:2px 2px 0 var(--ink)}
-.sparat .fick img,.topp .reset .bi{width:20px;height:20px;vertical-align:-5px;margin-right:3px}
+.sparat .fick img,.x-unused{width:20px;height:20px;vertical-align:-5px;margin-right:3px}
 @media (max-width:1000px){.rad .card{flex-basis:100%}.topp{flex-basis:100%;width:min(560px,100%)}}
 </style>
 </head>
@@ -172,7 +186,7 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
       <button type="button" role="tab" id="flik-vecka" aria-selected="true">Veckan</button>
       <button type="button" role="tab" id="flik-alla" aria-selected="false">Genom tiderna</button>
     </div>
-    <p class="reset" id="topp-reset"></p>
+    <div class="pris" id="topp-reset"></div>
     <ol id="topp-lista"><li class="tom" style="display:block">Laddar…</li></ol>
   </aside>
  </div>
@@ -664,6 +678,13 @@ var TOPP = (function(){
   fV.addEventListener("click", function(){ valj("vecka"); });
   fA.addEventListener("click", function(){ valj("alla"); });
   // Tid kvar till måndag 00:00
+  function prisHTML(){
+    var P = [["#1",100,"g1"],["#2",50,"g2"],["#3",25,"g3"],["#4–10",10,"g4"]];
+    return '<div class="tid" title="Veckan slutar måndag 00:00">Slutar om <b>' + kvar() + '</b></div>' +
+      '<ul aria-label="Veckans priser i bubblor">' + P.map(function(p){
+        return '<li class="' + p[2] + '"><span class="p">' + p[0] + '</span><span class="v">' + p[1] + '<img src="bilder/bubbla.png" alt="bubblor"></span></li>';
+      }).join("") + '</ul>';
+  }
   function kvar(){
     var n = new Date(), m = new Date(n); m.setHours(0,0,0,0);
     m.setDate(m.getDate() + ((8 - m.getDay()) % 7 || 7));
@@ -677,7 +698,7 @@ var TOPP = (function(){
     var u = k() && k().anvandare();
     elI.textContent = u ? "Dina rundor sparas på listan. Bara ditt bästa resultat räknas." : "Logga in med Discord för att komma med på listan.";
     fV.setAttribute("aria-selected", flik === "vecka"); fA.setAttribute("aria-selected", flik === "alla");
-    elR.innerHTML = flik === "vecka" ? "Nollställs måndag 00:00 · om " + kvar() + '<br><img src="bilder/bubbla.png" alt="" class="bi">Pris: 1:a 100 · 2:a 50 · 3:a 25 · 4–10: 10' : "Alla tiders bästa resultat";
+    elR.innerHTML = flik === "vecka" ? prisHTML() : '<p class="alla">Alla tiders bästa resultat</p>';
     var rader = flik === "vecka" ? vecka : lista;
     if (!rader.length){ elL.innerHTML = '<li class="tom" style="display:block">' + (flik === "vecka" ? "Ingen har spelat den här veckan än. Bli först!" : "Ingen har kommit med än. Bli först!") + '</li>'; return; }
     elL.innerHTML = rader.map(function(r, i){

@@ -141,8 +141,21 @@ h2{font-family:var(--pirate);font-weight:400;font-size:clamp(36px,5.5vw,50px);li
 .flikar button+button{border-left:3px solid var(--ink)}
 .flikar button[aria-selected="true"]{background:var(--ink);color:var(--jasmine)}
 .flikar button:focus-visible{outline:3px dashed var(--jasmine);outline-offset:-6px}
-.tl-reset{margin:8px 0 0;font-weight:600;font-size:13px;color:#4a2c12;text-align:center;min-height:1.3em}
-.tl-reset .bi{width:20px;height:20px;vertical-align:-5px;margin-right:4px}
+/* Veckans priser */
+.pris{margin:10px 0 0;display:grid;gap:7px}
+.pris .tid{display:flex;align-items:center;justify-content:center;gap:8px;border:2.5px solid #121826;border-radius:10px;box-shadow:2px 2px 0 #121826;padding:5px 10px;
+  background:linear-gradient(100deg,#91569D,#20ACE4);color:#fff;font:700 13px "Fredoka",system-ui,sans-serif;letter-spacing:.02em;text-transform:uppercase}
+.pris .tid b{font:400 19px/1 "Luckiest Guy","Fredoka",sans-serif;letter-spacing:.03em;color:#FAE052;-webkit-text-stroke:1px #121826;paint-order:stroke fill;text-transform:none;padding-top:2px}
+.pris ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.pris ul li{display:grid;grid-template-columns:none;justify-items:center;align-items:center;gap:1px;border:2.5px solid #121826;border-radius:9px;box-shadow:2px 2px 0 #121826;padding:3px 2px 4px;min-width:0}
+.pris ul li .p{font:400 15px/1.1 "Luckiest Guy","Fredoka",sans-serif;color:#121826;letter-spacing:.02em;white-space:nowrap}
+.pris ul li .v{display:inline-flex;align-items:center;gap:3px;font:700 15px/1 "Fredoka",system-ui,sans-serif;color:#121826;font-variant-numeric:tabular-nums}
+.pris ul li img{width:17px;height:17px;object-fit:contain;border:0;border-radius:0;background:none}
+.pris .g1{background:linear-gradient(160deg,#FFF3A6 0%,#FAE052 45%,#E2B22C 100%)}
+.pris .g2{background:linear-gradient(160deg,#FFFFFF 0%,#DCE2EA 50%,#AEB8C6 100%)}
+.pris .g3{background:linear-gradient(160deg,#FBD3AE 0%,#E9A66B 50%,#C47A3E 100%)}
+.pris .g4{background:linear-gradient(160deg,#D6F4E0 0%,#9DD8B0 50%,#73BB89 100%)}
+.pris .alla{margin:0;text-align:center;font:600 12px "Figtree",system-ui,sans-serif;color:#4a2c12}
 .tl{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:6px}
 .tl li{display:grid;grid-template-columns:24px 30px minmax(0,1fr) auto auto;align-items:center;gap:10px;background:rgba(255,248,235,.8);border:2.5px solid var(--ink);border-radius:8px;padding:4px 10px 4px 8px}
 .tl li.tom{display:block;text-align:center;font-weight:600;font-size:14px;color:#4a2c12;padding:10px}
@@ -218,7 +231,7 @@ footer .gg span{font-size:14px;color:#4a2c12;font-weight:600}
         <button type="button" role="tab" id="tl-vecka" aria-selected="true">Veckan</button>
         <button type="button" role="tab" id="tl-alla" aria-selected="false">Genom tiderna</button>
       </div>
-      <p class="tl-reset" id="tl-reset"></p>
+      <div class="pris" id="tl-reset"></div>
       <ol class="tl" id="tl-lista"><li class="tom">Laddar…</li></ol>
       <a class="btn" href="fiskeskytte.html">Spela Fiskeskytte →</a>
     </section>
@@ -256,6 +269,13 @@ footer .gg span{font-size:14px;color:#4a2c12;font-weight:600}
   try{ if (localStorage.getItem("fisk-flik") === "alla") flik = "alla"; }catch(e){}
   var fV = document.getElementById("tl-vecka"), fA = document.getElementById("tl-alla"), elL = document.getElementById("tl-lista"), elR = document.getElementById("tl-reset");
   function esc(t){ return String(t == null ? "" : t).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+  function prisHTML(){
+    var P = [["#1",100,"g1"],["#2",50,"g2"],["#3",25,"g3"],["#4–10",10,"g4"]];
+    return '<div class="tid" title="Veckan slutar måndag 00:00">Slutar om <b>' + kvar() + '</b></div>' +
+      '<ul aria-label="Veckans priser i bubblor">' + P.map(function(p){
+        return '<li class="' + p[2] + '"><span class="p">' + p[0] + '</span><span class="v">' + p[1] + '<img src="bilder/bubbla.png" alt="bubblor"></span></li>';
+      }).join("") + '</ul>';
+  }
   function kvar(){
     var n = new Date(), m = new Date(n); m.setHours(0,0,0,0);
     m.setDate(m.getDate() + ((8 - m.getDay()) % 7 || 7));
@@ -264,7 +284,7 @@ footer .gg span{font-size:14px;color:#4a2c12;font-weight:600}
   }
   function rita(){
     fV.setAttribute("aria-selected", flik === "vecka"); fA.setAttribute("aria-selected", flik === "alla");
-    elR.innerHTML = flik === "vecka" ? "Nollställs måndag 00:00 · om " + kvar() + '<br><img src="bilder/bubbla.png" alt="" class="bi">Pris: 1:a 100 · 2:a 50 · 3:a 25 · 4–10: 10 bubblor' : "Alla tiders bästa resultat";
+    elR.innerHTML = flik === "vecka" ? prisHTML() : '<p class="alla">Alla tiders bästa resultat</p>';
     if (!laddat) return;
     var rader = (flik === "vecka" ? data.vecka : data.lista).slice(0, 5);
     if (!rader.length){ elL.innerHTML = '<li class="tom">' + (flik === "vecka" ? "Ingen har spelat den här veckan än. Bli först!" : "Ingen har kommit med än. Bli först!") + '</li>'; return; }
