@@ -1,15 +1,18 @@
 /*
-  LoomBoom – inloggning med Discord (via Supabase)
+  LoomBoom – inloggning med Discord (direkt mot Discord, utan e-post)
 
-  Fyll i de två värdena nedan från Supabase:
-  Project Settings → API → "Project URL" och "anon / publishable key".
-  De är gjorda för att synas på en hemsida och är säkra att lägga här.
-  Lägg ALDRIG in "service_role" eller "secret key" här.
+  Vi ber Discord bara om "identify": namn, profilbild och Discord-id.
+  Ingen e-post hämtas och inget sparas i någon databas när man loggar in.
+  Inloggningen sparas bara i besökarens egen webbläsare och gäller i ungefär 7 dagar.
+
+  DISCORD_CLIENT_ID hittar du i Discord Developer Portal → din app → OAuth2 → Client ID.
+  Den är gjord för att synas och är säker att ha här. Lägg ALDRIG in Client Secret här.
 */
-var SUPABASE_URL = "https://cipqlojdcdcqahyqqttj.supabase.co";
-var SUPABASE_ANON_KEY = "sb_publishable_wYu-AZc81VeCJp9XjrTTfA_4FcFVLYh";
+var DISCORD_CLIENT_ID = "1564819056635420734";
+var INLOGG_ADRESS = "https://loomboom.se/";   // måste stå exakt så under OAuth2 → Redirects hos Discord
 
 (function(){
+  var NYCKEL = "loomboom-discord", TILLSTAND = "loomboom-discord-state";
   var CSS = '' +
   '.konto{position:relative;display:flex;align-items:center}' +
   '.konto-btn{display:inline-flex;align-items:center;gap:8px;border:3px solid #121826;border-radius:6px;padding:3px 12px 3px 8px;cursor:pointer;' +
@@ -36,56 +39,97 @@ var SUPABASE_ANON_KEY = "sb_publishable_wYu-AZc81VeCJp9XjrTTfA_4FcFVLYh";
     var d = document.createElement("div"); d.className = "konto-fel"; d.setAttribute("role","status"); d.textContent = msg;
     document.body.appendChild(d); setTimeout(function(){ d.remove(); }, 5000);
   }
+  function las(k){ try{ return JSON.parse(localStorage.getItem(k) || "null"); }catch(e){ return null; } }
+  function skriv(k, v){ try{ if (v == null) localStorage.removeItem(k); else localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+
+  // Städa bort den gamla Supabase-inloggningen om den finns kvar
+  try{ Object.keys(localStorage).forEach(function(k){ if (/^sb-.*-auth-token/.test(k)) localStorage.removeItem(k); }); }catch(e){}
+
+  var lyssnare = [];
+  function inloggning(){
+    var s = las(NYCKEL);
+    if (!s || !s.token || !s.user || Date.now() > s.utgar){ if (s) skriv(NYCKEL, null); return null; }
+    return s;
+  }
+  function meddela(){
+    var s = inloggning();
+    lyssnare.forEach(function(f){ try{ f(s ? s.user : null); }catch(e){} });
+    try{ window.dispatchEvent(new CustomEvent("loomboom-konto", { detail: s ? s.user : null })); }catch(e){}
+  }
+  function avatar(u){
+    if (u.avatar) return "https://cdn.discordapp.com/avatars/" + u.id + "/" + u.avatar + ".png?size=64";
+    var n = 0; try{ n = Number((BigInt(u.id) >> 22n) % 6n); }catch(e){}
+    return "https://cdn.discordapp.com/embed/avatars/" + n + ".png";
+  }
+
+  function loggaIn(){
+    if (!DISCORD_CLIENT_ID){ toast("Inloggningen är inte inställd än."); return; }
+    var st = Math.random().toString(36).slice(2) + Date.now().toString(36);
+    skriv(TILLSTAND, { state: st, tillbaka: location.href.split("#")[0] });
+    location.href = "https://discord.com/oauth2/authorize?client_id=" + encodeURIComponent(DISCORD_CLIENT_ID) +
+      "&response_type=token&scope=identify&prompt=none&redirect_uri=" + encodeURIComponent(INLOGG_ADRESS) + "&state=" + st;
+  }
+  function loggaUt(){ skriv(NYCKEL, null); meddela(); }
+
+  // Tillbaka från Discord: adressen slutar med #access_token=...
+  function tillbakaFranDiscord(){
+    var h = location.hash.replace(/^#/, ""), q = location.search.replace(/^\?/, "");
+    var p = new URLSearchParams(h.indexOf("access_token=") >= 0 || h.indexOf("error=") >= 0 ? h : q);
+    if (!p.get("access_token") && !p.get("error")) return Promise.resolve();
+    var sparat = las(TILLSTAND); skriv(TILLSTAND, null);
+    try{ history.replaceState(null, "", location.pathname); }catch(e){}
+    if (p.get("error")){ toast("Inloggningen avbröts. Du kan försöka igen."); return Promise.resolve(); }
+    if (!sparat || sparat.state !== p.get("state")){ toast("Inloggningen gick inte att verifiera. Försök igen."); return Promise.resolve(); }
+    var token = p.get("access_token"), sek = parseInt(p.get("expires_in") || "604800", 10);
+    return fetch("https://discord.com/api/v10/users/@me", { headers: { Authorization: "Bearer " + token } })
+      .then(function(r){ if (!r.ok) throw new Error("discord " + r.status); return r.json(); })
+      .then(function(u){
+        skriv(NYCKEL, { token: token, utgar: Date.now() + (sek - 300) * 1000,
+          user: { id: u.id, namn: u.global_name || u.username, avatar: avatar(u) } });
+        var hit = location.href.split("#")[0];
+        if (sparat.tillbaka && sparat.tillbaka !== hit && sparat.tillbaka.indexOf(location.origin) === 0){ location.replace(sparat.tillbaka); return; }
+      })
+      .catch(function(){ toast("Det gick inte att logga in just nu. Försök igen om en stund."); });
+  }
+
+  window.loomboomKonto = {
+    anvandare: function(){ var s = inloggning(); return s ? s.user : null; },
+    token: function(){ var s = inloggning(); return s ? s.token : null; },
+    loggaIn: loggaIn,
+    loggaUt: loggaUt,
+    vidAndring: function(f){ lyssnare.push(f); }
+  };
 
   function start(){
-    var nav = document.querySelector(".nav ul");
-    if (!nav) return;
+    var plats = document.getElementById("konto-plats") || document.querySelector(".nav ul");
+    if (!DISCORD_CLIENT_ID){ console.info("LoomBoom: fyll i DISCORD_CLIENT_ID i konto.js."); return; }
     var st = document.createElement("style"); st.textContent = CSS; document.head.appendChild(st);
-    var li = document.createElement("li"); li.className = "konto"; nav.appendChild(li);
+    var li = null;
+    if (plats){ li = document.createElement(plats.tagName === "UL" ? "li" : "span"); li.className = "konto"; plats.appendChild(li); }
 
-    if (!SUPABASE_URL || !SUPABASE_ANON_KEY){
-      console.info("LoomBoom: inloggningen är inte inställd än. Fyll i SUPABASE_URL och SUPABASE_ANON_KEY i konto.js.");
-      li.remove(); return;
-    }
-    if (!window.supabase || !window.supabase.createClient){ li.remove(); return; }
-
-    var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { persistSession: true, detectSessionInUrl: true, flowType: "pkce" } });
-    window.loomboomKonto = sb; // så att andra sidor (t.ex. topplistor) kan använda samma inloggning senare
-
-    function showOut(){
+    function visaUt(){
+      if (!li) return;
       li.innerHTML = '<button type="button" class="konto-btn" id="konto-in">' + DISCORD + 'Logga in</button>';
-      li.querySelector("#konto-in").addEventListener("click", function(){
-        var back = location.href.split("#")[0];
-        sb.auth.signInWithOAuth({ provider: "discord", options: { redirectTo: back, scopes: "identify" } })
-          .then(function(r){ if (r && r.error) toast("Det gick inte att logga in just nu. Försök igen om en stund."); });
-      });
+      li.querySelector("#konto-in").addEventListener("click", loggaIn);
     }
-    function showIn(user){
-      var m = user.user_metadata || {};
-      var name = (m.custom_claims && m.custom_claims.global_name) || m.full_name || m.name || m.user_name || "Inloggad";
-      var pic = m.avatar_url || m.picture || "";
+    function visaIn(u){
+      if (!li) return;
       li.innerHTML = '<button type="button" class="konto-btn" id="konto-knapp" aria-expanded="false" aria-haspopup="true">' +
-        (pic ? '<img src="' + esc(pic) + '" alt="" referrerpolicy="no-referrer">' : DISCORD) + '<span class="namn">' + esc(name) + '</span></button>' +
-        '<div class="konto-meny" id="konto-meny" hidden><p>Inloggad med Discord som<b>' + esc(name) + '</b></p><button type="button" id="konto-ut">Logga ut</button></div>';
+        '<img src="' + esc(u.avatar) + '" alt="" referrerpolicy="no-referrer"><span class="namn">' + esc(u.namn) + '</span></button>' +
+        '<div class="konto-meny" id="konto-meny" hidden><p>Inloggad med Discord som<b>' + esc(u.namn) + '</b></p><button type="button" id="konto-ut">Logga ut</button></div>';
       var btn = li.querySelector("#konto-knapp"), menu = li.querySelector("#konto-meny");
       btn.addEventListener("click", function(e){ e.stopPropagation(); var open = menu.hidden; menu.hidden = !open; btn.setAttribute("aria-expanded", open ? "true" : "false"); });
-      li.querySelector("#konto-ut").addEventListener("click", function(){ sb.auth.signOut().then(showOut); });
+      li.querySelector("#konto-ut").addEventListener("click", loggaUt);
     }
+    function rita(u){ if (u) visaIn(u); else visaUt(); }
+    lyssnare.push(rita);
 
-    function closeMenu(){ var m = li.querySelector("#konto-meny"), b = li.querySelector("#konto-knapp"); if (m){ m.hidden = true; b.setAttribute("aria-expanded","false"); } }
-    document.addEventListener("click", function(e){ if (!li.contains(e.target)) closeMenu(); });
-    document.addEventListener("keydown", function(e){ if (e.key === "Escape") closeMenu(); });
+    function stang(){ if (!li) return; var m = li.querySelector("#konto-meny"), b = li.querySelector("#konto-knapp"); if (m){ m.hidden = true; b.setAttribute("aria-expanded","false"); } }
+    document.addEventListener("click", function(e){ if (li && !li.contains(e.target)) stang(); });
+    document.addEventListener("keydown", function(e){ if (e.key === "Escape") stang(); });
 
-    showOut();
-    sb.auth.getSession().then(function(r){ var s = r && r.data && r.data.session; if (s) showIn(s.user); });
-    sb.auth.onAuthStateChange(function(ev, session){
-      if (session && session.user) showIn(session.user); else showOut();
-      if (ev === "SIGNED_IN" && /[?&]code=/.test(location.search)){
-        try{ history.replaceState(null, "", location.pathname + location.hash); }catch(e){}
-      }
-    });
-    var p = new URLSearchParams(location.search + "&" + location.hash.replace(/^#/, ""));
-    if (p.get("error")) toast("Inloggningen avbröts. Du kan försöka igen.");
+    rita(window.loomboomKonto.anvandare());
+    tillbakaFranDiscord().then(meddela);
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();

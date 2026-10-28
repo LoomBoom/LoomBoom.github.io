@@ -85,6 +85,24 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
 .toolbar a{margin-top:20px;align-self:center;font:400 20px var(--pirate);border:var(--line);border-radius:6px;padding:6px 16px;box-shadow:3px 3px 0 var(--ink)}
 .toolbar a:hover{background:var(--yellow)}
 @media (max-width:440px){.targets{grid-template-columns:repeat(4,minmax(0,1fr))}.chip{min-width:74px;padding:3px 8px 5px}.chip .n{font-size:20px}.back{font-size:16px}}
+
+/* TOPPLISTA */
+.rad{display:flex;gap:22px;align-items:flex-start;justify-content:center;width:min(940px,100%);flex-wrap:wrap}
+.rad .card{flex:1 1 440px}
+.topp{position:relative;flex:0 1 330px;width:min(330px,100%);border:var(--line);border-radius:12px;box-shadow:8px 8px 0 var(--ink);padding:18px 18px 16px;text-align:left}
+.topp h2{margin:0;font:400 30px/1 var(--pirate);color:var(--ink);text-align:center}
+.topp .konto-rad{display:flex;justify-content:center;margin-top:10px;min-height:34px}
+.topp .info{margin:10px 0 0;font:600 13px var(--body);color:#3a2410;text-align:center}
+.topp ol{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:5px}
+.topp li{display:grid;grid-template-columns:26px 26px minmax(0,1fr) auto;align-items:center;gap:8px;background:rgba(255,248,235,.8);border:2.5px solid var(--ink);border-radius:8px;padding:3px 8px 3px 6px}
+.topp li.jag{background:var(--yellow)}
+.topp li .nr{font:700 14px var(--mono);text-align:center}
+.topp li img{width:26px;height:26px;border-radius:50%;border:2px solid var(--ink);background:#fff;object-fit:cover}
+.topp li .n{font:700 14px var(--body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topp li b{font:700 14px var(--mono)}
+.topp .tom{font:600 13px var(--body);color:var(--brown);text-align:center;padding:8px 0}
+.sparat{display:block;margin-top:10px;font:700 14px var(--body);color:#3a2410;min-height:1.3em}
+@media (max-width:1000px){.rad .card{flex-basis:100%}.topp{flex-basis:100%;width:min(560px,100%)}}
 </style>
 </head>
 <body>
@@ -102,6 +120,7 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
 </div>
 
 <div class="overlay" id="start">
+ <div class="rad" id="rad1">
   <div class="card wood" role="dialog" aria-labelledby="t1">
     <h1 id="t1">Fiskeskytte</h1>
     <p>Rör musen för att titta runt i havet. Siktet stannar i mitten. Klicka när ett djur är i siktet. Du har 60 sekunder.</p>
@@ -111,6 +130,13 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
     <p class="hint">Tryck Esc för att pausa. På mobil drar du med fingret och trycker för att skjuta.</p>
     <span class="best" id="best1" hidden></span>
   </div>
+  <aside class="topp wood" id="topp" aria-labelledby="topp-t">
+    <h2 id="topp-t">Topplista</h2>
+    <div class="konto-rad" id="konto-plats"></div>
+    <p class="info" id="topp-info">Logga in med Discord för att komma med på listan.</p>
+    <ol id="topp-lista"><li class="tom" style="display:block">Laddar…</li></ol>
+  </aside>
+ </div>
 </div>
 
 <div class="overlay" id="pause" hidden>
@@ -123,6 +149,7 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
 </div>
 
 <div class="overlay" id="end" hidden>
+ <div class="rad" id="rad2">
   <div class="card wood" role="dialog" aria-labelledby="t3">
     <h1 id="t3">Tiden är ute!</h1>
     <div class="result">
@@ -132,9 +159,11 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
     </div>
     <span class="newbest" id="newbest" hidden>Nytt rekord!</span>
     <br><span class="best" id="best2"></span>
+    <span class="sparat" id="sparat" role="status"></span>
     <br><button class="btn" type="button" id="again">Spela igen</button>
     <div class="toolbar"><a class="wood" href="./">Till startsidan</a></div>
   </div>
+ </div>
 </div>
 
 <script>
@@ -484,6 +513,7 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
     score = 0; shots = 0; hits = 0; left = ROUND; animals = []; fx = []; spawnT = 0;
     cam.x = WW/2; cam.y = WH*0.42; clampCam();
     for (var i=0;i<4;i++){ spawn(); var a = animals[animals.length-1]; if (a && a.dir) a.x = rnd(400, WW-400); }
+    TOPP.start();
     state = "play"; elStart.hidden = true; elEnd.hidden = true; elPause.hidden = true; elHud.hidden = false; hud();
     wantLock();
   }
@@ -497,7 +527,8 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
     document.getElementById("r-hits").textContent = hits;
     document.getElementById("r-acc").textContent = accText();
     document.getElementById("newbest").hidden = !nb;
-    showBest(); elEnd.hidden = false;
+    showBest(); document.getElementById("rad2").appendChild(document.getElementById("topp")); elEnd.hidden = false;
+    TOPP.klar(score, hits, shots);
   }
   document.getElementById("go").addEventListener("click", begin);
   document.getElementById("again").addEventListener("click", begin);
@@ -522,6 +553,55 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
     }
     requestAnimationFrame(idle);
   })();
+})();
+</script>
+<script src="konto.js"></script>
+<script>
+/* ---------- Topplista (sparas via Supabase-funktionen "topplista") ---------- */
+var TOPP = (function(){
+  var URL_ = "https://cipqlojdcdcqahyqqttj.supabase.co/functions/v1/topplista";
+  var runda = null, lista = [];
+  var elL = document.getElementById("topp-lista"), elI = document.getElementById("topp-info"), elS = document.getElementById("sparat");
+  function k(){ return window.loomboomKonto; }
+  function esc(t){ return String(t == null ? "" : t).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+  function rita(){
+    var u = k() && k().anvandare();
+    elI.textContent = u ? "Dina rundor sparas på listan. Bara ditt bästa resultat räknas." : "Logga in med Discord för att komma med på listan.";
+    if (!lista.length){ elL.innerHTML = '<li class="tom" style="display:block">Ingen har kommit med än. Bli först!</li>'; return; }
+    elL.innerHTML = lista.map(function(r, i){
+      return '<li' + (u && u.id === r.id ? ' class="jag"' : '') + '><span class="nr">' + (i+1) + '</span><img src="' + esc(r.avatar) + '" alt="" referrerpolicy="no-referrer" loading="lazy"><span class="n">' + esc(r.namn) + '</span><b>' + r.poang + '</b></li>';
+    }).join("");
+  }
+  function hamta(){
+    fetch(URL_).then(function(r){ return r.json(); }).then(function(d){ lista = d.lista || []; rita(); })
+      .catch(function(){ elL.innerHTML = '<li class="tom" style="display:block">Topplistan gick inte att ladda just nu.</li>'; });
+  }
+  function post(data){
+    return fetch(URL_, { method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + k().token() }, body: JSON.stringify(data) })
+      .then(function(r){ return r.json().then(function(d){ d._status = r.status; return d; }); });
+  }
+  function start(){
+    runda = null; elS.textContent = "";
+    if (!k() || !k().token()) return;
+    runda = post({ typ: "start" }).then(function(d){ return d.runda || null; }).catch(function(){ return null; });
+  }
+  function klar(poang, traffar, skott){
+    if (!runda){ elS.textContent = (k() && k().anvandare()) ? "" : "Logga in med Discord för att spara på topplistan."; return; }
+    var r = runda; runda = null;
+    elS.textContent = "Sparar på topplistan…";
+    r.then(function(id){
+      if (!id) throw 0;
+      return post({ typ: "klar", runda: id, poang: poang, traffar: traffar, skott: skott });
+    }).then(function(d){
+      if (d._status === 401){ k().loggaUt(); elS.textContent = "Din inloggning har gått ut. Logga in igen."; return; }
+      if (!d.ok) throw 0;
+      lista = d.lista || lista; rita();
+      elS.textContent = "Sparat! Ditt bästa: " + d.basta + " poäng, plats " + d.plats + ".";
+    }).catch(function(){ elS.textContent = "Det gick inte att spara på topplistan den här gången."; });
+  }
+  if (k()) k().vidAndring(rita);
+  hamta();
+  return { start: start, klar: klar };
 })();
 </script>
 </body>
