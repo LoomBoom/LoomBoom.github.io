@@ -167,7 +167,7 @@ var FUNKTION_URL = "https://cipqlojdcdcqahyqqttj.supabase.co/functions/v1/toppli
     bak.innerHTML = '<div class="kr-ruta" role="alertdialog" aria-modal="true" aria-labelledby="kr-t" aria-describedby="kr-d">' +
       '<h2 id="kr-t">Radera kontot?</h2>' +
       '<p id="kr-d">Vill du verkligen radera ditt konto? <b>All progress och data försvinner</b> för alltid:</p>' +
-      '<ul><li>alla dina bubblor</li><li>dina placeringar på topplistorna</li><li>dina rekord och dagar du spelat</li><li>dina vänner och vänförfrågningar</li></ul>' +
+      '<ul><li>alla dina bubblor</li><li>dina placeringar på topplistorna</li><li>dina rekord och dagar du spelat</li><li>dina vänner och vänförfrågningar</li><li>alla dina schackpartier</li></ul>' +
       '<p>Det går inte att ångra. Du kan logga in igen senare, men då börjar du om från noll.</p>' +
       '<div class="kr-knappar"><button type="button" class="kr-avbryt">Nej, avbryt</button><button type="button" class="kr-ja">Ja, radera allt</button></div>' +
       '<p class="kr-fel" role="status"></p></div>';
