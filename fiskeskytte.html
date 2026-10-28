@@ -121,7 +121,7 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
 .topp h2{margin:0;font:400 30px/1 var(--pirate);color:var(--ink);text-align:center}
 .topp .konto-rad{display:flex;justify-content:center;margin-top:10px;min-height:34px}
 .topp .info{margin:10px 0 0;font:600 13px var(--body);color:#3a2410;text-align:center}
-.flikar{display:grid;grid-template-columns:1fr 1fr;margin-top:12px;border:2.5px solid var(--ink);border-radius:999px;overflow:hidden;background:rgba(255,248,235,.6)}
+.flikar{display:grid;grid-template-columns:repeat(3,1fr);margin-top:12px;border:2.5px solid var(--ink);border-radius:999px;overflow:hidden;background:rgba(255,248,235,.6)}
 .flikar button{font:700 13px var(--body);color:var(--ink);background:transparent;border:0;padding:5px 6px;cursor:pointer;white-space:nowrap}
 .flikar button+button{border-left:2.5px solid var(--ink)}
 .flikar button[aria-selected="true"]{background:var(--ink);color:var(--yellow)}
@@ -149,6 +149,12 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
 .topp li .n{font:700 14px var(--body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .topp li b{font:700 14px var(--mono);text-align:right}
 .topp li .pr{font:600 12px var(--mono);color:var(--brown);min-width:4ch;text-align:right}
+.topp li .pr.bubp{display:inline-flex;align-items:center;gap:2px;justify-content:flex-end;color:#0E2A4D;font-weight:700}
+.topp li .pr.bubp img{width:15px;height:15px;border:0;border-radius:0;background:none}
+.van-box{margin:0;text-align:center;border:2.5px solid #121826;border-radius:10px;box-shadow:2px 2px 0 #121826;padding:6px 10px;background:linear-gradient(100deg,#73BB89,#2F9E5B);color:#fff;font:700 13px "Fredoka",system-ui,sans-serif;letter-spacing:.03em;text-transform:uppercase;text-shadow:1px 1px 0 rgba(18,24,38,.45)}
+.van-knapp{margin-top:8px;font:700 14px "Fredoka",system-ui,sans-serif;color:#fff;background:linear-gradient(135deg,#86CC9B,#2F9E5B);border:2.5px solid #121826;border-radius:999px;padding:4px 14px;cursor:pointer;box-shadow:2px 2px 0 #121826;text-shadow:1px 1px 0 rgba(18,24,38,.4)}
+.van-knapp:hover{filter:brightness(1.08)}
+
 .topp li.jag .pr{color:#4a2c12}
 .topp .tom{font:600 13px var(--body);color:var(--brown);text-align:center;padding:8px 0}
 .sparat{display:block;margin-top:10px;font:700 14px var(--body);color:#3a2410;min-height:1.3em}
@@ -194,7 +200,8 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
     <p class="info" id="topp-info">Logga in med Discord för att komma med på listan.</p>
     <div class="flikar" role="tablist" aria-label="Välj topplista">
       <button type="button" role="tab" id="flik-vecka" aria-selected="true">Veckan</button>
-      <button type="button" role="tab" id="flik-alla" aria-selected="false">Genom tiderna</button>
+      <button type="button" role="tab" id="flik-alla" aria-selected="false">Alla tider</button>
+      <button type="button" role="tab" id="flik-vanner" aria-selected="false">Vänner</button>
     </div>
     <div class="pris" id="topp-reset"></div>
     <ol id="topp-lista"><li class="tom" style="display:block">Laddar…</li></ol>
@@ -690,11 +697,12 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
 var TOPP = (function(){
   var URL_ = "https://cipqlojdcdcqahyqqttj.supabase.co/functions/v1/topplista";
   var runda = null, lista = [], vecka = [], flik = "vecka";
-  try{ if (localStorage.getItem("fisk-flik") === "alla") flik = "alla"; }catch(e){}
-  var fV = document.getElementById("flik-vecka"), fA = document.getElementById("flik-alla"), elR = document.getElementById("topp-reset");
+  try{ var sf = localStorage.getItem("fisk-flik"); if (sf === "alla" || sf === "vanner") flik = sf; }catch(e){}
+  var fV = document.getElementById("flik-vecka"), fA = document.getElementById("flik-alla"), fF = document.getElementById("flik-vanner"), elR = document.getElementById("topp-reset");
   function valj(f){ flik = f; try{ localStorage.setItem("fisk-flik", f); }catch(e){} rita(); }
   fV.addEventListener("click", function(){ valj("vecka"); });
   fA.addEventListener("click", function(){ valj("alla"); });
+  fF.addEventListener("click", function(){ valj("vanner"); });
   // Tid kvar till måndag 00:00
   function prisHTML(){
     var P = [["#1",100,"g1"],["#2",50,"g2"],["#3",25,"g3"],["#4–10",10,"g4"]];
@@ -715,14 +723,35 @@ var TOPP = (function(){
   function rita(){
     var u = k() && k().anvandare();
     elI.textContent = u ? "Dina rundor sparas på listan. Bara ditt bästa resultat räknas." : "Logga in med Discord för att komma med på listan.";
-    fV.setAttribute("aria-selected", flik === "vecka"); fA.setAttribute("aria-selected", flik === "alla");
-    elR.innerHTML = flik === "vecka" ? prisHTML() : '<p class="alla">🏆 Alla tiders bästa resultat</p>';
+    fV.setAttribute("aria-selected", flik === "vecka"); fA.setAttribute("aria-selected", flik === "alla"); fF.setAttribute("aria-selected", flik === "vanner");
+    elR.innerHTML = flik === "vecka" ? prisHTML() : flik === "alla" ? '<p class="alla">🏆 Alla tiders bästa resultat</p>' : '<p class="van-box">👥 Du och dina vänner</p>';
+    if (flik === "vanner"){ elL.innerHTML = vanHTML(u, 10, "tom"); return; }
     var rader = flik === "vecka" ? vecka : lista;
     if (!rader.length){ elL.innerHTML = '<li class="tom" style="display:block">' + (flik === "vecka" ? "Ingen har spelat den här veckan än. Bli först!" : "Ingen har kommit med än. Bli först!") + '</li>'; return; }
     elL.innerHTML = rader.map(function(r, i){
-      return '<li' + (u && u.id === r.id ? ' class="jag"' : '') + '><span class="nr">' + (i+1) + '</span><img src="' + esc(r.avatar) + '" alt="" referrerpolicy="no-referrer" loading="lazy"><span class="n">' + esc(r.namn) + '</span><b>' + r.poang + '</b><span class="pr" title="Träffsäkerhet">' + (r.skott ? Math.round(r.traffar / r.skott * 100) + '%' : '–') + '</span></li>';
+      return '<li class="klick' + (u && u.id === r.id ? ' jag' : '') + '"' + spelarAttr(r) + '><span class="nr">' + (i+1) + '</span><img src="' + esc(r.avatar) + '" alt="" referrerpolicy="no-referrer" loading="lazy"><span class="n">' + esc(r.namn) + '</span><b>' + r.poang + '</b><span class="pr" title="Träffsäkerhet">' + (r.skott ? Math.round(r.traffar / r.skott * 100) + '%' : '–') + '</span></li>';
     }).join("");
   }
+  // ---------- Vänner-fliken ----------
+  function vanHTML(u, max, tomKlass){
+    var V = window.loomboomVanner, d = V && V.data();
+    var tom = function(t){ return '<li class="' + tomKlass + '" style="display:block">' + t + '</li>'; };
+    if (!u) return tom('Logga in för att se dina vänners topplista.<br><button type="button" class="van-knapp" data-van="logga">Logga in</button>');
+    if (!d) return tom('Laddar dina vänner…');
+    var r = d.vanner.slice().sort(function(a, b){ return (b.basta || 0) - (a.basta || 0) || a.namn.localeCompare(b.namn, "sv"); });
+    if (r.length < 2) return tom('Du har inga vänner här än.<br><button type="button" class="van-knapp" data-van="oppna">Lägg till vänner</button>');
+    return r.slice(0, max).map(function(v, i){
+      return '<li class="klick' + (v.jag ? ' jag' : '') + '"' + spelarAttr(v) + '><span class="nr">' + (i+1) + '</span><img src="' + esc(v.avatar) + '" alt="" referrerpolicy="no-referrer" loading="lazy"><span class="n">' + esc(v.namn) + '</span><b>' + (v.basta != null ? v.basta : '–') + '</b><span class="pr bubp" title="Bubblor"><img src="bilder/bubbla.png" alt="bubblor">' + v.saldo + '</span></li>';
+    }).join("");
+  }
+  function spelarAttr(r){ return ' tabindex="0" data-spelare="' + esc(r.id) + '" data-namn="' + esc(r.namn) + '" data-avatar="' + esc(r.avatar) + '" aria-label="' + esc(r.namn) + ', visa spelare"'; }
+  function vanKoppla(){ if (window.loomboomVanner) window.loomboomVanner.vidAndring(function(){ if (flik === "vanner") rita(); }); }
+  window.addEventListener("loomboom-vanner-redo", vanKoppla); vanKoppla();
+  document.addEventListener("click", function(e){
+    var b = e.target.closest && e.target.closest("[data-van]"); if (!b) return;
+    if (b.getAttribute("data-van") === "logga"){ if (window.loomboomKonto) window.loomboomKonto.loggaIn(); }
+    else if (window.loomboomVanner) window.loomboomVanner.oppna();
+  });
   function hamta(){
     fetch(URL_).then(function(r){ return r.json(); }).then(function(d){ lista = d.lista || []; vecka = d.vecka || []; rita(); })
       .catch(function(){ elL.innerHTML = '<li class="tom" style="display:block">Topplistan gick inte att ladda just nu.</li>'; });

@@ -76,6 +76,12 @@ var FUNKTION_URL = "https://cipqlojdcdcqahyqqttj.supabase.co/functions/v1/toppli
   '.kr-ja{background:linear-gradient(135deg,#FF6B55,#C7301E);color:#fff;text-shadow:1px 1px 0 rgba(18,24,38,.5)}.kr-ja:hover{background:linear-gradient(135deg,#FF836F,#D93C29)}' +
   '.kr-ja:disabled{opacity:.6;cursor:default}' +
   '.kr-fel{color:#9B1C1C;font-weight:700;min-height:1.2em;margin:8px 0 0!important}' +
+  '.konto-btn{position:relative}' +
+  '.konto-prick{position:absolute;top:-9px;right:-9px;min-width:22px;height:22px;padding:0 5px;border-radius:999px;background:#E8553F;color:#fff;border:2.5px solid #121826;font:700 12px/17px "Fredoka",system-ui,sans-serif;text-align:center}' +
+  '.konto-meny .km-vanner{position:relative;display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin:0 0 8px;font:700 16px "Fredoka",system-ui,sans-serif;color:#fff;background:linear-gradient(135deg,#73BB89,#2F9E5B);border:2.5px solid #121826;border-radius:10px;padding:6px 12px;cursor:pointer;box-shadow:2px 2px 0 #121826;text-shadow:1px 1px 0 rgba(18,24,38,.45)}' +
+  '.konto-meny .km-vanner:hover{background:linear-gradient(135deg,#86CC9B,#37B068)}' +
+  '.konto-meny .km-vanner svg{width:22px;height:22px;fill:#fff;flex:none}' +
+  '.konto-meny .km-vanner .konto-prick{position:static;text-shadow:none}' +
   '.konto-fel{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:60;background:#fff;border:3px solid #121826;border-radius:10px;box-shadow:4px 4px 0 #121826;padding:8px 16px;font:600 14px "Figtree",system-ui,sans-serif;max-width:calc(100% - 32px)}';
 
   var DISCORD = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.6 5.3A17 17 0 0 0 15.4 4l-.5 1.1a15.6 15.6 0 0 0-5.8 0L8.6 4a17 17 0 0 0-4.2 1.3C1.7 9.3 1 13.2 1.3 17a17 17 0 0 0 5.2 2.6l1.1-1.8a11 11 0 0 1-1.7-.8l.4-.3a12.2 12.2 0 0 0 11.4 0l.4.3-1.7.8 1.1 1.8a17 17 0 0 0 5.2-2.6c.4-4.4-.7-8.3-3.1-11.7ZM8.7 14.7c-1 0-1.9-1-1.9-2.1s.8-2.1 1.9-2.1 1.9 1 1.9 2.1-.8 2.1-1.9 2.1Zm6.6 0c-1 0-1.9-1-1.9-2.1s.8-2.1 1.9-2.1 1.9 1 1.9 2.1-.8 2.1-1.9 2.1Z"/></svg>';
@@ -115,7 +121,7 @@ var FUNKTION_URL = "https://cipqlojdcdcqahyqqttj.supabase.co/functions/v1/toppli
     location.href = "https://discord.com/oauth2/authorize?client_id=" + encodeURIComponent(DISCORD_CLIENT_ID) +
       "&response_type=token&scope=identify&prompt=none&redirect_uri=" + encodeURIComponent(INLOGG_ADRESS) + "&state=" + st;
   }
-  function loggaUt(){ skriv(NYCKEL, null); skriv("loomboom-bubblor", null); bub = null; meddela(); }
+  function loggaUt(){ skriv(NYCKEL, null); skriv("loomboom-bubblor", null); bub = null; vanInfo = {}; meddela(); }
 
   // Tillbaka från Discord: adressen slutar med #access_token=...
   function tillbakaFranDiscord(){
@@ -161,7 +167,7 @@ var FUNKTION_URL = "https://cipqlojdcdcqahyqqttj.supabase.co/functions/v1/toppli
     bak.innerHTML = '<div class="kr-ruta" role="alertdialog" aria-modal="true" aria-labelledby="kr-t" aria-describedby="kr-d">' +
       '<h2 id="kr-t">Radera kontot?</h2>' +
       '<p id="kr-d">Vill du verkligen radera ditt konto? <b>All progress och data försvinner</b> för alltid:</p>' +
-      '<ul><li>alla dina bubblor</li><li>dina placeringar på topplistorna</li><li>dina rekord och dagar du spelat</li></ul>' +
+      '<ul><li>alla dina bubblor</li><li>dina placeringar på topplistorna</li><li>dina rekord och dagar du spelat</li><li>dina vänner och vänförfrågningar</li></ul>' +
       '<p>Det går inte att ångra. Du kan logga in igen senare, men då börjar du om från noll.</p>' +
       '<div class="kr-knappar"><button type="button" class="kr-avbryt">Nej, avbryt</button><button type="button" class="kr-ja">Ja, radera allt</button></div>' +
       '<p class="kr-fel" role="status"></p></div>';
@@ -197,6 +203,15 @@ var FUNKTION_URL = "https://cipqlojdcdcqahyqqttj.supabase.co/functions/v1/toppli
     avbryt.focus();
   }
 
+  // ---------- Hjälp till vanner.js ----------
+  var vanInfo = {};
+  function api(data){
+    var t = window.loomboomKonto.token();
+    if (!t) return Promise.reject(new Error("utloggad"));
+    return fetch(FUNKTION_URL, { method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + t }, body: JSON.stringify(data) })
+      .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(d){ d._status = r.status; if (r.status === 401) loggaUt(); return d; }); });
+  }
+
   window.loomboomKonto = {
     anvandare: function(){ var s = inloggning(); return s ? s.user : null; },
     token: function(){ var s = inloggning(); return s ? s.token : null; },
@@ -205,7 +220,11 @@ var FUNKTION_URL = "https://cipqlojdcdcqahyqqttj.supabase.co/functions/v1/toppli
     vidAndring: function(f){ lyssnare.push(f); },
     bubblor: function(){ return bub; },
     sattBubblor: sattBubblor,
-    hamtaBubblor: hamtaBubblor
+    hamtaBubblor: hamtaBubblor,
+    api: api,
+    toast: toast,
+    esc: esc,
+    sattVanInfo: function(v){ vanInfo = v || {}; meddela(); }
   };
 
   function start(){
@@ -233,8 +252,9 @@ var FUNKTION_URL = "https://cipqlojdcdcqahyqqttj.supabase.co/functions/v1/toppli
       }).join("");
       var spelat = vd.filter(Boolean).length;
       var dagKlar = !!vd[idag], veckaKlar = !!(b && b.veckobonus);
-      li.innerHTML = '<button type="button" class="konto-btn" id="konto-knapp" aria-expanded="' + (oppen ? 'true' : 'false') + '" aria-haspopup="true" aria-label="' + esc(u.namn) + ', ' + saldo + ' bubblor">' +
-        '<img src="' + esc(u.avatar) + '" alt="" referrerpolicy="no-referrer"><span class="namn">' + esc(u.namn) + '</span><span class="bub-n">' + BI + saldo + '</span></button>' +
+      var nya = vanInfo.inkommande || 0, PRICK = nya ? '<span class="konto-prick">' + nya + '</span>' : '';
+      li.innerHTML = '<button type="button" class="konto-btn" id="konto-knapp" aria-expanded="' + (oppen ? 'true' : 'false') + '" aria-haspopup="true" aria-label="' + esc(u.namn) + ', ' + saldo + ' bubblor' + (nya ? ', ' + nya + ' nya vänförfrågningar' : '') + '">' +
+        '<img src="' + esc(u.avatar) + '" alt="" referrerpolicy="no-referrer"><span class="namn">' + esc(u.namn) + '</span><span class="bub-n">' + BI + saldo + '</span>' + PRICK + '</button>' +
         '<div class="konto-meny" id="konto-meny"' + (oppen ? '' : ' hidden') + '>' +
         '<div class="km-dc">' + DISCORD + 'Inloggad med Discord som</div>' +
         '<div class="km-namn"><img src="' + esc(u.avatar) + '" alt="" referrerpolicy="no-referrer"><span>' + esc(u.namn) + '</span></div>' +
@@ -244,6 +264,7 @@ var FUNKTION_URL = "https://cipqlojdcdcqahyqqttj.supabase.co/functions/v1/toppli
           '<div class="d" title="Dagens första runda i Fiskeskytte">' + (dagKlar ? '<em aria-label="klar">✓</em>' : '') + '<small>Dag</small><strong>+5' + BI + '</strong></div>' +
           '<div class="v" title="Spela alla 7 dagar i veckan">' + (veckaKlar ? '<em aria-label="klar">✓</em>' : '') + '<small>Vecka</small><strong>+25' + BI + '</strong></div>' +
         '</div>' +
+        '<button type="button" class="km-vanner" id="konto-vanner"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm7 0a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7ZM9 13c-3.9 0-7 2-7 4.5V20h14v-2.5C16 15 12.9 13 9 13Zm7.4.1c1.6.9 2.6 2.4 2.6 4.4V20h3v-2.2c0-2.3-2.4-4.1-5.6-4.7Z"/></svg>Vänner' + PRICK + '</button>' +
         '<button type="button" class="km-ut" id="konto-ut">Logga ut</button>' +
         '<div class="km-lankar"><a href="integritet.html">Integritet</a><button type="button" class="km-radera" id="konto-radera">Radera mitt konto</button></div></div>';
       var btn = li.querySelector("#konto-knapp"), menu = li.querySelector("#konto-meny");
@@ -256,6 +277,7 @@ var FUNKTION_URL = "https://cipqlojdcdcqahyqqttj.supabase.co/functions/v1/toppli
         } else { menu.style.top = ""; menu.style.maxHeight = ""; }
       });
       li.querySelector("#konto-ut").addEventListener("click", loggaUt);
+      li.querySelector("#konto-vanner").addEventListener("click", function(e){ e.stopPropagation(); stang(); if (window.loomboomVanner) window.loomboomVanner.oppna(); });
       li.querySelector("#konto-radera").addEventListener("click", function(e){ e.stopPropagation(); stang(); fragaRadera(); });
     }
     function rita(u){ if (u) visaIn(u); else visaUt(); }
@@ -269,6 +291,8 @@ var FUNKTION_URL = "https://cipqlojdcdcqahyqqttj.supabase.co/functions/v1/toppli
     if (forst) bub = bubCache(forst.id);
     rita(forst);
     tillbakaFranDiscord().then(function(){ meddela(); hamtaBubblor(); });
+    // Vänner ligger i en egen fil
+    var vs = document.createElement("script"); vs.src = "vanner.js"; vs.defer = true; document.body.appendChild(vs);
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();

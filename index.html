@@ -134,7 +134,7 @@ h2{font-family:var(--pirate);font-weight:400;font-size:clamp(36px,5.5vw,50px);li
 .btn:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink)}
 
 /* TOPPLISTA */
-.flikar{display:grid;grid-template-columns:1fr 1fr;border:var(--line);border-radius:999px;overflow:hidden;background:rgba(255,248,235,.6)}
+.flikar{display:grid;grid-template-columns:repeat(3,1fr);border:var(--line);border-radius:999px;overflow:hidden;background:rgba(255,248,235,.6)}
 .flikar button{font:700 14px var(--display);color:var(--ink);background:transparent;border:0;padding:6px 8px;cursor:pointer;white-space:nowrap}
 .flikar button+button{border-left:3px solid var(--ink)}
 .flikar button[aria-selected="true"]{background:var(--ink);color:var(--jasmine)}
@@ -163,6 +163,15 @@ h2{font-family:var(--pirate);font-weight:400;font-size:clamp(36px,5.5vw,50px);li
 .tl .n{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tl b{font:700 15px var(--display);font-variant-numeric:tabular-nums;text-align:right}
 .tl .pr{font-size:12px;font-weight:600;color:#4a2c12;min-width:4ch;text-align:right;font-variant-numeric:tabular-nums}
+.tl .pr.bubp{display:inline-flex;align-items:center;gap:3px;justify-content:flex-end;color:#0E2A4D;font-weight:700;font-size:13px}
+.tl .pr.bubp img{width:16px;height:16px;border:0;border-radius:0;background:none}
+.tl li.jag{outline:3px solid var(--blue, #20ACE4);outline-offset:-1px}
+.tl li.klick{cursor:pointer}
+.tl li.klick:hover{filter:brightness(1.05)}
+.van-box{margin:0;text-align:center;border:2.5px solid #121826;border-radius:10px;box-shadow:2px 2px 0 #121826;padding:6px 10px;background:linear-gradient(100deg,#73BB89,#2F9E5B);color:#fff;font:700 13px "Fredoka",system-ui,sans-serif;letter-spacing:.03em;text-transform:uppercase;text-shadow:1px 1px 0 rgba(18,24,38,.45)}
+.van-knapp{margin-top:8px;font:700 14px "Fredoka",system-ui,sans-serif;color:#fff;background:linear-gradient(135deg,#86CC9B,#2F9E5B);border:2.5px solid #121826;border-radius:999px;padding:4px 14px;cursor:pointer;box-shadow:2px 2px 0 #121826;text-shadow:1px 1px 0 rgba(18,24,38,.4)}
+.van-knapp:hover{filter:brightness(1.08)}
+
 
 /* PROFILE */
 .rows{list-style:none;margin:0;padding:0}
@@ -233,7 +242,8 @@ footer .gg .upp{display:inline-block;margin-top:8px;font:700 13px var(--display)
       <p class="sub">De bästa skyttarna i Fiskeskytte.</p>
       <div class="flikar" role="tablist" aria-label="Välj topplista">
         <button type="button" role="tab" id="tl-vecka" aria-selected="true">Veckan</button>
-        <button type="button" role="tab" id="tl-alla" aria-selected="false">Genom tiderna</button>
+        <button type="button" role="tab" id="tl-alla" aria-selected="false">Alla tider</button>
+        <button type="button" role="tab" id="tl-vanner" aria-selected="false">Vänner</button>
       </div>
       <div class="pris" id="tl-reset"></div>
       <ol class="tl" id="tl-lista"><li class="tom">Laddar…</li></ol>
@@ -278,7 +288,8 @@ document.getElementById("till-toppen").addEventListener("click", function(e){
 (function(){
   var URL_ = "https://cipqlojdcdcqahyqqttj.supabase.co/functions/v1/topplista";
   var data = { vecka: [], lista: [] }, flik = "vecka", laddat = false;
-  try{ if (localStorage.getItem("fisk-flik") === "alla") flik = "alla"; }catch(e){}
+  try{ var sf = localStorage.getItem("fisk-flik"); if (sf === "alla" || sf === "vanner") flik = sf; }catch(e){}
+  var fF = document.getElementById("tl-vanner");
   var fV = document.getElementById("tl-vecka"), fA = document.getElementById("tl-alla"), elL = document.getElementById("tl-lista"), elR = document.getElementById("tl-reset");
   function esc(t){ return String(t == null ? "" : t).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
   function prisHTML(){
@@ -295,18 +306,42 @@ document.getElementById("till-toppen").addEventListener("click", function(e){
     return d >= 1 ? d + " d " + (h % 24) + " h" : h >= 1 ? h + " h" : "under en timme";
   }
   function rita(){
-    fV.setAttribute("aria-selected", flik === "vecka"); fA.setAttribute("aria-selected", flik === "alla");
-    elR.innerHTML = flik === "vecka" ? prisHTML() : '<p class="alla">🏆 Alla tiders bästa resultat</p>';
+    fV.setAttribute("aria-selected", flik === "vecka"); fA.setAttribute("aria-selected", flik === "alla"); fF.setAttribute("aria-selected", flik === "vanner");
+    elR.innerHTML = flik === "vecka" ? prisHTML() : flik === "alla" ? '<p class="alla">🏆 Alla tiders bästa resultat</p>' : '<p class="van-box">👥 Du och dina vänner</p>';
+    if (flik === "vanner"){ var u = window.loomboomKonto && window.loomboomKonto.anvandare(); elL.innerHTML = vanHTML(u, 5, "tom"); return; }
     if (!laddat) return;
     var rader = (flik === "vecka" ? data.vecka : data.lista).slice(0, 5);
     if (!rader.length){ elL.innerHTML = '<li class="tom">' + (flik === "vecka" ? "Ingen har spelat den här veckan än. Bli först!" : "Ingen har kommit med än. Bli först!") + '</li>'; return; }
     elL.innerHTML = rader.map(function(r, i){
-      return '<li><span class="nr">' + (i+1) + '</span><img src="' + esc(r.avatar) + '" alt="" referrerpolicy="no-referrer" loading="lazy"><span class="n">' + esc(r.namn) + '</span><b>' + r.poang + '</b><span class="pr" title="Träffsäkerhet">' + (r.skott ? Math.round(r.traffar / r.skott * 100) + '%' : '–') + '</span></li>';
+      var u = window.loomboomKonto && window.loomboomKonto.anvandare();
+      return '<li class="klick' + (u && u.id === r.id ? ' jag' : '') + '"' + spelarAttr(r) + '><span class="nr">' + (i+1) + '</span><img src="' + esc(r.avatar) + '" alt="" referrerpolicy="no-referrer" loading="lazy"><span class="n">' + esc(r.namn) + '</span><b>' + r.poang + '</b><span class="pr" title="Träffsäkerhet">' + (r.skott ? Math.round(r.traffar / r.skott * 100) + '%' : '–') + '</span></li>';
     }).join("");
   }
   function valj(f){ flik = f; try{ localStorage.setItem("fisk-flik", f); }catch(e){} rita(); }
   fV.addEventListener("click", function(){ valj("vecka"); });
   fA.addEventListener("click", function(){ valj("alla"); });
+  fF.addEventListener("click", function(){ valj("vanner"); });
+  // ---------- Vänner-fliken ----------
+  function vanHTML(u, max, tomKlass){
+    var V = window.loomboomVanner, d = V && V.data();
+    var tom = function(t){ return '<li class="' + tomKlass + '" style="display:block">' + t + '</li>'; };
+    if (!u) return tom('Logga in för att se dina vänners topplista.<br><button type="button" class="van-knapp" data-van="logga">Logga in</button>');
+    if (!d) return tom('Laddar dina vänner…');
+    var r = d.vanner.slice().sort(function(a, b){ return (b.basta || 0) - (a.basta || 0) || a.namn.localeCompare(b.namn, "sv"); });
+    if (r.length < 2) return tom('Du har inga vänner här än.<br><button type="button" class="van-knapp" data-van="oppna">Lägg till vänner</button>');
+    return r.slice(0, max).map(function(v, i){
+      return '<li class="klick' + (v.jag ? ' jag' : '') + '"' + spelarAttr(v) + '><span class="nr">' + (i+1) + '</span><img src="' + esc(v.avatar) + '" alt="" referrerpolicy="no-referrer" loading="lazy"><span class="n">' + esc(v.namn) + '</span><b>' + (v.basta != null ? v.basta : '–') + '</b><span class="pr bubp" title="Bubblor"><img src="bilder/bubbla.png" alt="bubblor">' + v.saldo + '</span></li>';
+    }).join("");
+  }
+  function spelarAttr(r){ return ' tabindex="0" data-spelare="' + esc(r.id) + '" data-namn="' + esc(r.namn) + '" data-avatar="' + esc(r.avatar) + '" aria-label="' + esc(r.namn) + ', visa spelare"'; }
+  function vanKoppla(){ if (window.loomboomVanner) window.loomboomVanner.vidAndring(function(){ if (flik === "vanner") rita(); }); }
+  window.addEventListener("loomboom-vanner-redo", vanKoppla); vanKoppla();
+  document.addEventListener("click", function(e){
+    var b = e.target.closest && e.target.closest("[data-van]"); if (!b) return;
+    if (b.getAttribute("data-van") === "logga"){ if (window.loomboomKonto) window.loomboomKonto.loggaIn(); }
+    else if (window.loomboomVanner) window.loomboomVanner.oppna();
+  });
+  window.addEventListener("loomboom-konto", function(){ rita(); });
   rita();
   fetch(URL_).then(function(r){ return r.json(); })
     .then(function(d){ data.vecka = d.vecka || []; data.lista = d.lista || []; laddat = true; rita(); })
