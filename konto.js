@@ -27,19 +27,38 @@ var FUNKTION_URL = "https://cipqlojdcdcqahyqqttj.supabase.co/functions/v1/toppli
   '.konto-meny{position:absolute;right:0;top:calc(100% + 8px);z-index:50;min-width:200px;border:3px solid #121826;border-radius:8px;box-shadow:4px 4px 0 #121826;padding:12px;' +
     'background:repeating-linear-gradient(181deg,rgba(91,58,28,.14) 0 1px,transparent 1px 6px),linear-gradient(#D39A5D,#C0834A);font-family:"Figtree",system-ui,sans-serif;color:#121826;text-align:left}' +
   '@media (max-width:600px){.konto-meny{left:0;right:auto;max-width:calc(100vw - 32px)}}' +
-  '.konto-meny p{margin:0 0 10px;font-weight:600;font-size:14px;color:#4a2c12}' +
-  '.konto-meny b{display:block;font-size:16px;color:#121826}' +
-  '.konto-meny button{width:100%;font:700 15px "Fredoka",system-ui,sans-serif;background:#fff;border:2.5px solid #121826;border-radius:999px;padding:4px 12px;cursor:pointer;box-shadow:2px 2px 0 #121826}' +
-  '.konto-meny button:hover{background:#FAE052}' +
-  '.bub-n{display:inline-flex;align-items:center;gap:4px;margin-left:2px;padding:0 8px 0 3px;background:#fff;border:2px solid #121826;border-radius:999px;font:700 14px/1.5 "Fredoka",system-ui,sans-serif;font-variant-numeric:tabular-nums}' +
-  '.konto-btn .bub-n img,.bub-big img,.bub-info img{width:18px;height:18px;border:0;border-radius:0;background:none;object-fit:contain}' +
-  '.konto-meny{min-width:270px}' +
-  '.bub-big{display:flex;flex-wrap:wrap;align-items:center;gap:0 8px;background:#fff;border:2.5px solid #121826;border-radius:10px;padding:6px 10px;margin:0 0 8px;font:700 22px "Fredoka",system-ui,sans-serif;font-variant-numeric:tabular-nums}' +
-  '.bub-big img{width:30px;height:30px}.konto-meny .bub-big small{display:block;flex-basis:100%;font:600 13px "Figtree",system-ui,sans-serif;color:#4a2c12;margin:-4px 0 0 38px;white-space:nowrap}' +
-  '.konto-meny .bub-logg{display:block;width:100%;list-style:none;margin:0 0 8px;padding:0;font:600 13px "Figtree",system-ui,sans-serif}' +
-  '.konto-meny .bub-logg li{display:flex;width:100%;justify-content:space-between;align-items:baseline;gap:10px;margin:0;padding:3px 0;border-top:1.5px dashed rgba(91,58,28,.55);background:none;border-radius:0;box-shadow:none}' +
-  '.konto-meny .bub-logg li:first-child{border-top:0}.konto-meny .bub-logg b{display:inline;white-space:nowrap;font-size:14px}' +
-  '.bub-info{margin:0 0 10px!important;font-size:12px!important;font-weight:600;line-height:1.45}' +
+  '.konto-meny{min-width:280px;width:300px}' +
+  '.konto-meny .km-dc{display:flex;align-items:center;gap:8px;margin:0 0 8px;padding:7px 10px;border:2.5px solid #121826;border-radius:9px;background:linear-gradient(135deg,#5865F2,#3C45A5);color:#fff;font:700 13px "Figtree",system-ui,sans-serif;box-shadow:2px 2px 0 #121826}' +
+  '.konto-meny .km-dc svg{width:20px;height:20px;fill:#fff;flex:none}' +
+  '.konto-meny .km-namn{display:flex;align-items:center;gap:10px;margin:0 0 8px;padding:6px 10px;border:2.5px solid #121826;border-radius:9px;background:linear-gradient(135deg,#D4F0FF,#8FD0F2);box-shadow:2px 2px 0 #121826}' +
+  '.konto-meny .km-namn img{width:34px;height:34px;border-radius:50%;border:2px solid #121826;background:#fff;object-fit:cover;flex:none}' +
+  '.konto-meny .km-namn span{font:700 18px "Fredoka",system-ui,sans-serif;color:#0E2A4D;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}' +
+  '.konto-meny .km-saldo{display:flex;align-items:center;gap:8px;margin:0 0 8px;padding:6px 12px;border:2.5px solid #121826;border-radius:10px;box-shadow:2px 2px 0 #121826;background:linear-gradient(135deg,#7FF0F2,#22C3E6 55%,#1E8FD8)}' +
+  '.konto-meny .km-saldo img{width:34px;height:34px;object-fit:contain;flex:none}' +
+  '.konto-meny .km-saldo b{font:400 30px/1 "Luckiest Guy","Fredoka",sans-serif;color:#FAE052;-webkit-text-stroke:1.5px #121826;paint-order:stroke fill;letter-spacing:.02em;padding-top:4px}' +
+  '.konto-meny .km-saldo span{font:700 15px "Fredoka",system-ui,sans-serif;color:#0E2A4D}' +
+  '.konto-meny .km-dagar{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:0 0 8px;padding:7px 6px 5px;border:2.5px solid #121826;border-radius:10px;background:rgba(255,248,235,.85);box-shadow:2px 2px 0 #121826}' +
+  '.konto-meny .km-dagar div{display:grid;justify-items:center;gap:2px;font:700 11px "Fredoka",system-ui,sans-serif;color:#4a2c12}' +
+  '.konto-meny .km-dagar i{display:block;width:24px;height:24px;border-radius:50%;border:2.5px solid #121826;background:#E9E2D6}' +
+  '.konto-meny .km-dagar i.ja{background:radial-gradient(circle at 35% 30%,#B8F5C4,#3FBF5F 60%,#2A9447)}' +
+  '.konto-meny .km-dagar i.nej{background:radial-gradient(circle at 35% 30%,#FFC2B8,#E8553F 60%,#B53A28)}' +
+  '.konto-meny .km-dagar i.idag{background:#fff;border-style:dashed;border-color:#121826}' +
+  '.konto-meny .km-dagar div.idag{color:#121826}' +
+  '.konto-meny .km-pris{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:0 0 8px}' +
+  '.konto-meny .km-pris div{position:relative;display:grid;justify-items:center;gap:0;padding:4px 4px 5px;border:2.5px solid #121826;border-radius:10px;box-shadow:2px 2px 0 #121826}' +
+  '.konto-meny .km-pris .d{background:linear-gradient(135deg,#FFF3A6,#FAE052 50%,#F5B83D)}' +
+  '.konto-meny .km-pris .v{background:linear-gradient(135deg,#E6B8F0,#B57BC9 50%,#91569D)}' +
+  '.konto-meny .km-pris small{font:700 12px "Fredoka",system-ui,sans-serif;text-transform:uppercase;letter-spacing:.05em;color:#121826}' +
+  '.konto-meny .km-pris .v small{color:#fff}' +
+  '.konto-meny .km-pris strong{display:inline-flex;align-items:center;gap:4px;font:700 19px/1.2 "Fredoka",system-ui,sans-serif;color:#121826}' +
+  '.konto-meny .km-pris .v strong{color:#fff;text-shadow:1px 1px 0 #121826}' +
+  '.konto-meny .km-pris img{width:20px;height:20px;object-fit:contain}' +
+  '.konto-meny .km-pris em{position:absolute;top:-8px;right:-6px;width:20px;height:20px;border-radius:50%;background:#3FBF5F;border:2px solid #121826;color:#fff;font:700 12px/16px "Fredoka",system-ui,sans-serif;font-style:normal;text-align:center}' +
+  '.konto-meny .km-ut{display:block;width:100%;font:700 15px "Fredoka",system-ui,sans-serif;color:#fff;background:linear-gradient(135deg,#FF8A73,#E8553F);border:2.5px solid #121826;border-radius:999px;padding:5px 12px;cursor:pointer;box-shadow:2px 2px 0 #121826;text-shadow:1px 1px 0 rgba(18,24,38,.5)}' +
+  '.konto-meny .km-ut:hover{background:linear-gradient(135deg,#FFA08C,#F06A55)}' +
+  '.konto-meny .km-ut:focus-visible{outline:3px dashed #121826;outline-offset:2px}' +
+  '.bub-n{display:inline-flex;align-items:center;gap:4px;margin-left:2px;padding:0 9px 0 3px;border:2px solid #121826;border-radius:999px;font:700 14px/1.5 "Fredoka",system-ui,sans-serif;font-variant-numeric:tabular-nums;color:#0E2A4D;background:linear-gradient(135deg,#9FF3F5,#22C3E6)}' +
+  '.konto-btn .bub-n img{width:18px;height:18px;border:0;border-radius:0;background:none;object-fit:contain}' +
   '.konto-fel{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:60;background:#fff;border:3px solid #121826;border-radius:10px;box-shadow:4px 4px 0 #121826;padding:8px 16px;font:600 14px "Figtree",system-ui,sans-serif;max-width:calc(100% - 32px)}';
 
   var DISCORD = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.6 5.3A17 17 0 0 0 15.4 4l-.5 1.1a15.6 15.6 0 0 0-5.8 0L8.6 4a17 17 0 0 0-4.2 1.3C1.7 9.3 1 13.2 1.3 17a17 17 0 0 0 5.2 2.6l1.1-1.8a11 11 0 0 1-1.7-.8l.4-.3a12.2 12.2 0 0 0 11.4 0l.4.3-1.7.8 1.1 1.8a17 17 0 0 0 5.2-2.6c.4-4.4-.7-8.3-3.1-11.7ZM8.7 14.7c-1 0-1.9-1-1.9-2.1s.8-2.1 1.9-2.1 1.9 1 1.9 2.1-.8 2.1-1.9 2.1Zm6.6 0c-1 0-1.9-1-1.9-2.1s.8-2.1 1.9-2.1 1.9 1 1.9 2.1-.8 2.1-1.9 2.1Z"/></svg>';
@@ -107,7 +126,7 @@ var FUNKTION_URL = "https://cipqlojdcdcqahyqqttj.supabase.co/functions/v1/toppli
   function bubCache(id){ var c = las("loomboom-bubblor"); return c && c.id === id ? c : null; }
   function sattBubblor(d){
     var u = window.loomboomKonto.anvandare(); if (!u || !d || d.saldo == null) return;
-    bub = { id: u.id, saldo: d.saldo, dagar: d.dagar || 0, logg: d.logg || (bub && bub.logg) || [] };
+    bub = { id: u.id, saldo: d.saldo, dagar: d.dagar || 0, vdagar: d.vdagar || [], idag: d.idag, veckobonus: !!d.veckobonus, logg: d.logg || (bub && bub.logg) || [] };
     skriv("loomboom-bubblor", bub); meddela();
   }
   function hamtaBubblor(){
@@ -144,14 +163,27 @@ var FUNKTION_URL = "https://cipqlojdcdcqahyqqttj.supabase.co/functions/v1/toppli
       if (!li) return;
       var b = bub && bub.id === u.id ? bub : bubCache(u.id), oppen = li.querySelector("#konto-meny") && !li.querySelector("#konto-meny").hidden;
       var saldo = b ? b.saldo : "…", BI = '<img src="bilder/bubbla.png" alt="">';
-      var logg = b && b.logg && b.logg.length ? '<ul class="bub-logg">' + b.logg.slice(0, 5).map(function(r){ return '<li><span>' + esc(r.text) + '</span><b>+' + r.antal + '</b></li>'; }).join("") + '</ul>' : '';
+      var D = ["M","T","O","T","F","L","S"], DL = ["måndag","tisdag","onsdag","torsdag","fredag","lördag","söndag"];
+      var vd = (b && b.vdagar) || [], idag = b && b.idag != null ? b.idag : (new Date().getDay() + 6) % 7;
+      var dagar = D.map(function(d, i){
+        var c = vd[i] ? "ja" : i < idag ? "nej" : i === idag ? "idag" : "";
+        var t = DL[i] + (vd[i] ? ": spelade" : i < idag ? ": missade" : i === idag ? ": idag" : "");
+        return '<div class="' + (i === idag ? "idag" : "") + '" title="' + t + '"><i class="' + c + '" aria-hidden="true"></i>' + d + '</div>';
+      }).join("");
+      var spelat = vd.filter(Boolean).length;
+      var dagKlar = !!vd[idag], veckaKlar = !!(b && b.veckobonus);
       li.innerHTML = '<button type="button" class="konto-btn" id="konto-knapp" aria-expanded="' + (oppen ? 'true' : 'false') + '" aria-haspopup="true" aria-label="' + esc(u.namn) + ', ' + saldo + ' bubblor">' +
         '<img src="' + esc(u.avatar) + '" alt="" referrerpolicy="no-referrer"><span class="namn">' + esc(u.namn) + '</span><span class="bub-n">' + BI + saldo + '</span></button>' +
-        '<div class="konto-meny" id="konto-meny"' + (oppen ? '' : ' hidden') + '><p>Inloggad med Discord som<b>' + esc(u.namn) + '</b></p>' +
-        '<div class="bub-big">' + BI + saldo + ' <span style="font-size:15px">bubblor</span><small>' + (b ? 'Spelat ' + (b.dagar || 0) + ' av 7 dagar den här veckan' : '') + '</small></div>' +
-        logg +
-        '<p class="bub-info">Så får du bubblor i Fiskeskytte:<br>+5 för dagens första runda<br>+25 om du spelar alla 7 dagar i en vecka (mån–sön)<br>Veckotopplistan: 1:a 100 · 2:a 50 · 3:a 25 · 4–10: 10</p>' +
-        '<button type="button" id="konto-ut">Logga ut</button></div>';
+        '<div class="konto-meny" id="konto-meny"' + (oppen ? '' : ' hidden') + '>' +
+        '<div class="km-dc">' + DISCORD + 'Inloggad med Discord som</div>' +
+        '<div class="km-namn"><img src="' + esc(u.avatar) + '" alt="" referrerpolicy="no-referrer"><span>' + esc(u.namn) + '</span></div>' +
+        '<div class="km-saldo">' + BI + '<b>' + saldo + '</b><span>bubblor</span></div>' +
+        '<div class="km-dagar" role="img" aria-label="Spelat ' + spelat + ' av 7 dagar den här veckan">' + dagar + '</div>' +
+        '<div class="km-pris">' +
+          '<div class="d" title="Dagens första runda i Fiskeskytte">' + (dagKlar ? '<em aria-label="klar">✓</em>' : '') + '<small>Dag</small><strong>+5' + BI + '</strong></div>' +
+          '<div class="v" title="Spela alla 7 dagar i veckan">' + (veckaKlar ? '<em aria-label="klar">✓</em>' : '') + '<small>Vecka</small><strong>+25' + BI + '</strong></div>' +
+        '</div>' +
+        '<button type="button" class="km-ut" id="konto-ut">Logga ut</button></div>';
       var btn = li.querySelector("#konto-knapp"), menu = li.querySelector("#konto-meny");
       btn.addEventListener("click", function(e){ e.stopPropagation(); var open = menu.hidden; menu.hidden = !open; btn.setAttribute("aria-expanded", open ? "true" : "false"); });
       li.querySelector("#konto-ut").addEventListener("click", loggaUt);

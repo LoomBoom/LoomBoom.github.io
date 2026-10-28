@@ -79,11 +79,16 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
 .btn{margin-top:20px;font:400 30px var(--title);color:var(--ink);background:var(--yellow);border:var(--line);border-radius:999px;padding:8px 34px 6px;box-shadow:4px 4px 0 var(--ink);cursor:pointer}
 .btn:hover{transform:translate(-1px,-2px);box-shadow:5px 6px 0 var(--ink)}
 .btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
-.sens{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:16px;font:700 14px var(--body)}
-.sens input{width:160px;accent-color:var(--ink)}
-.sens output{font:700 14px var(--mono);min-width:3ch;text-align:left}
+.sens{display:flex;align-items:center;justify-content:center;gap:12px;width:fit-content;max-width:100%;margin:16px auto 0;padding:7px 16px;border:2.5px solid var(--ink);border-radius:999px;box-shadow:3px 3px 0 var(--ink);
+  background:linear-gradient(100deg,#20ACE4,#73BB89);font:700 15px var(--body);color:#fff;text-shadow:1px 1px 0 rgba(18,24,38,.5)}
+.sens input{-webkit-appearance:none;appearance:none;width:170px;height:14px;border:2.5px solid var(--ink);border-radius:999px;background:linear-gradient(90deg,#9FF3F5,#FAE052 55%,#E8553F);cursor:pointer;margin:0}
+.sens input::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#FAE052;border:2.5px solid var(--ink);box-shadow:2px 2px 0 var(--ink)}
+.sens input::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:#FAE052;border:2.5px solid var(--ink);box-shadow:2px 2px 0 var(--ink)}
+.sens input:focus-visible{outline:3px dashed #FAE052;outline-offset:4px}
+@media (max-width:480px){.sens{gap:8px;padding:6px 12px}.sens input{width:110px}}
+.sens output{font:700 15px var(--mono);min-width:3.2ch;text-align:center;background:#fff;color:var(--ink);text-shadow:none;border:2px solid var(--ink);border-radius:8px;padding:0 6px}
 .hint{font-size:13px!important;color:var(--brown)!important}
-.best{display:inline-block;margin-top:12px;background:var(--paper);border:2.5px solid var(--ink);border-radius:999px;padding:2px 14px;font:700 14px var(--body)}
+.best{display:inline-block;margin-top:12px;background:linear-gradient(100deg,#91569D,#E8553F 60%,#F5B83D);color:#fff;border:2.5px solid var(--ink);border-radius:999px;box-shadow:3px 3px 0 var(--ink);padding:3px 16px;font:700 15px var(--body);text-shadow:1px 1px 0 rgba(18,24,38,.55)}
 .result{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:18px}
 .result div{background:var(--paper);border:var(--line);border-radius:10px;box-shadow:3px 3px 0 var(--ink);padding:6px 8px 8px}
 .result .l{display:block;font:700 11px var(--body);text-transform:uppercase;letter-spacing:.05em;color:var(--brown)}
@@ -92,9 +97,13 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
 .kills{margin-top:8px!important;grid-template-columns:repeat(5,minmax(0,1fr))!important}
 .kills li.noll{opacity:.45}
 .kills b{font-size:16px!important}
-.combo{margin:12px auto 0;display:flex;flex-wrap:wrap;justify-content:center;gap:6px;padding:0;list-style:none}
-.combo li{background:rgba(255,248,235,.75);border:2px solid var(--ink);border-radius:999px;padding:1px 10px;font:700 12px var(--body);white-space:nowrap}
-.combo li b{font-family:var(--mono)}
+.multi{margin:16px 0 0;padding:10px 12px 12px;border:2.5px solid var(--ink);border-radius:12px;box-shadow:3px 3px 0 var(--ink);background:linear-gradient(135deg,#9FF3F5,#20ACE4)}
+.multi p{margin:0!important;max-width:none!important;font:700 15px/1.35 var(--body)!important;color:var(--ink)!important}
+.combo{margin:9px auto 0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;padding:0;list-style:none}
+.combo li{display:grid;justify-items:center;border:2.5px solid var(--ink);border-radius:10px;box-shadow:2px 2px 0 var(--ink);padding:3px 4px 4px;font:700 13px var(--body);white-space:nowrap;color:var(--ink)}
+.combo li b{font:400 22px/1.05 var(--title);letter-spacing:.02em}
+.combo li.m1{background:#FAE052}.combo li.m2{background:#F5B83D}.combo li.m3{background:#F08A3C}.combo li.m4{background:#E8553F;color:#fff}
+.combo li.m4 b{color:#FAE052;-webkit-text-stroke:1px var(--ink);paint-order:stroke fill}
 .btn:disabled{opacity:.5;cursor:default;transform:none!important;box-shadow:4px 4px 0 var(--ink)!important}
 .pmsg{min-height:1.3em;font-size:14px!important}
 .btn2{display:inline-block;margin:14px 6px 0;font:400 22px var(--pirate);color:var(--ink);border:var(--line);border-radius:6px;padding:4px 18px;box-shadow:3px 3px 0 var(--ink);cursor:pointer}
@@ -133,7 +142,7 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
 .pris .g2{background:linear-gradient(160deg,#FFFFFF 0%,#DCE2EA 50%,#AEB8C6 100%)}
 .pris .g3{background:linear-gradient(160deg,#FBD3AE 0%,#E9A66B 50%,#C47A3E 100%)}
 .pris .g4{background:linear-gradient(160deg,#D6F4E0 0%,#9DD8B0 50%,#73BB89 100%)}
-.pris .alla{margin:0;text-align:center;font:600 12px "Figtree",system-ui,sans-serif;color:#4a2c12}
+.pris .alla{margin:0;text-align:center;border:2.5px solid #121826;border-radius:10px;box-shadow:2px 2px 0 #121826;padding:6px 10px;background:linear-gradient(100deg,#E8553F,#B5304A);color:#fff;font:700 13px "Fredoka",system-ui,sans-serif;letter-spacing:.03em;text-transform:uppercase;text-shadow:1px 1px 0 rgba(18,24,38,.45)}
 .topp ol{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:5px}
 .topp li{display:grid;grid-template-columns:26px 26px minmax(0,1fr) auto auto;align-items:center;gap:8px;background:rgba(255,248,235,.8);border:2.5px solid var(--ink);border-radius:8px;padding:3px 8px 3px 6px}
 .topp li.jag{background:var(--yellow)}
@@ -170,8 +179,10 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
     <h1 id="t1">Fiskeskytte</h1>
     <p>Rör musen för att titta runt i havet. Siktet stannar i mitten. Klicka när ett djur är i siktet. Du har 60 sekunder.</p>
     <ul class="targets" id="targets"></ul>
-    <p class="hint" style="margin-top:14px">Träffa flera i rad utan att missa så växer multiplikatorn:</p>
-    <ul class="combo"><li>5 i rad <b>×1,25</b></li><li>10 <b>×1,5</b></li><li>15 <b>×1,75</b></li><li>20+ <b>×2</b></li></ul>
+    <div class="multi">
+      <p>Träffa flera i rad utan att missa så växer multiplikatorn!</p>
+      <ul class="combo"><li class="m1"><b>×1,25</b>5 i rad</li><li class="m2"><b>×1,5</b>10 i rad</li><li class="m3"><b>×1,75</b>15 i rad</li><li class="m4"><b>×2</b>20+ i rad</li></ul>
+    </div>
     <div class="sens"><label for="sens">Känslighet</label><input type="range" id="sens" min="0.4" max="3" step="0.1" value="1.2"><output id="sensv" for="sens">1.2</output></div>
     <button class="btn" type="button" id="go">Starta</button>
     <p class="hint">Tryck Esc för att pausa. På mobil drar du med fingret och trycker för att skjuta.</p>
@@ -594,19 +605,27 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
 
   /* ---------- Skärmar ---------- */
   var elStart = document.getElementById("start"), elPause = document.getElementById("pause"), elEnd = document.getElementById("end"), elHud = document.getElementById("hud");
+  var elPmsg = document.getElementById("pmsg");
   function begin(){
     if (document.getElementById("again").disabled && state === "end") return;
     score = 0; shots = 0; hits = 0; left = ROUND; animals = []; fx = []; spawnT = 0; streak = 0; bestStreak = 0; kills = {};
     cam.x = WW/2; cam.y = WH*0.42; clampCam();
     for (var i=0;i<4;i++){ spawn(); var a = animals[animals.length-1]; if (a && a.dir) a.x = rnd(400, WW-400); }
     TOPP.start();
-    state = "play"; elStart.hidden = true; elEnd.hidden = true; elPause.hidden = true; elHud.hidden = false; hud();
-    wantLock();
+    elStart.hidden = true; elEnd.hidden = true; elPause.hidden = true; elHud.hidden = false; hud();
+    if (usesLock && cv.requestPointerLock && !locked){
+      // Börja om / Spela igen: vänta tills musen är låst innan rundan startar,
+      // annars kan muspekaren lossna från siktet
+      state = "pause"; pausedAt = performance.now(); elPmsg.textContent = "";
+      resume();
+    } else {
+      state = "play"; if (!locked) wantLock();
+    }
   }
-  var elPmsg = document.getElementById("pmsg");
   function pause(){ if (state !== "play") return; state = "pause"; pausedAt = performance.now(); elPmsg.textContent = ""; elPause.hidden = false; }
   function reallyResume(){ elPause.hidden = true; state = "play"; last = 0; }
   function lockFailed(){
+    elPause.hidden = false;
     elPmsg.textContent = "Musen kunde inte låsas just nu. Vänta en sekund och försök igen.";
   }
   function resume(){
@@ -643,7 +662,7 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
   document.getElementById("go").addEventListener("click", begin);
   document.getElementById("again").addEventListener("click", begin);
   document.getElementById("resume").addEventListener("click", function(){ resume(false); });
-  document.getElementById("restart").addEventListener("click", function(){ elPause.hidden = true; begin(); });
+  document.getElementById("restart").addEventListener("click", function(){ begin(); });
 
   resize();
   requestAnimationFrame(frame);
@@ -698,7 +717,7 @@ var TOPP = (function(){
     var u = k() && k().anvandare();
     elI.textContent = u ? "Dina rundor sparas på listan. Bara ditt bästa resultat räknas." : "Logga in med Discord för att komma med på listan.";
     fV.setAttribute("aria-selected", flik === "vecka"); fA.setAttribute("aria-selected", flik === "alla");
-    elR.innerHTML = flik === "vecka" ? prisHTML() : '<p class="alla">Alla tiders bästa resultat</p>';
+    elR.innerHTML = flik === "vecka" ? prisHTML() : '<p class="alla">🏆 Alla tiders bästa resultat</p>';
     var rader = flik === "vecka" ? vecka : lista;
     if (!rader.length){ elL.innerHTML = '<li class="tom" style="display:block">' + (flik === "vecka" ? "Ingen har spelat den här veckan än. Bli först!" : "Ingen har kommit med än. Bli först!") + '</li>'; return; }
     elL.innerHTML = rader.map(function(r, i){
