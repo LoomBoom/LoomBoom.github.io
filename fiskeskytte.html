@@ -257,9 +257,12 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
     peek:      {img:"blackfisk-tang", name:"Gömd bläckfisk", w:420, pts:40, weight:1, peek:1},
     mas:       {img:"mas",       name:"Mås",          w:150, speed:[360,460], pts:50, y:[0.015,0.05], weight:1, face:1},
     snabbmas:  {img:"mas",       name:"Snabb mås",    w:140, speed:[720,920], pts:100, y:[0.02,0.07], weight:0.5, face:1},
+    sjohast:   {img:"sjohast",   name:"Sjöhäst",      w:150, speed:[120,170], pts:75, y:[0.28,0.68], weight:0.7, face:-1, zig:1},
     snacka:    {img:"snacka",    name:"Snäcka",       w:120, pts:100, weight:0.6, shell:1}
   };
-  var ORDER = ["haj","manet","blackfisk","blasfisk","krabba","peek","mas","snabbmas","snacka"];
+  var ORDER = ["haj","manet","blackfisk","blasfisk","krabba","peek","mas","snabbmas","sjohast","snacka"];
+  // Sjöhästen åker snabbt och ryckigt upp och ner (två vågor ihop gör den svår att förutse)
+  function zigY(a){ return Math.sin(a.age*4.3 + a.phase)*170 + Math.sin(a.age*7.9 + a.phase*2.3)*60; }
   var TINT = "sepia(1) saturate(6) hue-rotate(-12deg) brightness(1.02)"; // gyllene färg för snabba måsen
   function multOf(n){ return n>=20 ? 2 : n>=15 ? 1.75 : n>=10 ? 1.5 : n>=5 ? 1.25 : 1; }
   function multTxt(m){ return "×" + String(m).replace(".", ","); }
@@ -376,6 +379,7 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
       a.y = a.y0;
       if (t.bob) a.y += Math.sin(a.age*1.6 + a.phase) * 60;
       if (t.wave) a.y += Math.sin(a.age*2.4 + a.phase) * 22;
+      if (t.zig) a.y += zigY(a);
       if (t.walk) a.y += Math.abs(Math.sin(a.age*9)) * -3;
       if ((a.dir>0 && a.x > WW + a.w) || (a.dir<0 && a.x < -a.w)) animals.splice(i,1);
     }
@@ -683,7 +687,7 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
       for (var i=animals.length-1;i>=0;i--){ var a = animals[i];
         a.age += dt;
         if (a.t.peek || a.t.shell){ if (a.age > (a.life||3)) animals.splice(i,1); else if (a.t.peek){ var p=a.age/a.life, rise=p<0.2?p/0.2:p>0.8?(1-p)/0.2:1; a.y=a.baseY-a.h*0.62*Math.max(0,rise)+a.h/2; } continue; }
-        a.x += a.dir*a.speed*dt; a.y = a.y0 + (a.t.bob? Math.sin(a.age*1.6+a.phase)*60:0) + (a.t.wave? Math.sin(a.age*2.4+a.phase)*22:0);
+        a.x += a.dir*a.speed*dt; a.y = a.y0 + (a.t.bob? Math.sin(a.age*1.6+a.phase)*60:0) + (a.t.wave? Math.sin(a.age*2.4+a.phase)*22:0) + (a.t.zig? zigY(a):0);
         if ((a.dir>0 && a.x > WW + a.w) || (a.dir<0 && a.x < -a.w)) animals.splice(i,1);
       }
     }
