@@ -114,7 +114,13 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
 .topp h2{margin:0;font:400 30px/1 var(--pirate);color:var(--ink);text-align:center}
 .topp .konto-rad{display:flex;justify-content:center;margin-top:10px;min-height:34px}
 .topp .info{margin:10px 0 0;font:600 13px var(--body);color:#3a2410;text-align:center}
-.topp ol{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:5px}
+.flikar{display:grid;grid-template-columns:1fr 1fr;margin-top:12px;border:2.5px solid var(--ink);border-radius:999px;overflow:hidden;background:rgba(255,248,235,.6)}
+.flikar button{font:700 13px var(--body);color:var(--ink);background:transparent;border:0;padding:5px 6px;cursor:pointer;white-space:nowrap}
+.flikar button+button{border-left:2.5px solid var(--ink)}
+.flikar button[aria-selected="true"]{background:var(--ink);color:var(--yellow)}
+.flikar button:focus-visible{outline:3px dashed var(--yellow);outline-offset:-5px}
+.topp .reset{margin:6px 0 0;font:600 12px var(--body);color:var(--brown);text-align:center;min-height:1.2em}
+.topp ol{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:5px}
 .topp li{display:grid;grid-template-columns:26px 26px minmax(0,1fr) auto auto;align-items:center;gap:8px;background:rgba(255,248,235,.8);border:2.5px solid var(--ink);border-radius:8px;padding:3px 8px 3px 6px}
 .topp li.jag{background:var(--yellow)}
 .topp li .nr{font:700 14px var(--mono);text-align:center}
@@ -159,6 +165,11 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
     <h2 id="topp-t">Topplista</h2>
     <div class="konto-rad" id="konto-plats"></div>
     <p class="info" id="topp-info">Logga in med Discord för att komma med på listan.</p>
+    <div class="flikar" role="tablist" aria-label="Välj topplista">
+      <button type="button" role="tab" id="flik-vecka" aria-selected="true">Veckan</button>
+      <button type="button" role="tab" id="flik-alla" aria-selected="false">Genom tiderna</button>
+    </div>
+    <p class="reset" id="topp-reset"></p>
     <ol id="topp-lista"><li class="tom" style="display:block">Laddar…</li></ol>
   </aside>
  </div>
@@ -643,20 +654,35 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,64px);line-
 /* ---------- Topplista (sparas via Supabase-funktionen "topplista") ---------- */
 var TOPP = (function(){
   var URL_ = "https://cipqlojdcdcqahyqqttj.supabase.co/functions/v1/topplista";
-  var runda = null, lista = [];
+  var runda = null, lista = [], vecka = [], flik = "vecka";
+  try{ if (localStorage.getItem("fisk-flik") === "alla") flik = "alla"; }catch(e){}
+  var fV = document.getElementById("flik-vecka"), fA = document.getElementById("flik-alla"), elR = document.getElementById("topp-reset");
+  function valj(f){ flik = f; try{ localStorage.setItem("fisk-flik", f); }catch(e){} rita(); }
+  fV.addEventListener("click", function(){ valj("vecka"); });
+  fA.addEventListener("click", function(){ valj("alla"); });
+  // Tid kvar till måndag 00:00
+  function kvar(){
+    var n = new Date(), m = new Date(n); m.setHours(0,0,0,0);
+    m.setDate(m.getDate() + ((8 - m.getDay()) % 7 || 7));
+    var h = Math.floor((m - n) / 3600000), d = Math.floor(h / 24);
+    return d >= 1 ? d + " d " + (h % 24) + " h" : h >= 1 ? h + " h" : "under en timme";
+  }
   var elL = document.getElementById("topp-lista"), elI = document.getElementById("topp-info"), elS = document.getElementById("sparat");
   function k(){ return window.loomboomKonto; }
   function esc(t){ return String(t == null ? "" : t).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
   function rita(){
     var u = k() && k().anvandare();
     elI.textContent = u ? "Dina rundor sparas på listan. Bara ditt bästa resultat räknas." : "Logga in med Discord för att komma med på listan.";
-    if (!lista.length){ elL.innerHTML = '<li class="tom" style="display:block">Ingen har kommit med än. Bli först!</li>'; return; }
-    elL.innerHTML = lista.map(function(r, i){
+    fV.setAttribute("aria-selected", flik === "vecka"); fA.setAttribute("aria-selected", flik === "alla");
+    elR.textContent = flik === "vecka" ? "Nollställs måndag 00:00 · om " + kvar() : "Alla tiders bästa resultat";
+    var rader = flik === "vecka" ? vecka : lista;
+    if (!rader.length){ elL.innerHTML = '<li class="tom" style="display:block">' + (flik === "vecka" ? "Ingen har spelat den här veckan än. Bli först!" : "Ingen har kommit med än. Bli först!") + '</li>'; return; }
+    elL.innerHTML = rader.map(function(r, i){
       return '<li' + (u && u.id === r.id ? ' class="jag"' : '') + '><span class="nr">' + (i+1) + '</span><img src="' + esc(r.avatar) + '" alt="" referrerpolicy="no-referrer" loading="lazy"><span class="n">' + esc(r.namn) + '</span><b>' + r.poang + '</b><span class="pr" title="Träffsäkerhet">' + (r.skott ? Math.round(r.traffar / r.skott * 100) + '%' : '–') + '</span></li>';
     }).join("");
   }
   function hamta(){
-    fetch(URL_).then(function(r){ return r.json(); }).then(function(d){ lista = d.lista || []; rita(); })
+    fetch(URL_).then(function(r){ return r.json(); }).then(function(d){ lista = d.lista || []; vecka = d.vecka || []; rita(); })
       .catch(function(){ elL.innerHTML = '<li class="tom" style="display:block">Topplistan gick inte att ladda just nu.</li>'; });
   }
   function post(data){
@@ -678,8 +704,10 @@ var TOPP = (function(){
     }).then(function(d){
       if (d._status === 401){ k().loggaUt(); elS.textContent = "Din inloggning har gått ut. Logga in igen."; return; }
       if (!d.ok) throw 0;
-      lista = d.lista || lista; rita();
-      elS.textContent = "Sparat! Ditt bästa: " + d.basta + " poäng, plats " + d.plats + ".";
+      lista = d.lista || lista; vecka = d.vecka || vecka; rita();
+      elS.textContent = d.vplats
+        ? "Sparat! Veckan: plats " + d.vplats + " (" + d.vbasta + " p). Genom tiderna: plats " + d.plats + " (" + d.basta + " p)."
+        : "Sparat! Ditt bästa: " + d.basta + " poäng, plats " + d.plats + ".";
     }).catch(function(){ elS.textContent = "Det gick inte att spara på topplistan den här gången."; });
   }
   if (k()) k().vidAndring(rita);

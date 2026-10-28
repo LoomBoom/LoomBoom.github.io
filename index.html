@@ -135,6 +135,23 @@ h2{font-family:var(--pirate);font-weight:400;font-size:clamp(36px,5.5vw,50px);li
 .btn{display:inline-flex;align-items:center;gap:8px;margin-top:18px;background:var(--jasmine);border:var(--line);border-radius:999px;padding:6px 20px;font-family:var(--pirate);font-size:22px;box-shadow:3px 3px 0 var(--ink);transition:transform .15s, box-shadow .15s}
 .btn:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink)}
 
+/* TOPPLISTA */
+.flikar{display:grid;grid-template-columns:1fr 1fr;border:var(--line);border-radius:999px;overflow:hidden;background:rgba(255,248,235,.6)}
+.flikar button{font:700 14px var(--display);color:var(--ink);background:transparent;border:0;padding:6px 8px;cursor:pointer;white-space:nowrap}
+.flikar button+button{border-left:3px solid var(--ink)}
+.flikar button[aria-selected="true"]{background:var(--ink);color:var(--jasmine)}
+.flikar button:focus-visible{outline:3px dashed var(--jasmine);outline-offset:-6px}
+.tl-reset{margin:8px 0 0;font-weight:600;font-size:13px;color:#4a2c12;text-align:center;min-height:1.3em}
+.tl{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:6px}
+.tl li{display:grid;grid-template-columns:24px 30px minmax(0,1fr) auto auto;align-items:center;gap:10px;background:rgba(255,248,235,.8);border:2.5px solid var(--ink);border-radius:8px;padding:4px 10px 4px 8px}
+.tl li.tom{display:block;text-align:center;font-weight:600;font-size:14px;color:#4a2c12;padding:10px}
+.tl li:nth-child(1):not(.tom){background:var(--jasmine)}
+.tl .nr{font:700 15px var(--display);text-align:center}
+.tl img{width:30px;height:30px;border-radius:50%;border:2px solid var(--ink);background:#fff;object-fit:cover}
+.tl .n{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tl b{font:700 15px var(--display);font-variant-numeric:tabular-nums;text-align:right}
+.tl .pr{font-size:12px;font-weight:600;color:#4a2c12;min-width:4ch;text-align:right;font-variant-numeric:tabular-nums}
+
 /* PROFILE */
 .rows{list-style:none;margin:0;padding:0}
 .rows li{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:2px dashed rgba(91,58,28,.55)}
@@ -151,8 +168,6 @@ footer .gg span{font-size:14px;color:#4a2c12;font-weight:600}
 
 @media (prefers-reduced-motion:reduce){h1 span,.seabub,.cloud img{animation:none}.cloud{transition:opacity .3s}.bub,.btn,.preview img{transition:none}}
 </style>
-</head>
-<body>
 
 <div class="ocean"><div class="sky" id="sky"><img id="ocean" src="bilder/ocean.webp" alt="" aria-hidden="true">
   <button type="button" class="cloud" id="cloud" aria-label="Flytta på molnet"><img src="bilder/moln.png" alt=""></button>
@@ -194,18 +209,17 @@ footer .gg span{font-size:14px;color:#4a2c12;font-weight:600}
 
     <div class="gap"></div>
 
-    <section id="om" class="panel right" data-creature="0.45">
+    <section id="topplista" class="panel right" data-creature="0.45">
       <span class="depth">↓ 40 m</span>
-      <h2>Spelar nu</h2>
-      <p class="sub">Det som går varmt just nu.</p>
-      <ul class="rows">
-        <li><span class="k">Counter-Strike</span><span class="tag">Main</span></li>
-        <li><span class="k">Minecraft</span></li>
-        <li><span class="k">Fortnite</span></li>
-        <li><span class="k">Lethal Company</span></li>
-        <li><span class="k">Schack</span><span class="v">chess.com</span></li>
-        <li><span class="k">…och mycket mer</span></li>
-      </ul>
+      <h2>Topplista</h2>
+      <p class="sub">De bästa skyttarna i Fiskeskytte.</p>
+      <div class="flikar" role="tablist" aria-label="Välj topplista">
+        <button type="button" role="tab" id="tl-vecka" aria-selected="true">Veckan</button>
+        <button type="button" role="tab" id="tl-alla" aria-selected="false">Genom tiderna</button>
+      </div>
+      <p class="tl-reset" id="tl-reset"></p>
+      <ol class="tl" id="tl-lista"><li class="tom">Laddar…</li></ol>
+      <a class="btn" href="fiskeskytte.html">Spela Fiskeskytte →</a>
     </section>
 
     <div class="gap"></div>
@@ -233,6 +247,39 @@ footer .gg span{font-size:14px;color:#4a2c12;font-weight:600}
   </main>
 </div>
 
+<script>
+/* Topplistan från Fiskeskytte */
+(function(){
+  var URL_ = "https://cipqlojdcdcqahyqqttj.supabase.co/functions/v1/topplista";
+  var data = { vecka: [], lista: [] }, flik = "vecka", laddat = false;
+  try{ if (localStorage.getItem("fisk-flik") === "alla") flik = "alla"; }catch(e){}
+  var fV = document.getElementById("tl-vecka"), fA = document.getElementById("tl-alla"), elL = document.getElementById("tl-lista"), elR = document.getElementById("tl-reset");
+  function esc(t){ return String(t == null ? "" : t).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+  function kvar(){
+    var n = new Date(), m = new Date(n); m.setHours(0,0,0,0);
+    m.setDate(m.getDate() + ((8 - m.getDay()) % 7 || 7));
+    var h = Math.floor((m - n) / 3600000), d = Math.floor(h / 24);
+    return d >= 1 ? d + " d " + (h % 24) + " h" : h >= 1 ? h + " h" : "under en timme";
+  }
+  function rita(){
+    fV.setAttribute("aria-selected", flik === "vecka"); fA.setAttribute("aria-selected", flik === "alla");
+    elR.textContent = flik === "vecka" ? "Nollställs måndag 00:00 · om " + kvar() : "Alla tiders bästa resultat";
+    if (!laddat) return;
+    var rader = (flik === "vecka" ? data.vecka : data.lista).slice(0, 5);
+    if (!rader.length){ elL.innerHTML = '<li class="tom">' + (flik === "vecka" ? "Ingen har spelat den här veckan än. Bli först!" : "Ingen har kommit med än. Bli först!") + '</li>'; return; }
+    elL.innerHTML = rader.map(function(r, i){
+      return '<li><span class="nr">' + (i+1) + '</span><img src="' + esc(r.avatar) + '" alt="" referrerpolicy="no-referrer" loading="lazy"><span class="n">' + esc(r.namn) + '</span><b>' + r.poang + '</b><span class="pr" title="Träffsäkerhet">' + (r.skott ? Math.round(r.traffar / r.skott * 100) + '%' : '–') + '</span></li>';
+    }).join("");
+  }
+  function valj(f){ flik = f; try{ localStorage.setItem("fisk-flik", f); }catch(e){} rita(); }
+  fV.addEventListener("click", function(){ valj("vecka"); });
+  fA.addEventListener("click", function(){ valj("alla"); });
+  rita();
+  fetch(URL_).then(function(r){ return r.json(); })
+    .then(function(d){ data.vecka = d.vecka || []; data.lista = d.lista || []; laddat = true; rita(); })
+    .catch(function(){ elL.innerHTML = '<li class="tom">Topplistan gick inte att ladda just nu.</li>'; });
+})();
+</script>
 <script>
 (function(){
   var img = document.getElementById('ocean'), sky = document.getElementById('sky'), sky2 = document.getElementById('sky2'), oceanEl = sky.parentNode;
