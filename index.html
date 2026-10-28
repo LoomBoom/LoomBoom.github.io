@@ -6,9 +6,7 @@
 <meta name="description" content="LoomBoom – gamer och konstnär. Spelar CS, Minecraft, Fortnite, Lethal Company och schack, och målar i Paint.">
 <link rel="icon" href="bilder/logo.png">
 <title>LoomBoom</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Pirata+One&family=Fredoka:wght@500;600;700&family=Figtree:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="fonts.css">
 <style>
 /* Layout: a dive. The user's tall ocean painting is a fixed layer that slides from surface to seabed as you scroll; outlined cartoon panels sit beside each creature. Social links are the painting's own cyan bubbles. */
 :root{
@@ -57,7 +55,7 @@ a{color:inherit;text-decoration:none}
 .cloud.away{transform:translateX(-130%) translateY(-25%);opacity:0}
 
 .page{position:relative;z-index:1;pointer-events:none}
-.page a,.page button,.page .panel,.page .hi,.page footer .gg{pointer-events:auto}
+.page a,.page button,.page .panel,.page .hi,.page footer .gg,.page footer .integ{pointer-events:auto}
 .wrap{max-width:900px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
 
 /* TOP (over the sky) */
@@ -174,7 +172,9 @@ h2{font-family:var(--pirate);font-weight:400;font-size:clamp(36px,5.5vw,50px);li
 .rows .v{color:#4a2c12;font-weight:500;text-align:right}
 .tag{background:var(--pink);border:2px solid var(--ink);border-radius:999px;padding:0 10px;font-weight:700;font-size:13px}
 
-footer{padding-top:clamp(220px,40vw,520px);padding-bottom:max(24px, env(safe-area-inset-bottom, 0px));display:flex;justify-content:center}
+footer{padding-top:clamp(220px,40vw,520px);padding-bottom:max(24px, env(safe-area-inset-bottom, 0px));display:flex;flex-direction:column;align-items:center;gap:14px}
+footer .integ{font:700 14px var(--display);color:var(--ink);background:rgba(255,255,255,.85);border:2px solid var(--ink);border-radius:999px;padding:2px 14px;text-decoration:none}
+footer .integ:hover{background:var(--jasmine)}
 footer .gg{position:relative;width:min(380px,100%);border:var(--line);border-radius:8px;padding:12px 20px 14px;box-shadow:5px 5px 0 var(--ink);text-align:center;
   background:radial-gradient(circle at 12px 12px, var(--nail) 0 3px, transparent 3.5px), radial-gradient(circle at calc(100% - 12px) 12px, var(--nail) 0 3px, transparent 3.5px), repeating-linear-gradient(181deg, rgba(91,58,28,.14) 0 1px, transparent 1px 6px), linear-gradient(var(--wood), var(--wood-2))}
 footer .gg b{font-family:var(--pirate);font-weight:400;font-size:32px;color:var(--ink);display:block;line-height:1.1}
@@ -262,6 +262,7 @@ footer .gg .upp{display:inline-block;margin-top:8px;font:700 13px var(--display)
         <span>LoomBoom · All konst målad av LoomBoom</span>
         <i class="upp">↑ Klicka för att simma upp</i>
       </a>
+      <a class="integ" href="integritet.html">Integritet och dina uppgifter</a>
     </footer>
   </main>
 </div>

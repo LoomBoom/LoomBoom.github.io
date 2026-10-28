@@ -6,9 +6,7 @@
 <title>LoomBoom Konstgalleri</title>
 <meta name="description" content="Alla målningar av LoomBoom i stort format.">
 <link rel="icon" href="bilder/logo.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Pirata+One&family=Fredoka:wght@500;600;700&family=Figtree:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="fonts.css">
 <style>
 /* Layout: the captain's gallery. Same sky, wood nav and nailed planks as the other pages; every painting hangs in a wooden frame with a small plank nameplate under it. */
 :root{
@@ -94,6 +92,8 @@ h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,100px);line
 footer{text-align:center;padding-block:0 48px}
 footer a{display:inline-block;border:var(--line);border-radius:6px;padding:6px 20px;font-family:var(--pirate);font-size:22px;box-shadow:3px 3px 0 var(--ink)}
 footer a:hover{background:var(--yellow)}
+footer .integ{display:block;width:fit-content;margin:14px auto 0;border:0;box-shadow:none;padding:0;font:600 14px var(--body);text-decoration:underline;color:#2c3a4a}
+footer .integ:hover{background:none;color:var(--ink)}
 
 /* LIGHTBOX */
 .lightbox{position:fixed;inset:0;z-index:20;background:rgba(18,24,38,.92);display:grid;place-items:center;
@@ -131,7 +131,7 @@ footer a:hover{background:var(--yellow)}
 
   <main class="wall" id="wall"></main>
 
-  <footer><a class="wood" href="./">← Tillbaka till startsidan</a></footer>
+  <footer><a class="wood" href="./">← Tillbaka till startsidan</a><a class="integ" href="integritet.html">Integritet och dina uppgifter</a></footer>
 </div>
 
 <div class="lightbox" id="lb" hidden role="dialog" aria-modal="true" aria-label="Målning i helskärm">

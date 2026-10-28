@@ -26,7 +26,7 @@ var FUNKTION_URL = "https://cipqlojdcdcqahyqqttj.supabase.co/functions/v1/toppli
   '.konto-btn .namn{max-width:12ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}' +
   '.konto-meny{position:absolute;right:0;top:calc(100% + 8px);z-index:50;min-width:200px;border:3px solid #121826;border-radius:8px;box-shadow:4px 4px 0 #121826;padding:12px;' +
     'background:repeating-linear-gradient(181deg,rgba(91,58,28,.14) 0 1px,transparent 1px 6px),linear-gradient(#D39A5D,#C0834A);font-family:"Figtree",system-ui,sans-serif;color:#121826;text-align:left}' +
-  '@media (max-width:600px){.konto-meny{left:0;right:auto;max-width:calc(100vw - 32px)}}' +
+  '@media (max-width:600px){.konto-meny{position:fixed;left:12px;right:12px;width:auto!important;min-width:0!important;overflow:auto}}' +
   '.konto-meny{min-width:280px;width:300px}' +
   '.konto-meny .km-dc{display:flex;align-items:center;gap:8px;margin:0 0 8px;padding:7px 10px;border:2.5px solid #121826;border-radius:9px;background:linear-gradient(135deg,#5865F2,#3C45A5);color:#fff;font:700 13px "Figtree",system-ui,sans-serif;box-shadow:2px 2px 0 #121826}' +
   '.konto-meny .km-dc svg{width:20px;height:20px;fill:#fff;flex:none}' +
@@ -59,6 +59,23 @@ var FUNKTION_URL = "https://cipqlojdcdcqahyqqttj.supabase.co/functions/v1/toppli
   '.konto-meny .km-ut:focus-visible{outline:3px dashed #121826;outline-offset:2px}' +
   '.bub-n{display:inline-flex;align-items:center;gap:4px;margin-left:2px;padding:0 9px 0 3px;border:2px solid #121826;border-radius:999px;font:700 14px/1.5 "Fredoka",system-ui,sans-serif;font-variant-numeric:tabular-nums;color:#0E2A4D;background:linear-gradient(135deg,#9FF3F5,#22C3E6)}' +
   '.konto-btn .bub-n img{width:18px;height:18px;border:0;border-radius:0;background:none;object-fit:contain}' +
+  '.konto-meny .km-lankar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:9px;font:600 13px "Figtree",system-ui,sans-serif}' +
+  '.konto-meny .km-lankar a{display:inline;background:none;border:0;box-shadow:none;padding:0;border-radius:0;font:600 13px "Figtree",system-ui,sans-serif;color:#2a1a0a;text-decoration:underline}' +
+  '.konto-meny .km-lankar a:hover{background:none;color:#121826}' +
+  '.konto-meny .km-radera{background:none;border:0;padding:0;font:700 13px "Figtree",system-ui,sans-serif;color:#9B1C1C;text-decoration:underline;cursor:pointer}' +
+  '.konto-meny .km-radera:hover{color:#121826}' +
+  '.kr-bak{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:16px;background:rgba(18,24,38,.6)}' +
+  '.kr-ruta{width:min(440px,100%);border:3px solid #121826;border-radius:14px;box-shadow:6px 6px 0 #121826;padding:22px 22px 20px;background:linear-gradient(160deg,#FFE3DE,#FFC2B8);font-family:"Figtree",system-ui,sans-serif;color:#121826}' +
+  '.kr-ruta h2{margin:0 0 8px;font:400 30px/1.1 "Luckiest Guy","Fredoka",sans-serif;color:#E8553F;-webkit-text-stroke:1.5px #121826;paint-order:stroke fill;letter-spacing:.02em}' +
+  '.kr-ruta p{margin:0 0 10px;font-weight:600;font-size:15px}' +
+  '.kr-ruta ul{margin:0 0 12px;padding:10px 12px 10px 30px;background:#fff;border:2.5px solid #121826;border-radius:10px;font-weight:600;font-size:15px}' +
+  '.kr-ruta li{margin:2px 0}' +
+  '.kr-knappar{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}' +
+  '.kr-knappar button{flex:1 1 150px;font:700 16px "Fredoka",system-ui,sans-serif;border:2.5px solid #121826;border-radius:999px;padding:7px 14px;cursor:pointer;box-shadow:3px 3px 0 #121826}' +
+  '.kr-avbryt{background:#fff;color:#121826}.kr-avbryt:hover{background:#FAE052}' +
+  '.kr-ja{background:linear-gradient(135deg,#FF6B55,#C7301E);color:#fff;text-shadow:1px 1px 0 rgba(18,24,38,.5)}.kr-ja:hover{background:linear-gradient(135deg,#FF836F,#D93C29)}' +
+  '.kr-ja:disabled{opacity:.6;cursor:default}' +
+  '.kr-fel{color:#9B1C1C;font-weight:700;min-height:1.2em;margin:8px 0 0!important}' +
   '.konto-fel{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:60;background:#fff;border:3px solid #121826;border-radius:10px;box-shadow:4px 4px 0 #121826;padding:8px 16px;font:600 14px "Figtree",system-ui,sans-serif;max-width:calc(100% - 32px)}';
 
   var DISCORD = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.6 5.3A17 17 0 0 0 15.4 4l-.5 1.1a15.6 15.6 0 0 0-5.8 0L8.6 4a17 17 0 0 0-4.2 1.3C1.7 9.3 1 13.2 1.3 17a17 17 0 0 0 5.2 2.6l1.1-1.8a11 11 0 0 1-1.7-.8l.4-.3a12.2 12.2 0 0 0 11.4 0l.4.3-1.7.8 1.1 1.8a17 17 0 0 0 5.2-2.6c.4-4.4-.7-8.3-3.1-11.7ZM8.7 14.7c-1 0-1.9-1-1.9-2.1s.8-2.1 1.9-2.1 1.9 1 1.9 2.1-.8 2.1-1.9 2.1Zm6.6 0c-1 0-1.9-1-1.9-2.1s.8-2.1 1.9-2.1 1.9 1 1.9 2.1-.8 2.1-1.9 2.1Z"/></svg>';
@@ -136,6 +153,50 @@ var FUNKTION_URL = "https://cipqlojdcdcqahyqqttj.supabase.co/functions/v1/toppli
       .then(sattBubblor).catch(function(){});
   }
 
+  // ---------- Radera kontot ----------
+  function fragaRadera(){
+    if (document.querySelector(".kr-bak")) return;
+    var forra = document.activeElement;
+    var bak = document.createElement("div"); bak.className = "kr-bak";
+    bak.innerHTML = '<div class="kr-ruta" role="alertdialog" aria-modal="true" aria-labelledby="kr-t" aria-describedby="kr-d">' +
+      '<h2 id="kr-t">Radera kontot?</h2>' +
+      '<p id="kr-d">Vill du verkligen radera ditt konto? <b>All progress och data försvinner</b> för alltid:</p>' +
+      '<ul><li>alla dina bubblor</li><li>dina placeringar på topplistorna</li><li>dina rekord och dagar du spelat</li></ul>' +
+      '<p>Det går inte att ångra. Du kan logga in igen senare, men då börjar du om från noll.</p>' +
+      '<div class="kr-knappar"><button type="button" class="kr-avbryt">Nej, avbryt</button><button type="button" class="kr-ja">Ja, radera allt</button></div>' +
+      '<p class="kr-fel" role="status"></p></div>';
+    document.body.appendChild(bak);
+    var avbryt = bak.querySelector(".kr-avbryt"), ja = bak.querySelector(".kr-ja"), fel = bak.querySelector(".kr-fel");
+    function stang(){ bak.remove(); document.removeEventListener("keydown", tangent, true); if (forra && forra.focus) try{ forra.focus(); }catch(e){} }
+    function tangent(e){
+      if (e.key === "Escape"){ e.stopPropagation(); stang(); }
+      if (e.key === "Tab"){ var f = [avbryt, ja]; var i = f.indexOf(document.activeElement); e.preventDefault(); f[(i + (e.shiftKey ? 1 : 1)) % 2].focus(); }
+    }
+    document.addEventListener("keydown", tangent, true);
+    bak.addEventListener("click", function(e){ if (e.target === bak) stang(); });
+    avbryt.addEventListener("click", stang);
+    ja.addEventListener("click", function(){
+      var t = window.loomboomKonto.token();
+      if (!t){ fel.textContent = "Du är inte inloggad längre. Logga in igen och försök på nytt."; return; }
+      ja.disabled = true; ja.textContent = "Raderar…"; fel.textContent = "";
+      fetch(FUNKTION_URL, { method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + t }, body: JSON.stringify({ typ: "radera" }) })
+        .then(function(r){ return r.json().then(function(d){ d._s = r.status; return d; }); })
+        .then(function(d){
+          if (d._s === 401){ throw new Error("401"); }
+          if (!d.ok) throw new Error("fel");
+          ["fisk-best", "loomboom-bubblor"].forEach(function(k){ try{ localStorage.removeItem(k); }catch(e){} });
+          stang(); loggaUt();
+          toast("Ditt konto och all din data är raderat.");
+          setTimeout(function(){ location.reload(); }, 1600);
+        })
+        .catch(function(e){
+          ja.disabled = false; ja.textContent = "Ja, radera allt";
+          fel.textContent = e && e.message === "401" ? "Din inloggning har gått ut. Logga in igen och försök på nytt." : "Det gick inte att radera just nu. Försök igen om en stund.";
+        });
+    });
+    avbryt.focus();
+  }
+
   window.loomboomKonto = {
     anvandare: function(){ var s = inloggning(); return s ? s.user : null; },
     token: function(){ var s = inloggning(); return s ? s.token : null; },
@@ -183,10 +244,19 @@ var FUNKTION_URL = "https://cipqlojdcdcqahyqqttj.supabase.co/functions/v1/toppli
           '<div class="d" title="Dagens första runda i Fiskeskytte">' + (dagKlar ? '<em aria-label="klar">✓</em>' : '') + '<small>Dag</small><strong>+5' + BI + '</strong></div>' +
           '<div class="v" title="Spela alla 7 dagar i veckan">' + (veckaKlar ? '<em aria-label="klar">✓</em>' : '') + '<small>Vecka</small><strong>+25' + BI + '</strong></div>' +
         '</div>' +
-        '<button type="button" class="km-ut" id="konto-ut">Logga ut</button></div>';
+        '<button type="button" class="km-ut" id="konto-ut">Logga ut</button>' +
+        '<div class="km-lankar"><a href="integritet.html">Integritet</a><button type="button" class="km-radera" id="konto-radera">Radera mitt konto</button></div></div>';
       var btn = li.querySelector("#konto-knapp"), menu = li.querySelector("#konto-meny");
-      btn.addEventListener("click", function(e){ e.stopPropagation(); var open = menu.hidden; menu.hidden = !open; btn.setAttribute("aria-expanded", open ? "true" : "false"); });
+      btn.addEventListener("click", function(e){
+        e.stopPropagation(); var open = menu.hidden; menu.hidden = !open; btn.setAttribute("aria-expanded", open ? "true" : "false");
+        // På mobil ligger menyn fast precis under knappen, över hela bredden
+        if (open && window.innerWidth <= 600){
+          var top = Math.max(8, btn.getBoundingClientRect().bottom + 8);
+          menu.style.top = top + "px"; menu.style.maxHeight = (window.innerHeight - top - 12) + "px";
+        } else { menu.style.top = ""; menu.style.maxHeight = ""; }
+      });
       li.querySelector("#konto-ut").addEventListener("click", loggaUt);
+      li.querySelector("#konto-radera").addEventListener("click", function(e){ e.stopPropagation(); stang(); fragaRadera(); });
     }
     function rita(u){ if (u) visaIn(u); else visaUt(); }
     lyssnare.push(rita);

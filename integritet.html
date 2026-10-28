@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LoomBoom Integritet</title>
+<meta name="description" content="Vilka uppgifter LoomBoom.se sparar när du loggar in med Discord, varför, hur länge, och hur du raderar dem.">
+<link rel="icon" href="bilder/logo.png">
+<link rel="stylesheet" href="fonts.css">
+<style>
+:root{
+  color-scheme: light;
+  --sky:#CFEFF6;
+  --sky-2:#A9E1EE;
+  --paper:#ffffff;
+  --ink:#121826;
+  --brown:#4a2c12;
+  --wood:#D39A5D;
+  --wood-2:#C0834A;
+  --nail:#3A2614;
+  --yellow:#FAE052;
+  --blue:#20ACE4;
+  --mint:#73BB89;
+  --amethyst:#91569D;
+  --red:#E8553F;
+  --line:3px solid var(--ink);
+  --pirate:"Pirata One", "Fredoka", Georgia, serif;
+  --title:"Luckiest Guy", "Fredoka", "Arial Black", sans-serif;
+  --display:"Fredoka", "Trebuchet MS", system-ui, sans-serif;
+  --body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(var(--sky), var(--sky-2) 60%, #7FC6E8) fixed;color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;overflow-x:hidden;min-height:100vh;
+  padding-top:env(safe-area-inset-top, 0px);padding-bottom:env(safe-area-inset-bottom, 0px)}
+a{color:inherit}
+img{max-width:100%}
+[hidden]{display:none!important}
+:focus-visible{outline:3px dashed var(--amethyst);outline-offset:4px;border-radius:8px}
+.wrap{max-width:860px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+.wood{background:repeating-linear-gradient(181deg, rgba(91,58,28,.14) 0 1px, transparent 1px 6px), repeating-linear-gradient(179deg, rgba(255,235,200,.12) 0 2px, transparent 2px 13px), linear-gradient(var(--wood), var(--wood-2))}
+
+.nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding-block:18px}
+.logo{display:block;width:64px;height:64px;filter:drop-shadow(3px 3px 0 var(--ink))}
+.logo img{width:100%;height:100%;display:block}
+.nav ul{display:flex;gap:8px;list-style:none;margin:0;padding:0;flex-wrap:wrap}
+.nav ul a{display:block;border:var(--line);border-radius:6px;padding:4px 14px;font-family:var(--pirate);font-size:19px;line-height:1.2;box-shadow:2px 2px 0 var(--ink);text-decoration:none}
+.nav ul a:hover{background:var(--yellow)}
+
+header.head{text-align:center;padding-block:10px 26px}
+h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,84px);line-height:1;margin:0;color:var(--yellow);-webkit-text-stroke:.05em var(--ink);paint-order:stroke fill;text-shadow:.045em .05em 0 var(--ink)}
+.kort{display:inline-block;margin:16px auto 0;max-width:52ch;background:linear-gradient(135deg,#5865F2,#3C45A5);color:#fff;border:var(--line);border-radius:12px;box-shadow:4px 4px 0 var(--ink);padding:10px 18px;font-weight:600}
+
+.board{position:relative;border:var(--line);border-radius:12px;margin:0 0 22px;padding:22px clamp(18px,4vw,30px);
+  box-shadow:inset 0 0 0 9px rgba(120,76,36,.45), inset 0 0 0 11px rgba(58,38,20,.55), 7px 7px 0 var(--ink)}
+.board::before{content:"";position:absolute;inset:5px;pointer-events:none;
+  background:
+    radial-gradient(circle, var(--nail) 0 3.5px, #9b7a55 4px, transparent 5px) 0 0/12px 12px no-repeat,
+    radial-gradient(circle, var(--nail) 0 3.5px, #9b7a55 4px, transparent 5px) 100% 0/12px 12px no-repeat,
+    radial-gradient(circle, var(--nail) 0 3.5px, #9b7a55 4px, transparent 5px) 0 100%/12px 12px no-repeat,
+    radial-gradient(circle, var(--nail) 0 3.5px, #9b7a55 4px, transparent 5px) 100% 100%/12px 12px no-repeat}
+h2{font-family:var(--pirate);font-weight:400;font-size:clamp(28px,5vw,38px);line-height:1.1;margin:0 0 10px}
+.board p{margin:0 0 10px;color:#2a1a0a;font-weight:500}
+.board p:last-child{margin-bottom:0}
+.board ul{margin:0 0 10px;padding-left:22px;color:#2a1a0a;font-weight:500}
+.board li{margin:3px 0}
+.board b{color:var(--ink)}
+
+.tabell{width:100%;border-collapse:separate;border-spacing:0;background:rgba(255,248,235,.85);border:2.5px solid var(--ink);border-radius:10px;overflow:hidden;font-size:15px;box-shadow:3px 3px 0 var(--ink)}
+.tabell th,.tabell td{text-align:left;vertical-align:top;padding:8px 12px;border-top:2px dashed rgba(91,58,28,.45)}
+.tabell tr:first-child th,.tabell tr:first-child td{border-top:0}
+.tabell thead th{background:var(--ink);color:var(--yellow);font-family:var(--display);font-weight:600;border-top:0}
+.tabell td:first-child{font-weight:700}
+.tbl{overflow-x:auto}
+
+.ratt{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:6px 0 0;padding:0;list-style:none}
+.ratt li{margin:0;overflow-wrap:anywhere;hyphens:auto;background:#fff;border:2.5px solid var(--ink);border-radius:10px;box-shadow:2px 2px 0 var(--ink);padding:8px 12px;font-size:15px}
+.ratt li b{display:block;font-family:var(--display);font-size:16px}
+.ratt li:nth-child(1){background:#D4F0FF}.ratt li:nth-child(2){background:#FFF3A6}.ratt li:nth-child(3){background:#FFD0C7}.ratt li:nth-child(4){background:#D6F4E0}
+
+.radera{background:linear-gradient(135deg,#FFE3DE,#FFC2B8);border:2.5px solid var(--ink);border-radius:10px;box-shadow:3px 3px 0 var(--ink);padding:12px 14px;margin:6px 0 10px}
+.knapp{display:inline-block;margin-top:4px;font:700 16px var(--display);color:#fff;background:linear-gradient(135deg,#5865F2,#3C45A5);border:2.5px solid var(--ink);border-radius:999px;padding:5px 16px;box-shadow:2px 2px 0 var(--ink);text-decoration:none}
+.knapp:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--ink)}
+.knapp.rod{background:linear-gradient(135deg,#FF8A73,#E8553F)}
+.small{font-size:14px!important;color:#4a2c12!important}
+
+footer{text-align:center;padding-block:4px 48px}
+footer a{display:inline-block;border:var(--line);border-radius:6px;padding:6px 20px;font-family:var(--pirate);font-size:22px;box-shadow:3px 3px 0 var(--ink);text-decoration:none}
+footer a:hover{background:var(--yellow)}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav class="nav">
+    <a class="logo" href="./" aria-label="Till startsidan"><img src="bilder/logo.png" alt="LoomBoom logga"></a>
+    <ul>
+      <li><a class="wood" href="konst.html">Konstgalleri</a></li>
+      <li><a class="wood" href="installningar.html">Inställningar</a></li>
+      <li><a class="wood" href="statistik.html">Statistik</a></li>
+      <li><a class="wood" href="fiskeskytte.html">Fiskeskytte</a></li>
+    </ul>
+  </nav>
+
+  <header class="head">
+    <h1>Integritet</h1>
+    <p class="kort">Här står vilka uppgifter loomboom.se sparar om dig, varför, och hur du får dem raderade. Kort sagt: bara det som behövs för topplistan och bubblorna.</p>
+  </header>
+
+  <main>
+    <section class="board wood">
+      <h2>Vem ansvarar?</h2>
+      <p>Sidan loomboom.se drivs av LoomBoom som en hobbysida. LoomBoom är ansvarig för uppgifterna som sparas här.</p>
+      <p>Har du frågor, eller vill du att något raderas? Skriv till LoomBoom på <a href="https://discord.gg/jajX36mE5Q" target="_blank" rel="noopener"><b>LoomBooms Discord-server</b></a>.</p>
+    </section>
+
+    <section class="board wood">
+      <h2>Om du inte loggar in</h2>
+      <p>Då sparas inget om dig i någon databas. Du kan titta på hela sidan, spela Fiskeskytte och se topplistorna utan konto.</p>
+      <p>Sidan ligger på <b>GitHub Pages</b>. Som alla webbservrar ser GitHub din IP-adress när sidan laddas, och sparar den en kort tid i sina loggar för säkerhet. Det styrs av GitHubs egen integritetspolicy.</p>
+    </section>
+
+    <section class="board wood">
+      <h2>Om du loggar in med Discord</h2>
+      <p>När du loggar in ber vi Discord bara om <b>namn, profilbild och Discord-id</b>. Vi får <b>ingen e-post och inget lösenord</b>.</p>
+      <div class="tbl">
+      <table class="tabell">
+        <thead><tr><th scope="col">Vad</th><th scope="col">Varför</th><th scope="col">Hur länge</th></tr></thead>
+        <tbody>
+          <tr><td>Discord-id, namn och profilbild</td><td>Visa vem som har vilket resultat på topplistan och i menyn</td><td>Tills du raderar kontot</td></tr>
+          <tr><td>Bästa poäng, träffar och skott</td><td>Topplistan genom tiderna</td><td>Tills du raderar kontot</td></tr>
+          <tr><td>Veckans bästa poäng</td><td>Veckotopplistan och veckans pris</td><td>8 veckor, sedan raderas det automatiskt</td></tr>
+          <tr><td>Bubblor och vilka dagar du spelat</td><td>Ditt bubbelsaldo, dagsbonus och veckobonus</td><td>Tills du raderar kontot</td></tr>
+          <tr><td>Pågående runda (start-tid)</td><td>Kolla att en runda verkligen varade 60 sekunder, mot fusk</td><td>1 dag</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p style="margin-top:12px">Uppgifterna sparas i en databas hos <b>Supabase</b>, med servrar inom EU. Supabase sparar också tekniska loggar (till exempel IP-adress) en kort tid för att tjänsten ska fungera och vara säker.</p>
+      <p>Profilbilderna på topplistan och i menyn hämtas direkt från Discord, som då ser att bilden laddas.</p>
+      <p>Uppgifterna används <b>bara</b> för topplistorna och bubblorna. De säljs aldrig, delas inte med någon annan och används inte till reklam.</p>
+      <p class="small">Varför vi får spara dem: du väljer själv att logga in för att vara med på topplistan och samla bubblor, och uppgifterna behövs för att det ska fungera (GDPR artikel 6.1 b och f).</p>
+    </section>
+
+    <section class="board wood">
+      <h2>I din webbläsare</h2>
+      <p>Sidan använder <b>inga cookies</b> och ingen spårning eller statistik. Några småsaker sparas i din egen webbläsare (localStorage) så att sidan fungerar:</p>
+      <ul>
+        <li>att du är inloggad, i högst 7 dagar</li>
+        <li>ditt bubbelsaldo, så det syns direkt</li>
+        <li>ditt lokala rekord, känslighet och vilken topplista-flik du valde i Fiskeskytte</li>
+      </ul>
+      <p>Det ligger bara på din dator eller mobil. Loggar du ut, eller tömmer webbläsarens data, försvinner det.</p>
+      <p class="small">Typsnitten ligger på sidan själv, så inget skickas till Google när du besöker loomboom.se.</p>
+    </section>
+
+    <section class="board wood" id="radera">
+      <h2>Dina rättigheter</h2>
+      <ul class="ratt">
+        <li><b>Se dina uppgifter</b>Fråga vad som finns sparat om dig.</li>
+        <li><b>Rätta</b>Ditt namn och din bild uppdateras från Discord nästa gång du spelar.</li>
+        <li><b>Radera</b>Ta bort ditt konto och allt som sparats.</li>
+        <li><b>Klaga</b>Hos Integritets&shy;skydds&shy;myndigheten (IMY) om något inte känns rätt.</li>
+      </ul>
+      <div class="radera">
+        <p><b>Så raderar du ditt konto:</b> Logga in, klicka på ditt namn uppe i menyn och välj <b>Radera mitt konto</b>. Då tas allt bort direkt: bubblor, topplistplaceringar och dagar du spelat. Det går inte att ångra.</p>
+        <p>Vill du också ta bort LoomBoom från ditt Discord-konto: öppna Discord, gå till <b>Inställningar → Auktoriserade appar</b> och välj <b>Avauktorisera</b> vid LoomBoom.</p>
+      </div>
+      <a class="knapp" href="https://discord.gg/jajX36mE5Q" target="_blank" rel="noopener">Fråga på Discord</a>
+    </section>
+
+    <section class="board wood">
+      <h2>Ålder</h2>
+      <p>Discord kräver att du är minst 13 år. Därför behöver du också vara minst 13 år för att logga in här.</p>
+      <p class="small">Senast uppdaterad 28 oktober 2026.</p>
+    </section>
+  </main>
+
+  <footer><a class="wood" href="./">← Tillbaka till startsidan</a></footer>
+</div>
+
+<script src="konto.js"></script>
+</body>
+</html>
