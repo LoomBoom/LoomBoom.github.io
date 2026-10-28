@@ -85,9 +85,12 @@ h2{font-family:var(--pirate);font-weight:400;font-size:clamp(28px,4.5vw,36px);li
 .pj{position:relative;display:grid;place-items:center;width:100%;aspect-ratio:1}
 .pj img{width:88%;height:88%;object-fit:contain;filter:drop-shadow(0 3px 0 rgba(18,24,38,.28));pointer-events:none;user-select:none;-webkit-user-drag:none}
 .pj.b img{transform:scaleX(-1)}
-.pj.kung::after{content:"";position:absolute;top:-2%;left:50%;width:34%;height:18%;transform:translateX(-50%);
-  background:linear-gradient(#FFE873,#F5B83D);border:2px solid var(--ink);clip-path:polygon(0 100%,0 20%,22% 60%,50% 0,78% 60%,100% 20%,100% 100%);border-radius:2px}
-.pj.b.kung::after{background:linear-gradient(#D9C8FF,#8E6BC9)}
+/* storlek per pjäs: hajen är bred, musslan lite mindre, sjöhästen får plats med svansen */
+.pj.t-k img{width:118%;height:118%;max-width:none}
+.pj.t-b img{width:96%;height:96%}
+.pj.t-q img{width:90%;height:90%}
+.pj.t-p img{width:70%;height:70%}
+.pj.t-n img{width:78%;height:78%}
 
 /* ---------- MENY ---------- */
 .ny-grid{display:grid;gap:14px}
@@ -321,17 +324,17 @@ import { Chess } from "./chess.js";
 
 /* ---------- Pjäserna: LoomBooms djur ---------- */
 var PJAS = {
-  k: { img: "kung",    namn: "Kung (blåsfisk)" },
-  q: { img: "dam",     namn: "Dam (bläckfisk)" },
+  k: { img: "kung",    namn: "Kung (hammarhaj)" },
+  q: { img: "dam",     namn: "Drottning (blåsfisk)" },
   r: { img: "krabba",  namn: "Torn (krabba)" },
-  b: { img: "lopare",  namn: "Löpare (mås)" },
+  b: { img: "lopare",  namn: "Löpare (ål)" },
   n: { img: "sjohast", namn: "Springare (sjöhäst)" },
   p: { img: "mussla",  namn: "Bonde (mussla)" }
 };
 // bilder/schack/<djur>-ljus.png och <djur>-mork.png
 function bild(farg, typ){ return "bilder/schack/" + PJAS[typ].img + (farg === "w" ? "-ljus" : "-mork") + ".png"; }
 var FARG = { w: "ljus", b: "mörk" };
-function pjHTML(farg, typ){ return '<span class="pj ' + farg + (typ === "k" ? " kung" : "") + '"><img src="' + bild(farg, typ) + '" alt=""></span>'; }
+function pjHTML(farg, typ){ return '<span class="pj ' + farg + " t-" + typ + (typ === "k" ? " kung" : "") + '"><img src="' + bild(farg, typ) + '" alt=""></span>'; }
 function esc(t){ return String(t == null ? "" : t).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
 function sedan(t){
   var s = Math.max(0, (Date.now() - new Date(t).getTime()) / 1000);
@@ -655,7 +658,7 @@ function ritaStatus(){
   }
   var min = spel.turn() === jag;
   s.className = "status" + (min ? " min" : "");
-  s.innerHTML = (skickar ? "Skickar draget…" : min ? "Din tur!" : "Väntar på " + esc(mot.namn) + "…") + (spel.inCheck() ? '<small>' + (min ? "Din kung (blåsfisken) står i schack!" : "Schack!") + '</small>' : '<small>Senaste drag ' + sedan(parti.uppdaterad) + '</small>');
+  s.innerHTML = (skickar ? "Skickar draget…" : min ? "Din tur!" : "Väntar på " + esc(mot.namn) + "…") + (spel.inCheck() ? '<small>' + (min ? "Din kung (hammarhajen) står i schack!" : "Schack!") + '</small>' : '<small>Senaste drag ' + sedan(parti.uppdaterad) + '</small>');
 }
 function sanHTML(san, farg){
   var m = san.match(/^([KQRBN])/);
