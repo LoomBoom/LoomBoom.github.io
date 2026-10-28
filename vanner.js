@@ -17,46 +17,50 @@
     'background:repeating-linear-gradient(181deg,rgba(91,58,28,.14) 0 1px,transparent 1px 6px),linear-gradient(#D39A5D,#C0834A)}' +
   '.vp h2{margin:0 0 12px;font:400 34px/1 "Luckiest Guy","Fredoka",sans-serif;color:#73BB89;-webkit-text-stroke:1.5px #121826;paint-order:stroke fill;text-shadow:2px 2px 0 #121826;letter-spacing:.02em}' +
   '.vp h3{margin:14px 0 6px;font:700 13px "Fredoka",system-ui,sans-serif;text-transform:uppercase;letter-spacing:.06em;color:#2a1a0a}' +
-  '.vp-stang{position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;border:2.5px solid #121826;background:#fff;font:700 20px/1 "Fredoka",system-ui,sans-serif;cursor:pointer;box-shadow:2px 2px 0 #121826}' +
-  '.vp-stang:hover{background:#FAE052}' +
+  '.vp-stang{position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;border:2.5px solid #121826;background:linear-gradient(135deg,#FF8A73,#E8553F);color:#fff;font:700 22px/1 "Fredoka",system-ui,sans-serif;cursor:pointer;box-shadow:2px 2px 0 #121826;text-shadow:1px 1px 0 rgba(18,24,38,.4)}' +
+  '.vp-stang:hover{background:linear-gradient(135deg,#FFA08C,#F06A55)}' +
   '.vp-kod{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 12px;border:2.5px solid #121826;border-radius:10px;box-shadow:2px 2px 0 #121826;background:linear-gradient(135deg,#5865F2,#3C45A5);color:#fff;font-weight:700;font-size:14px}' +
   '.vp-kod b{font:400 26px/1 "Luckiest Guy","Fredoka",sans-serif;letter-spacing:.12em;color:#FAE052;-webkit-text-stroke:1px #121826;paint-order:stroke fill;padding-top:3px}' +
   '.vp-kod button{margin-left:auto}' +
-  '.vp-ny{display:flex;gap:8px;margin-top:8px}' +
-  '.vp-ny input{flex:1;min-width:0;font:700 18px "Fredoka",system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;border:2.5px solid #121826;border-radius:10px;padding:5px 10px;background:#fff;color:#121826}' +
-  '.vp-ny input::placeholder{letter-spacing:0;text-transform:none;font-weight:600;font-size:15px;color:#7a6a5a}' +
-  '.vp button.k{font:700 14px "Fredoka",system-ui,sans-serif;border:2.5px solid #121826;border-radius:999px;padding:4px 12px;cursor:pointer;box-shadow:2px 2px 0 #121826;background:#fff;color:#121826;white-space:nowrap}' +
-  '.vp button.k:hover{background:#FAE052}' +
-  '.vp button.k.gron{background:linear-gradient(135deg,#86CC9B,#2F9E5B);color:#fff;text-shadow:1px 1px 0 rgba(18,24,38,.4)}' +
-  '.vp button.k.rod{background:linear-gradient(135deg,#FF8A73,#E8553F);color:#fff;text-shadow:1px 1px 0 rgba(18,24,38,.4)}' +
-  '.vp button.k:disabled{opacity:.55;cursor:default}' +
+  '.vp-ny{display:flex;gap:8px;margin-top:8px;padding:8px;border:2.5px solid #121826;border-radius:12px;box-shadow:2px 2px 0 #121826;background:linear-gradient(135deg,#9FF3F5,#22C3E6 60%,#1E8FD8)}' +
+  '.vp-ny input{flex:1;min-width:0;font:700 18px "Fredoka",system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;border:2.5px solid #121826;border-radius:10px;padding:5px 10px;background:#E6FBFF;color:#0E2A4D}' +
+  '.vp-ny input::placeholder{letter-spacing:0;text-transform:none;font-weight:600;font-size:15px;color:#3E6E8E}' +
+  '.vp-ny input:focus{outline:3px dashed #FAE052;outline-offset:2px}' +
+  '.vp button.vp-k{font:700 14px "Fredoka",system-ui,sans-serif;border:2.5px solid #121826;border-radius:999px;padding:4px 12px;cursor:pointer;box-shadow:2px 2px 0 #121826;background:linear-gradient(135deg,#FFF3A6,#FAE052);color:#121826;white-space:nowrap}' +
+  '.vp button.vp-k:hover{background:linear-gradient(135deg,#FFF8C4,#FFE873)}' +
+  '.vp button.vp-k.lila{background:linear-gradient(135deg,#C99AD6,#91569D);color:#fff;text-shadow:1px 1px 0 rgba(18,24,38,.4)}' +
+  '.vp button.vp-k.gron{background:linear-gradient(135deg,#86CC9B,#2F9E5B);color:#fff;text-shadow:1px 1px 0 rgba(18,24,38,.4)}' +
+  '.vp button.vp-k.rod{background:linear-gradient(135deg,#FF8A73,#E8553F);color:#fff;text-shadow:1px 1px 0 rgba(18,24,38,.4)}' +
+  '.vp button.vp-k:disabled{opacity:.55;cursor:default}' +
   '.vp-msg{min-height:1.3em;margin:6px 0 0;font-weight:700;font-size:14px}' +
   '.vp-msg.fel{color:#9B1C1C}' +
   '.vp ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}' +
-  '.vp li{display:flex;align-items:center;gap:10px;padding:5px 8px;border:2.5px solid #121826;border-radius:10px;background:rgba(255,248,235,.92);box-shadow:2px 2px 0 #121826}' +
-  '.vp li.in{background:linear-gradient(135deg,#FFF3A6,#FAE052)}' +
-  '.vp li img.av{width:34px;height:34px;border-radius:50%;border:2px solid #121826;background:#fff;object-fit:cover;flex:none}' +
-  '.vp li .n{flex:1;min-width:0;font:700 15px "Fredoka",system-ui,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}' +
-  '.vp li .n small{display:block;font:600 12px "Figtree",system-ui,sans-serif;color:#4a2c12}' +
-  '.vp li .bub{display:inline-flex;align-items:center;gap:3px;padding:0 8px 0 3px;border:2px solid #121826;border-radius:999px;background:linear-gradient(135deg,#9FF3F5,#22C3E6);font:700 13px/1.6 "Fredoka",system-ui,sans-serif;color:#0E2A4D;flex:none}' +
-  '.vp li .bub img{width:16px;height:16px}' +
-  '.vp li .mer{position:relative;flex:none}' +
-  '.vp li .mer > button{width:32px;height:32px;padding:0;border-radius:50%;font-size:18px;line-height:1}' +
-  '.vp-val{position:absolute;right:0;top:calc(100% + 6px);z-index:3;display:grid;gap:6px;min-width:150px;padding:8px;border:2.5px solid #121826;border-radius:10px;background:#fff;box-shadow:3px 3px 0 #121826}' +
-  '.vp-tom{padding:10px 12px;border:2.5px dashed rgba(18,24,38,.5);border-radius:10px;font-weight:600;font-size:14px;color:#2a1a0a;background:rgba(255,248,235,.5)}' +
+  '.vp li{display:flex;align-items:center;gap:10px;padding:5px 8px;border:2.5px solid #121826;border-radius:10px;background:linear-gradient(135deg,#D4F0FF,#9BD7F5);box-shadow:2px 2px 0 #121826}' +
+  '.vp li.vp-ut{background:linear-gradient(135deg,#F0E0F7,#D3B3E3)}' +
+  '.vp li.vp-bl{background:linear-gradient(135deg,#FFE3DE,#FFC2B8)}' +
+  '.vp li.vp-in{background:linear-gradient(135deg,#FFF3A6,#FAE052)}' +
+  '.vp li img.vp-av{width:34px;height:34px;border-radius:50%;border:2px solid #121826;background:#fff;object-fit:cover;flex:none}' +
+  '.vp li .vp-n{flex:1;min-width:0;font:700 15px "Fredoka",system-ui,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}' +
+  '.vp li .vp-n small{display:block;font:600 12px "Figtree",system-ui,sans-serif;color:#4a2c12}' +
+  '.vp li .vp-bub{display:inline-flex;align-items:center;gap:3px;padding:0 8px 0 3px;border:2px solid #121826;border-radius:999px;background:linear-gradient(135deg,#9FF3F5,#22C3E6);font:700 13px/1.6 "Fredoka",system-ui,sans-serif;color:#0E2A4D;flex:none}' +
+  '.vp li .vp-bub img{width:16px;height:16px}' +
+  '.vp li .vp-mer{position:relative;flex:none}' +
+  '.vp li .vp-mer > button{width:32px;height:32px;padding:0;border-radius:50%;font-size:18px;line-height:1}' +
+  '.vp-val{position:absolute;right:0;top:calc(100% + 6px);z-index:3;display:grid;gap:6px;min-width:150px;padding:8px;border:2.5px solid #121826;border-radius:10px;background:linear-gradient(135deg,#FFF3A6,#F5B83D);box-shadow:3px 3px 0 #121826}' +
+  '.vp-tom{padding:10px 12px;border:2.5px dashed rgba(18,24,38,.5);border-radius:10px;font-weight:600;font-size:14px;color:#0E2A4D;background:rgba(212,240,255,.75)}' +
   '.vp details summary{cursor:pointer;font:700 13px "Fredoka",system-ui,sans-serif;text-transform:uppercase;letter-spacing:.06em;color:#2a1a0a;margin:14px 0 6px}' +
   '.vp-fot{margin:14px 0 0;font-size:12px;font-weight:600;color:#3a2410}' +
   '.vp-fot a{color:inherit}' +
   /* liten ruta när man klickar på en spelare i topplistan */
-  '.vs{position:fixed;z-index:95;width:240px;padding:12px;border:3px solid #121826;border-radius:12px;box-shadow:4px 4px 0 #121826;background:#fff;font-family:"Figtree",system-ui,sans-serif;color:#121826;text-align:center}' +
+  '.vs{position:fixed;z-index:95;width:240px;padding:12px;border:3px solid #121826;border-radius:12px;box-shadow:4px 4px 0 #121826;background:linear-gradient(160deg,#D4F0FF,#8FD0F2);font-family:"Figtree",system-ui,sans-serif;color:#121826;text-align:center}' +
   '.vs img{width:56px;height:56px;border-radius:50%;border:2.5px solid #121826;background:#fff;object-fit:cover}' +
   '.vs b{display:block;margin:4px 0 8px;font:700 17px "Fredoka",system-ui,sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}' +
-  '.vs button{display:block;width:100%;margin-top:6px;font:700 14px "Fredoka",system-ui,sans-serif;border:2.5px solid #121826;border-radius:999px;padding:5px 12px;cursor:pointer;box-shadow:2px 2px 0 #121826;background:#fff;color:#121826}' +
+  '.vs button{display:block;width:100%;margin-top:6px;font:700 14px "Fredoka",system-ui,sans-serif;border:2.5px solid #121826;border-radius:999px;padding:5px 12px;cursor:pointer;box-shadow:2px 2px 0 #121826;background:linear-gradient(135deg,#C99AD6,#91569D);color:#fff}' +
   '.vs button.gron{background:linear-gradient(135deg,#86CC9B,#2F9E5B);color:#fff}' +
   '.vs button.bla{background:linear-gradient(135deg,#5865F2,#3C45A5);color:#fff}' +
   '.vs button:disabled{opacity:.6;cursor:default}' +
   '.vs p{margin:4px 0 0;font-weight:700;font-size:13px}' +
-  '.vs .ok{display:inline-block;padding:3px 12px;border:2px solid #121826;border-radius:999px;background:linear-gradient(135deg,#86CC9B,#2F9E5B);color:#fff;font:700 14px "Fredoka",system-ui,sans-serif}' +
+  '.vs .vs-ok{display:inline-block;padding:3px 12px;border:2px solid #121826;border-radius:999px;background:linear-gradient(135deg,#86CC9B,#2F9E5B);color:#fff;font:700 14px "Fredoka",system-ui,sans-serif}' +
   '.klick{cursor:pointer}.klick:hover{filter:brightness(1.06)}.klick:focus-visible{outline:3px dashed #121826;outline-offset:2px}';
   var st = document.createElement("style"); st.textContent = CSS; document.head.appendChild(st);
 
@@ -121,10 +125,10 @@
     }
   }
   function rad(v, knappar, klass){
-    var sub = v.basta != null ? 'Bästa: ' + v.basta + ' p' + (v.vbasta != null ? ' · Veckan: ' + v.vbasta : '') : (klass === "in" ? "Vill bli din vän" : "");
-    return '<li class="' + (klass || "") + '"><img class="av" src="' + esc(v.avatar) + '" alt="" referrerpolicy="no-referrer" loading="lazy">' +
-      '<span class="n">' + esc(v.namn) + (sub ? '<small>' + sub + '</small>' : '') + '</span>' +
-      (v.saldo != null ? '<span class="bub" title="Bubblor">' + BI + v.saldo + '</span>' : '') + knappar + '</li>';
+    var sub = v.basta != null ? 'Bästa: ' + v.basta + ' p' + (v.vbasta != null ? ' · Veckan: ' + v.vbasta : '') : (klass === "vp-in" ? "Vill bli din vän" : "");
+    return '<li class="' + (klass || "") + '"><img class="vp-av" src="' + esc(v.avatar) + '" alt="" referrerpolicy="no-referrer" loading="lazy">' +
+      '<span class="vp-n">' + esc(v.namn) + (sub ? '<small>' + sub + '</small>' : '') + '</span>' +
+      (v.saldo != null ? '<span class="vp-bub" title="Bubblor">' + BI + v.saldo + '</span>' : '') + knappar + '</li>';
   }
   function ritaPanel(){
     if (!panel) return;
@@ -138,28 +142,28 @@
       panel.innerHTML = h; panel.querySelector("#vp-stang").addEventListener("click", stang); return;
     }
     var vanner = d.vanner.filter(function(v){ return !v.jag; }).sort(function(a, b){ return a.namn.localeCompare(b.namn, "sv"); });
-    h += '<div class="vp-kod">Din vänkod: <b>' + esc(d.vankod) + '</b><button type="button" class="k" id="vp-kopiera">Kopiera</button></div>' +
+    h += '<div class="vp-kod">Din vänkod: <b>' + esc(d.vankod) + '</b><button type="button" class="vp-k" id="vp-kopiera">Kopiera</button></div>' +
       '<form class="vp-ny" id="vp-form" autocomplete="off"><label for="vp-kod-in" class="sr" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Vänkod</label>' +
-      '<input id="vp-kod-in" maxlength="8" placeholder="Skriv en väns kod" value="' + esc(varde) + '"><button type="submit" class="k gron">Lägg till</button></form>' +
+      '<input id="vp-kod-in" maxlength="8" placeholder="Skriv en väns kod" value="' + esc(varde) + '"><button type="submit" class="vp-k gron">Lägg till</button></form>' +
       '<p class="vp-msg' + (msg.fel ? ' fel' : '') + '" role="status">' + esc(msg.t) + '</p>';
     if (d.inkommande.length){
       h += '<h3>Vill bli din vän (' + d.inkommande.length + ')</h3><ul>' + d.inkommande.map(function(v){
-        return rad(v, '<button type="button" class="k gron" data-g="van_svara" data-ja="1" data-id="' + esc(v.id) + '">Godkänn</button>' +
-          '<span class="mer"><button type="button" class="k" data-meny="in" data-id="' + esc(v.id) + '" aria-label="Fler val för ' + esc(v.namn) + '">⋯</button></span>', "in");
+        return rad(v, '<button type="button" class="vp-k gron" data-g="van_svara" data-ja="1" data-id="' + esc(v.id) + '">Godkänn</button>' +
+          '<span class="vp-mer"><button type="button" class="vp-k" data-meny="in" data-id="' + esc(v.id) + '" aria-label="Fler val för ' + esc(v.namn) + '">⋯</button></span>', "vp-in");
       }).join("") + '</ul>';
     }
     h += '<h3>Mina vänner (' + vanner.length + ')</h3>';
     h += vanner.length ? '<ul>' + vanner.map(function(v){
-      return rad(v, '<span class="mer"><button type="button" class="k" data-meny="van" data-id="' + esc(v.id) + '" aria-label="Fler val för ' + esc(v.namn) + '">⋯</button></span>');
+      return rad(v, '<span class="vp-mer"><button type="button" class="vp-k" data-meny="van" data-id="' + esc(v.id) + '" aria-label="Fler val för ' + esc(v.namn) + '">⋯</button></span>');
     }).join("") + '</ul>' : '<p class="vp-tom">Inga vänner än. Dela din vänkod, eller klicka på någon i topplistan för att lägga till dem.</p>';
     if (d.utgaende.length){
       h += '<h3>Väntar på svar (' + d.utgaende.length + ')</h3><ul>' + d.utgaende.map(function(v){
-        return rad(v, '<button type="button" class="k" data-g="van_avbryt" data-id="' + esc(v.id) + '">Ta tillbaka</button>');
+        return rad(v, '<button type="button" class="vp-k lila" data-g="van_avbryt" data-id="' + esc(v.id) + '">Ta tillbaka</button>', "vp-ut");
       }).join("") + '</ul>';
     }
     if (d.blockerade.length){
       h += '<details><summary>Blockerade (' + d.blockerade.length + ')</summary><ul>' + d.blockerade.map(function(v){
-        return rad(v, '<button type="button" class="k" data-g="van_avblockera" data-id="' + esc(v.id) + '">Avblockera</button>');
+        return rad(v, '<button type="button" class="vp-k" data-g="van_avblockera" data-id="' + esc(v.id) + '">Avblockera</button>', "vp-bl");
       }).join("") + '</ul></details>';
     }
     h += '<p class="vp-fot">Vänner ser varandras namn, bild, bubblor och bästa poäng. Det finns ingen chatt. <a href="integritet.html">Integritet</a></p></div>';
@@ -197,8 +201,8 @@
     var id = knapp.getAttribute("data-id"), typ = knapp.getAttribute("data-meny");
     var v = document.createElement("div"); v.className = "vp-val";
     v.innerHTML = typ === "in"
-      ? '<button type="button" class="k" data-x="van_svara">Neka</button><button type="button" class="k rod" data-x="van_blockera">Blockera</button>'
-      : '<button type="button" class="k" data-x="van_ta_bort">Ta bort vän</button><button type="button" class="k rod" data-x="van_blockera">Blockera</button>';
+      ? '<button type="button" class="vp-k" data-x="van_svara">Neka</button><button type="button" class="vp-k rod" data-x="van_blockera">Blockera</button>'
+      : '<button type="button" class="vp-k" data-x="van_ta_bort">Ta bort vän</button><button type="button" class="vp-k rod" data-x="van_blockera">Blockera</button>';
     knapp.parentNode.appendChild(v);
     v.querySelectorAll("[data-x]").forEach(function(b){
       b.addEventListener("click", function(e){
@@ -226,7 +230,7 @@
       if (s === "utloggad") knapp = '<button type="button" class="bla" data-a="logga">Logga in för att lägga till vänner</button>';
       else if (s === "jag") knapp = '<p>Det är du! 🫧</p>';
       else if (s === "okand") knapp = '<p>Laddar…</p>';
-      else if (s === "van") knapp = '<span class="ok">✓ Ni är vänner</span>';
+      else if (s === "van") knapp = '<span class="vs-ok">✓ Ni är vänner</span>';
       else if (s === "skickad") knapp = '<p>Vänförfrågan skickad</p><button type="button" data-a="van_avbryt">Ta tillbaka</button>';
       else if (s === "inkommande") knapp = '<button type="button" class="gron" data-a="van_svara">Godkänn vänförfrågan</button>';
       else if (s === "blockerad") knapp = '<p>Du har blockerat den här spelaren.</p>';
