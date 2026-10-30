@@ -589,8 +589,8 @@ function ritaStat(){
 function alertMsg(t){ K.toast(t); }
 
 /* ---------- LJUD ---------- */
-// Ljud per pjäs. Bara musslan (bonde) har ett ljud än så länge.
-var LJUD = { p: "ljud/schack-mussla.mp3" };
+// Ljud per pjäs: p = mussla (bonde), n = sjöhäst (springare), q = blåsfisk (drottning). Övriga pjäser är tysta än så länge.
+var LJUD = { p: "ljud/schack-mussla.mp3", n: "ljud/schack-sjohast.mp3", q: "ljud/schack-blasfisk.mp3" };
 var ljudPa = true; try{ ljudPa = localStorage.getItem("schack-ljud") !== "av"; }catch(e){}
 var ljudCache = {};
 function spelaLjud(typ){
