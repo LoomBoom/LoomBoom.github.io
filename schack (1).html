@@ -1,0 +1,826 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LoomBoom Havsschack</title>
+<meta name="description" content="Havsschack på loomboom.se: spela schack mot dina vänner med havsdjur som pjäser. Ingen klocka, partierna sparas.">
+<link rel="icon" href="bilder/logo.png">
+<link rel="stylesheet" href="fonts.css">
+<style>
+/* Havsschack: samma sjöfartsstil som resten av sidan. Brädet är havsblått, pjäserna är LoomBooms djur på ljusa (sand) och mörka (djuphavs) brickor. */
+:root{
+  color-scheme: light;
+  --sky:#CFEFF6;
+  --sky-2:#A9E1EE;
+  --paper:#ffffff;
+  --ink:#121826;
+  --brown:#4a2c12;
+  --wood:#D39A5D;
+  --wood-2:#C0834A;
+  --nail:#3A2614;
+  --yellow:#FAE052;
+  --blue:#20ACE4;
+  --mint:#73BB89;
+  --amethyst:#91569D;
+  --red:#E8553F;
+  --line:3px solid var(--ink);
+  --pirate:"Pirata One", "Fredoka", Georgia, serif;
+  --title:"Luckiest Guy", "Fredoka", "Arial Black", sans-serif;
+  --display:"Fredoka", "Trebuchet MS", system-ui, sans-serif;
+  --body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, Consolas, monospace;
+  /* brädet */
+  --ljus-ruta:#EFE4B0;
+  --mork-ruta:#B5AD86;
+}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(var(--sky), var(--sky-2) 60%, #7FC6E8) fixed;color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.5;overflow-x:hidden;min-height:100vh;
+  padding-top:env(safe-area-inset-top, 0px);padding-bottom:env(safe-area-inset-bottom, 0px)}
+a{color:inherit}
+img{max-width:100%}
+[hidden]{display:none!important}
+button{font-family:inherit}
+:focus-visible{outline:3px dashed var(--amethyst);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+.wood{background:repeating-linear-gradient(181deg, rgba(91,58,28,.14) 0 1px, transparent 1px 6px), repeating-linear-gradient(179deg, rgba(255,235,200,.12) 0 2px, transparent 2px 13px), linear-gradient(var(--wood), var(--wood-2))}
+
+.nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding-block:18px}
+.logo{display:block;width:64px;height:64px;filter:drop-shadow(3px 3px 0 var(--ink))}
+.logo img{width:100%;height:100%;display:block}
+.nav ul{display:flex;gap:8px;list-style:none;margin:0;padding:0;flex-wrap:wrap}
+.nav ul a{display:block;border:var(--line);border-radius:6px;padding:4px 14px;font-family:var(--pirate);font-size:19px;line-height:1.2;box-shadow:2px 2px 0 var(--ink);text-decoration:none}
+.nav ul a:hover,.nav ul a[aria-current]{background:var(--yellow)}
+
+header.head{text-align:center;padding-block:6px 22px}
+h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,9vw,84px);line-height:1;margin:0;color:var(--yellow);-webkit-text-stroke:.05em var(--ink);paint-order:stroke fill;text-shadow:.045em .05em 0 var(--ink)}
+.under{margin:12px auto 0;display:inline-block;background:linear-gradient(135deg,#20ACE4,#91569D);color:#fff;border:var(--line);border-radius:999px;box-shadow:3px 3px 0 var(--ink);padding:4px 18px;font:700 15px var(--display);text-shadow:1px 1px 0 rgba(18,24,38,.45)}
+
+.board-wood{position:relative;border:var(--line);border-radius:12px;margin:0 0 22px;padding:20px clamp(16px,3.5vw,28px);
+  box-shadow:inset 0 0 0 9px rgba(120,76,36,.45), inset 0 0 0 11px rgba(58,38,20,.55), 7px 7px 0 var(--ink)}
+.board-wood::before{content:"";position:absolute;inset:5px;pointer-events:none;
+  background:
+    radial-gradient(circle, var(--nail) 0 3.5px, #9b7a55 4px, transparent 5px) 0 0/12px 12px no-repeat,
+    radial-gradient(circle, var(--nail) 0 3.5px, #9b7a55 4px, transparent 5px) 100% 0/12px 12px no-repeat,
+    radial-gradient(circle, var(--nail) 0 3.5px, #9b7a55 4px, transparent 5px) 0 100%/12px 12px no-repeat,
+    radial-gradient(circle, var(--nail) 0 3.5px, #9b7a55 4px, transparent 5px) 100% 100%/12px 12px no-repeat}
+h2{font-family:var(--pirate);font-weight:400;font-size:clamp(28px,4.5vw,36px);line-height:1.1;margin:0 0 12px}
+.tom{padding:12px 14px;border:2.5px dashed rgba(18,24,38,.5);border-radius:10px;font-weight:600;font-size:15px;color:#2a1a0a;background:rgba(212,240,255,.6);margin:0}
+
+/* knappar */
+.k{display:inline-flex;align-items:center;justify-content:center;gap:6px;font:700 15px var(--display);border:2.5px solid var(--ink);border-radius:999px;padding:6px 16px;cursor:pointer;box-shadow:2px 2px 0 var(--ink);color:var(--ink);
+  background:linear-gradient(135deg,#FFF3A6,#FAE052);white-space:nowrap;text-decoration:none}
+.k:hover{filter:brightness(1.06);transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--ink)}
+.k:active{transform:translate(1px,1px);box-shadow:1px 1px 0 var(--ink)}
+.k:disabled{opacity:.55;cursor:default;transform:none;box-shadow:2px 2px 0 var(--ink)}
+.k.gron{background:linear-gradient(135deg,#86CC9B,#2F9E5B);color:#fff;text-shadow:1px 1px 0 rgba(18,24,38,.4)}
+.k.rod{background:linear-gradient(135deg,#FF8A73,#E8553F);color:#fff;text-shadow:1px 1px 0 rgba(18,24,38,.4)}
+.k.lila{background:linear-gradient(135deg,#C99AD6,#91569D);color:#fff;text-shadow:1px 1px 0 rgba(18,24,38,.4)}
+.k.bla{background:linear-gradient(135deg,#5865F2,#3C45A5);color:#fff;text-shadow:1px 1px 0 rgba(18,24,38,.4)}
+.k.stor{font-size:20px;padding:8px 26px}
+.msg{min-height:1.4em;margin:10px 0 0;font-weight:700;font-size:15px}
+.msg.fel{color:#9B1C1C}
+
+/* pjäser: LoomBooms målade djur, ljus och mörk version */
+.pj{position:relative;display:grid;place-items:center;width:100%;aspect-ratio:1}
+.pj img{width:88%;height:88%;object-fit:contain;filter:drop-shadow(0 3px 0 rgba(18,24,38,.28));pointer-events:none;user-select:none;-webkit-user-drag:none}
+.pj.b img{transform:scaleX(-1)}
+.pj.b.t-q img{transform:scaleX(-1) translateY(-6%)}
+/* storlek per pjäs: hajen är bred, musslan lite mindre, sjöhästen får plats med svansen */
+.pj.t-k img{width:100%;height:100%}
+.pj.t-b img{width:96%;height:96%}
+.pj.t-q img{width:80%;height:80%;transform:translateY(-6%)}
+.pj.t-p img{width:70%;height:70%}
+.pj.t-n img{width:78%;height:78%}
+
+/* ---------- MENY ---------- */
+.ny-grid{display:grid;gap:14px}
+.vanval{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:0;padding:0}
+.vanval label{display:inline-flex;align-items:center;gap:8px;padding:4px 14px 4px 4px;border:2.5px solid var(--ink);border-radius:999px;background:linear-gradient(135deg,#D4F0FF,#9BD7F5);box-shadow:2px 2px 0 var(--ink);cursor:pointer;font:700 15px var(--display)}
+.vanval input{position:absolute;opacity:0;pointer-events:none}
+.vanval img{width:32px;height:32px;border-radius:50%;border:2px solid var(--ink);background:#fff;object-fit:cover}
+.vanval input:checked + label{background:linear-gradient(135deg,#FFF3A6,#FAE052);transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--ink)}
+.vanval input:focus-visible + label{outline:3px dashed var(--amethyst);outline-offset:3px}
+.fargval{display:flex;flex-wrap:wrap;gap:8px}
+.fargval input{position:absolute;opacity:0;pointer-events:none}
+.fargval label{display:inline-flex;align-items:center;gap:8px;padding:4px 16px 4px 4px;border:2.5px solid var(--ink);border-radius:999px;background:rgba(255,248,235,.9);box-shadow:2px 2px 0 var(--ink);cursor:pointer;font:700 15px var(--display)}
+.fargval .pj{width:36px}
+.fargval .slump{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;border:2.5px solid var(--ink);background:conic-gradient(#FCE7A0 0 50%,#6D4BAF 50% 100%);font-size:18px}
+.fargval input:checked + label{background:linear-gradient(135deg,#FFF3A6,#FAE052);transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--ink)}
+.fargval input:focus-visible + label{outline:3px dashed var(--amethyst);outline-offset:3px}
+.etikett{display:block;margin:0 0 6px;font:700 13px var(--display);text-transform:uppercase;letter-spacing:.06em;color:#2a1a0a}
+
+.lista{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.rad{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:8px 10px;border:2.5px solid var(--ink);border-radius:12px;box-shadow:2px 2px 0 var(--ink);background:linear-gradient(135deg,#D4F0FF,#9BD7F5)}
+.rad.in{background:linear-gradient(135deg,#FFF3A6,#FAE052)}
+.rad.ut{background:linear-gradient(135deg,#F0E0F7,#D3B3E3)}
+.rad .av{width:40px;height:40px;border-radius:50%;border:2px solid var(--ink);background:#fff;object-fit:cover;flex:none}
+.rad .txt{flex:1 1 160px;min-width:0}
+.rad .txt b{display:block;font:700 17px var(--display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rad .txt small{display:block;font-weight:600;font-size:13px;color:#2a1a0a}
+.rad .knappar{display:flex;gap:8px;flex-wrap:wrap}
+
+.partier{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;list-style:none;margin:0;padding:0}
+.kort{display:grid;grid-template-columns:96px minmax(0,1fr);gap:12px;align-items:center;padding:10px;border:2.5px solid var(--ink);border-radius:12px;box-shadow:3px 3px 0 var(--ink);
+  background:linear-gradient(135deg,#D4F0FF,#9BD7F5);text-decoration:none;color:var(--ink);transition:transform .12s, box-shadow .12s}
+.kort:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink)}
+.kort.min-tur{background:linear-gradient(135deg,#FFF3A6,#FAE052)}
+.kort.slut{background:linear-gradient(135deg,#EFE6DA,#D9C9B4)}
+.kort .namn{display:flex;align-items:center;gap:8px;font:700 16px var(--display);min-width:0}
+.kort .namn img{width:26px;height:26px;border-radius:50%;border:2px solid var(--ink);background:#fff;object-fit:cover;flex:none}
+.kort .namn span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.kort small{display:block;font-weight:600;font-size:13px;color:#2a1a0a;margin-top:2px}
+.lapp{display:inline-block;margin-top:6px;padding:1px 10px;border:2px solid var(--ink);border-radius:999px;font:700 13px var(--display);background:#fff}
+.lapp.tur{background:linear-gradient(135deg,#FF8A73,#E8553F);color:#fff;text-shadow:1px 1px 0 rgba(18,24,38,.4)}
+.lapp.vinst{background:linear-gradient(135deg,#86CC9B,#2F9E5B);color:#fff}
+.lapp.forlust{background:linear-gradient(135deg,#FF8A73,#E8553F);color:#fff}
+.lapp.remi{background:linear-gradient(135deg,#C99AD6,#91569D);color:#fff}
+.mini{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));grid-template-rows:repeat(8,minmax(0,1fr));width:96px;aspect-ratio:1;border:2px solid var(--ink);border-radius:4px;overflow:hidden}
+.mini i{display:block;background:var(--ljus-ruta);position:relative}
+.mini i.m{background:var(--mork-ruta)}
+.mini i b{position:absolute;inset:16%;border-radius:50%;border:1px solid var(--ink)}
+.mini i b.w{background:#F2A65A}.mini i b.b{background:#6D4BAF}
+.mini i b.kung{inset:6%;box-shadow:0 0 0 1.5px #F5B83D}
+
+.stat{width:100%;border-collapse:separate;border-spacing:0;border:2.5px solid var(--ink);border-radius:12px;overflow:hidden;box-shadow:3px 3px 0 var(--ink);background:rgba(212,240,255,.92);font-size:15px}
+.stat th,.stat td{padding:8px 10px;text-align:center;border-top:2px dashed rgba(18,24,38,.25);white-space:nowrap}
+.stat thead th{background:var(--ink);color:var(--yellow);font:600 13px var(--display);text-transform:uppercase;letter-spacing:.05em;border-top:0}
+.stat td:first-child,.stat th:first-child{text-align:left}
+.stat td:first-child{display:flex;align-items:center;gap:8px;font:700 15px var(--display)}
+.stat td:first-child img{width:28px;height:28px;border-radius:50%;border:2px solid var(--ink);background:#fff;object-fit:cover}
+.stat .v{color:#1F7A3F;font-weight:800}.stat .f{color:#B53A28;font-weight:800}.stat .r{color:#6D3E7E;font-weight:800}
+.stat tfoot td{background:linear-gradient(135deg,#FFF3A6,#FAE052);font-weight:800;border-top:2.5px solid var(--ink)}
+.stat-wrap{overflow-x:auto}
+.nasta{display:flex;align-items:center;gap:10px;margin:0;padding:6px 12px 6px 6px;width:fit-content;max-width:100%;border:2.5px solid var(--ink);border-radius:12px;box-shadow:2px 2px 0 var(--ink);background:linear-gradient(135deg,#D4F0FF,#9BD7F5);font-weight:600;font-size:15px}
+.nasta .pj{width:42px;flex:none}
+.stat-flikar{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.stat-flikar button{display:inline-flex;align-items:center;gap:6px;font:700 14px var(--display);border:2.5px solid var(--ink);border-radius:999px;padding:4px 14px;background:rgba(255,248,235,.9);box-shadow:2px 2px 0 var(--ink);cursor:pointer;color:var(--ink)}
+.stat-flikar button img{width:24px;height:24px;border-radius:50%;border:2px solid var(--ink);background:#fff;object-fit:cover;margin-left:-8px}
+.stat-flikar button[aria-selected="true"]{background:var(--ink);color:var(--yellow)}
+.stat-rutor{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+@media (max-width:820px){.stat-rutor{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.sr{display:grid;align-content:center;justify-items:center;text-align:center;gap:2px;padding:10px 6px;border:2.5px solid var(--ink);border-radius:12px;box-shadow:3px 3px 0 var(--ink);min-height:86px}
+.sr b{font:400 30px/1 var(--title);letter-spacing:.02em;color:var(--ink)}
+.sr span{font:700 13px/1.2 var(--display);color:#2a1a0a}
+.sr.gra{background:linear-gradient(135deg,#E3E7EC,#B9C2CC)}
+.sr.gron{background:linear-gradient(135deg,#C9EBC0,#73BB89)}
+.sr.rod{background:linear-gradient(135deg,#FFC2B8,#FF8A73)}
+.sr.lila{background:linear-gradient(135deg,#E6D4F5,#C99AD6)}
+.sr.gul{background:linear-gradient(135deg,#FFF3A6,#FAE052)}
+.sr.ljus{background:var(--ljus-ruta) url(bilder/schack/sand-ljus.png) center/cover}
+.sr.mork{background:var(--mork-ruta) url(bilder/schack/sand-mork.png) center/cover}
+.sr.eld{background:linear-gradient(135deg,#FFD08A,#F08A3C 60%,#E8553F)}
+.sr.eld b,.sr.eld span{color:#fff;text-shadow:1px 1px 0 rgba(18,24,38,.5)}
+.sr.eld b{-webkit-text-stroke:1px var(--ink);paint-order:stroke fill;color:#FAE052}
+.stat .sm{display:none}
+@media (max-width:560px){.stat .lg{display:none}.stat .sm{display:inline}.stat th,.stat td{padding:7px 6px}.stat td:first-child{max-width:130px}.stat td:first-child{overflow:hidden;text-overflow:ellipsis}}
+.procent{display:inline-block;min-width:3.6ch;padding:0 8px;border:2px solid var(--ink);border-radius:999px;background:#fff;font:700 13px var(--display)}
+
+/* ---------- PARTI ---------- */
+/* Under ett parti: inga knappar ovanför brädet. Meny till vänster, brädet i mitten, info till höger. */
+body.i-parti .wrap{max-width:none}
+body.i-parti header.head,body.i-parti .nav,body.i-parti footer{display:none}
+.spel{display:grid;grid-template-columns:minmax(220px,1fr) auto minmax(280px,1fr);gap:24px;align-items:center;min-height:100svh;padding-block:14px}
+.vanster{justify-self:center;width:230px;display:grid;gap:12px;align-content:center}
+.vanster .k{width:100%}
+.vanster .atgarder{display:grid;gap:10px}
+.vanster .atgarder .k{width:100%}
+.spel-logo{display:block;width:90px;margin:0 auto 4px;filter:drop-shadow(3px 3px 0 var(--ink))}
+.spel-logo img{display:block;width:100%}
+.ljudknapp{background:linear-gradient(135deg,#9FF3F5,#22C3E6)}
+.ljudknapp[aria-pressed="false"]{background:linear-gradient(135deg,#E3E7EC,#B9C2CC)}
+.integ-l{justify-self:center;font:600 13px var(--body);color:#2c3a4a}
+.sida{justify-self:center;width:100%;max-width:300px}
+.brade-ram{width:min(calc(100svh - 28px), calc(100vw - 640px));min-width:320px}
+@media (max-width:1000px){
+  .spel{grid-template-columns:minmax(0,1fr);min-height:0;align-items:start}
+  .vanster{justify-self:stretch;width:auto;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));align-items:start}
+  .spel-logo{display:none}
+  .integ-l{display:none}
+  .vanster .atgarder{grid-column:1/-1;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+  .brade-ram{width:min(100%, calc(100svh - 28px));justify-self:center;min-width:0}
+  .sida{justify-self:stretch;width:auto;max-width:none}
+  .spel{gap:14px}
+  .brade-ram{order:-2}.sida{order:-1}
+}
+.vanster > :empty{display:none}
+.brade-ram{border:var(--line);border-radius:14px;padding:10px;box-shadow:6px 6px 0 var(--ink);background:linear-gradient(135deg,#20ACE4,#1E5FA8);box-sizing:border-box}
+.brade{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));grid-template-rows:repeat(8,minmax(0,1fr));aspect-ratio:1;border:3px solid var(--ink);border-radius:6px;overflow:hidden;touch-action:manipulation;user-select:none}
+.ruta{position:relative;display:grid;place-items:center;border:0;padding:0;margin:0;cursor:default;min-width:0;min-height:0;
+  background:var(--ljus-ruta) url(bilder/schack/sand-ljus.png) center/cover}
+.ruta.m{background:var(--mork-ruta) url(bilder/schack/sand-mork.png) center/cover}
+.ruta::before{content:"";position:absolute;inset:0;pointer-events:none}
+.ruta.kan{cursor:pointer}
+.ruta.sist::before{background:rgba(250,224,82,.5)}
+.ruta.vald::before{background:rgba(255,190,30,.62);box-shadow:inset 0 0 0 3px rgba(18,24,38,.55)}
+.ruta.schack::before{background:radial-gradient(circle,rgba(255,80,60,.85) 0 35%,rgba(199,48,30,.55) 75%)}
+.ruta .pj{width:96%;z-index:1}
+.ruta .mal{position:absolute;z-index:2;width:28%;height:28%;border-radius:50%;background:rgba(32,172,228,.75);border:2px solid rgba(18,24,38,.6);pointer-events:none}
+.ruta .mal.slag{width:92%;height:92%;background:none;border:5px solid rgba(232,85,63,.85)}
+.ruta .ko{position:absolute;z-index:2;font:700 12px var(--display);color:rgba(58,38,20,.75);pointer-events:none}
+.ruta .ko.f{right:3px;bottom:1px}.ruta .ko.r{left:3px;top:1px}
+.ruta:focus-visible{outline:3px dashed var(--ink);outline-offset:-4px;z-index:2}
+
+.sida{display:grid;gap:14px}
+.spelare{display:flex;align-items:center;gap:10px;padding:8px 10px;border:2.5px solid var(--ink);border-radius:12px;box-shadow:2px 2px 0 var(--ink);background:var(--ljus-ruta) url(bilder/schack/sand-ljus.png) center/cover}
+.spelare.b{background:var(--mork-ruta) url(bilder/schack/sand-mork.png) center/cover}
+.spelare.tur{box-shadow:0 0 0 4px #FAE052, 0 0 18px 6px rgba(250,224,82,.75), 3px 3px 0 var(--ink)}
+.spelare.tur b::after{content:"  · tur";color:#B53A28;font-size:14px}
+.spelare .av{width:40px;height:40px;border-radius:50%;border:2px solid var(--ink);background:#fff;object-fit:cover;flex:none}
+.spelare .txt{flex:1;min-width:0}
+.spelare b{display:block;font:700 17px var(--display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.spelare small{font-weight:600;font-size:13px;color:#2a1a0a}
+.spelare .pj{width:40px;flex:none}
+.tagna{display:flex;flex-wrap:wrap;gap:1px;margin-top:2px;min-height:18px}
+.tagna img{width:22px;height:22px;object-fit:contain}
+.status{padding:10px 14px;border:2.5px solid var(--ink);border-radius:12px;box-shadow:3px 3px 0 var(--ink);font:700 17px var(--display);text-align:center;background:linear-gradient(135deg,#D4F0FF,#9BD7F5)}
+.status.min{background:linear-gradient(135deg,#FF8A73,#E8553F);color:#fff;text-shadow:1px 1px 0 rgba(18,24,38,.45)}
+.status.vinst{background:linear-gradient(135deg,#86CC9B,#2F9E5B);color:#fff;text-shadow:1px 1px 0 rgba(18,24,38,.45)}
+.status.forlust{background:linear-gradient(135deg,#C99AD6,#6D3E7E);color:#fff;text-shadow:1px 1px 0 rgba(18,24,38,.45)}
+.status.remi{background:linear-gradient(135deg,#FFF3A6,#F5B83D)}
+.status small{display:block;font:600 13px var(--body)}
+.remi-ruta{padding:10px 12px;border:2.5px solid var(--ink);border-radius:12px;box-shadow:2px 2px 0 var(--ink);background:linear-gradient(135deg,#F0E0F7,#D3B3E3);font-weight:700}
+.remi-ruta .knappar{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.drag-lista{max-height:240px;overflow:auto;margin:0;padding:6px;border:2.5px solid var(--ink);border-radius:12px;background:rgba(255,248,235,.92);box-shadow:2px 2px 0 var(--ink);
+  display:grid;grid-template-columns:2.6ch 1fr 1fr;gap:2px 8px;font:600 14px var(--mono);list-style:none}
+.drag-lista li{display:contents}
+.drag-lista .nr{color:#7a5a3a;text-align:right}
+.drag-lista span{display:inline-flex;align-items:center;gap:2px;padding:1px 4px;border-radius:5px;white-space:nowrap}
+.drag-lista span.sista{background:#FFE98A}
+.drag-lista img{width:18px;height:18px;object-fit:contain}
+.drag-tom{grid-column:1/-1;font:600 13px var(--body);color:#2a1a0a;padding:4px}
+.atgarder{display:flex;gap:8px;flex-wrap:wrap}
+
+/* promotionsval */
+.promo-bak{position:fixed;inset:0;z-index:80;display:grid;place-items:center;padding:16px;background:rgba(18,24,38,.55)}
+.promo{border:var(--line);border-radius:14px;box-shadow:6px 6px 0 var(--ink);padding:16px 18px;text-align:center}
+.promo p{margin:0 0 10px;font:700 18px var(--display)}
+.promo .val{display:flex;gap:10px}
+.promo button{width:72px;height:72px;display:grid;place-items:center;border:2.5px solid var(--ink);border-radius:12px;background:linear-gradient(135deg,#D4F0FF,#9BD7F5);cursor:pointer;box-shadow:2px 2px 0 var(--ink);padding:4px}
+.promo button:hover{background:linear-gradient(135deg,#FFF3A6,#FAE052)}
+.promo button .pj{width:100%}
+.promo small{display:block;margin-top:8px;font-weight:600;font-size:13px}
+
+/* bekräfta ge upp */
+.fraga{padding:10px 12px;border:2.5px solid var(--ink);border-radius:12px;background:linear-gradient(135deg,#FFE3DE,#FFC2B8);box-shadow:2px 2px 0 var(--ink);font-weight:700}
+.fraga .knappar{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+
+.legend{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:14px 0 0;padding:0;list-style:none}
+.legend li{display:flex;align-items:center;gap:8px;padding:5px 10px 5px 6px;border:2.5px solid var(--ink);border-radius:12px;box-shadow:2px 2px 0 var(--ink);font:700 14px/1.15 var(--display);color:var(--ink)}
+.legend li small{display:block;font:600 12px var(--body);color:#2a1a0a}
+.legend .pj{width:44px;flex:none}
+.legend li:nth-child(1){background:linear-gradient(135deg,#E3E7EC,#B9C2CC)}
+.legend li:nth-child(2){background:linear-gradient(135deg,#FFF3A6,#FAE052)}
+.legend li:nth-child(3){background:linear-gradient(135deg,#FFC2B8,#FF8A73)}
+.legend li:nth-child(4){background:linear-gradient(135deg,#C9EBC0,#86CC9B)}
+.legend li:nth-child(5){background:linear-gradient(135deg,#FFD9A8,#F5B064)}
+.legend li:nth-child(6){background:linear-gradient(135deg,#FFE3CC,#F2C29A)}
+@media (max-width:1000px){.legend{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}}
+
+footer{text-align:center;padding-block:4px 48px}
+footer a.wood{display:inline-block;border:var(--line);border-radius:6px;padding:6px 20px;font-family:var(--pirate);font-size:22px;box-shadow:3px 3px 0 var(--ink);text-decoration:none}
+footer a.wood:hover{background:var(--yellow)}
+footer .integ{display:block;width:fit-content;margin:14px auto 0;font:600 14px var(--body);color:#2c3a4a}
+@media (max-width:520px){
+  .kort{grid-template-columns:80px minmax(0,1fr)}.mini{width:80px}
+  .ruta .ko{font-size:9px}
+  .brade-ram{padding:6px;border-radius:10px}
+  .promo button{width:60px;height:60px}
+}
+@media (prefers-reduced-motion:reduce){.k,.kort{transition:none}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav class="nav">
+    <a class="logo" href="./" aria-label="Till startsidan"><img src="bilder/logo.png" alt="LoomBoom logga"></a>
+    <ul>
+      <li><a class="wood" href="konst.html">Konstgalleri</a></li>
+      <li><a class="wood" href="installningar.html">Inställningar</a></li>
+      <li><a class="wood" href="statistik.html">Statistik</a></li>
+      <li><a class="wood" href="fiskeskytte.html">Fiskeskytte</a></li>
+      <li><a class="wood" href="schack.html" aria-current="page">Havsschack</a></li>
+    </ul>
+  </nav>
+
+  <header class="head">
+    <h1>Havsschack</h1>
+    <span class="under">Spela mot dina vänner · ingen klocka · partierna sparas</span>
+  </header>
+
+  <!-- Inte inloggad -->
+  <section class="board-wood wood" id="utloggad" hidden>
+    <h2>Logga in för att spela</h2>
+    <p class="tom">Havsschack spelas mot dina vänner här på sidan. Logga in med Discord, lägg till en vän med deras vänkod och bjud in till ett parti.</p>
+    <p style="margin:14px 0 0"><button type="button" class="k bla stor" id="logga-in">Logga in med Discord</button></p>
+    <ul class="legend" id="legend1"></ul>
+  </section>
+
+  <!-- Menyn -->
+  <main id="meny" hidden>
+    <section class="board-wood wood" aria-labelledby="ny-t">
+      <h2 id="ny-t">Nytt parti</h2>
+      <div id="ny-innehall"></div>
+      <p class="msg" id="ny-msg" role="status"></p>
+    </section>
+
+    <section class="board-wood wood" id="inbj-sek" aria-labelledby="inbj-t" hidden>
+      <h2 id="inbj-t">Inbjudningar</h2>
+      <ul class="lista" id="inbj-lista"></ul>
+    </section>
+
+    <section class="board-wood wood" aria-labelledby="pag-t">
+      <h2 id="pag-t">Dina partier</h2>
+      <ul class="partier" id="pag-lista"><li class="tom">Laddar…</li></ul>
+    </section>
+
+    <section class="board-wood wood" aria-labelledby="stat-t">
+      <h2 id="stat-t">Statistik mot vänner</h2>
+      <div class="stat-wrap" id="stat"></div>
+    </section>
+
+    <section class="board-wood wood" id="slut-sek" aria-labelledby="slut-t" hidden>
+      <h2 id="slut-t">Avslutade partier</h2>
+      <ul class="partier" id="slut-lista"></ul>
+    </section>
+  </main>
+
+  <!-- Ett parti -->
+  <main id="parti" hidden>
+    <div class="spel">
+      <aside class="vanster" aria-label="Meny">
+        <a class="spel-logo" href="./" aria-label="Till startsidan"><img src="bilder/logo.png" alt="LoomBoom logga"></a>
+        <a class="k tillbaka" href="#">← Till schackmenyn</a>
+        <div class="atgarder" id="atgarder"></div>
+        <div id="fraga-plats"></div>
+        <p class="msg" id="parti-msg" role="status" style="margin:0"></p>
+        <button type="button" class="k ljudknapp" id="ljud-knapp" aria-pressed="true">🔊 Ljud på</button>
+        <a class="integ-l" href="integritet.html">Integritet</a>
+      </aside>
+      <div class="brade-ram"><div class="brade" id="brade" role="grid" aria-label="Schackbräde"></div></div>
+      <div class="sida">
+        <div class="spelare" id="sp-topp"></div>
+        <div class="status" id="status" role="status"></div>
+        <div id="remi-plats"></div>
+        <div class="spelare" id="sp-botten"></div>
+        <div>
+          <span class="etikett">Drag</span>
+          <ol class="drag-lista" id="drag-lista"></ol>
+        </div>
+        <ul class="legend" id="legend2"></ul>
+      </div>
+    </div>
+  </main>
+
+  <footer><a class="wood" href="./">← Tillbaka till startsidan</a><a class="integ" href="integritet.html">Integritet och dina uppgifter</a></footer>
+</div>
+
+<script src="konto.js"></script>
+<script type="module">
+import { Chess } from "./chess.js";
+
+/* ---------- Pjäserna: LoomBooms djur ---------- */
+var PJAS = {
+  k: { img: "kung",    namn: "Kung (hammarhaj)" },
+  q: { img: "dam",     namn: "Drottning (blåsfisk)" },
+  r: { img: "krabba",  namn: "Torn (krabba)" },
+  b: { img: "lopare",  namn: "Löpare (ål)" },
+  n: { img: "sjohast", namn: "Springare (sjöhäst)" },
+  p: { img: "mussla",  namn: "Bonde (mussla)" }
+};
+// bilder/schack/<djur>-ljus.png och <djur>-mork.png
+function bild(farg, typ){ return "bilder/schack/" + PJAS[typ].img + (farg === "w" ? "-ljus" : "-mork") + ".png"; }
+var FARG = { w: "ljus", b: "mörk" };
+function pjHTML(farg, typ){ return '<span class="pj ' + farg + " t-" + typ + (typ === "k" ? " kung" : "") + '"><img src="' + bild(farg, typ) + '" alt=""></span>'; }
+function esc(t){ return String(t == null ? "" : t).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+function sedan(t){
+  var s = Math.max(0, (Date.now() - new Date(t).getTime()) / 1000);
+  if (s < 60) return "nyss"; if (s < 3600) return "för " + Math.floor(s/60) + " min sedan";
+  if (s < 86400) return "för " + Math.floor(s/3600) + " h sedan"; var d = Math.floor(s/86400); return "för " + d + (d === 1 ? " dag" : " dagar") + " sedan";
+}
+var ANLEDNING = { schackmatt: "Schackmatt", patt: "Patt", gav_upp: "Gav upp", remi_overens: "Remi enligt överenskommelse", upprepning: "Samma ställning tre gånger", femtio_drag: "50 drag utan slag eller bondedrag", for_lite_material: "För lite pjäser kvar för att vinna" };
+
+["legend1", "legend2"].forEach(function(id){
+  document.getElementById(id).innerHTML = ["k","q","r","b","n","p"].map(function(t){ var n = PJAS[t].namn.match(/^(.*?) \((.*)\)$/); return '<li>' + pjHTML("w", t) + '<span>' + n[1] + '<small>' + n[2] + '</small></span></li>'; }).join("");
+});
+
+var K = window.loomboomKonto;
+var el = function(id){ return document.getElementById(id); };
+document.getElementById("logga-in").addEventListener("click", function(){ K && K.loggaIn(); });
+
+function api(data){
+  return K.api(data).then(function(d){ if (d.fel && !d.ok) { var e = new Error(d.fel); e.d = d; throw e; } return d; });
+}
+
+/* ---------- Sidval (meny eller parti) ---------- */
+var vy = null;
+function route(){
+  var u = K && K.anvandare();
+  var m = location.hash.match(/parti=([0-9a-f-]{36})/);
+  el("utloggad").hidden = !!u; el("meny").hidden = !u || !!m; el("parti").hidden = !u || !m;
+  stoppaPoll();
+  document.body.classList.toggle("i-parti", !!(u && m));
+  if (!u){ vy = null; return; }
+  if (m){ vy = "parti"; oppnaParti(m[1]); }
+  else { vy = "meny"; laddaMeny(); }
+}
+window.addEventListener("hashchange", route);
+window.addEventListener("loomboom-konto", function(){
+  var inloggad = !!(K && K.anvandare());
+  if (inloggad !== (vy !== null)) route();
+});
+
+/* ---------- Uppdatering ---------- */
+var pollTimer = null;
+function stoppaPoll(){ if (pollTimer){ clearTimeout(pollTimer); pollTimer = null; } }
+function poll(fn, ms){ stoppaPoll(); pollTimer = setTimeout(function(){ if (document.hidden){ poll(fn, ms); return; } fn(); }, ms); }
+document.addEventListener("visibilitychange", function(){ if (!document.hidden && vy){ if (vy === "meny") laddaMeny(true); else if (parti) hamtaParti(true); } });
+
+/* ---------- MENYN ---------- */
+var menyData = null, valdVan = null, statVal = "alla";
+function vanner(){ var V = window.loomboomVanner, d = V && V.data(); return d ? d.vanner.filter(function(v){ return !v.jag; }) : null; }
+function laddaMeny(tyst){
+  if (!tyst && !menyData) el("pag-lista").innerHTML = '<li class="tom">Laddar…</li>';
+  api({ typ: "schack_lista" }).then(function(d){ menyData = d; ritaMeny(); }, function(e){ el("pag-lista").innerHTML = '<li class="tom">' + esc(e.message === "utloggad" ? "Du är utloggad." : "Partierna gick inte att ladda just nu.") + '</li>'; })
+    .then(function(){ if (vy === "meny") poll(function(){ laddaMeny(true); }, 20000); });
+  if (window.loomboomVanner) window.loomboomVanner.hamta();
+}
+window.addEventListener("loomboom-vanner-redo", function(){ window.loomboomVanner.vidAndring(function(){ if (vy === "meny") ritaMeny(); }); });
+if (window.loomboomVanner) window.loomboomVanner.vidAndring(function(){ if (vy === "meny") ritaMeny(); });
+
+function ritaNy(){
+  var v = vanner(), h = "";
+  if (!v){ el("ny-innehall").innerHTML = '<p class="tom">Laddar dina vänner…</p>'; return; }
+  if (!v.length){
+    el("ny-innehall").innerHTML = '<p class="tom">Du kan bara spela mot dina vänner. Lägg till en vän med deras vänkod först.</p><p style="margin:12px 0 0"><button type="button" class="k gron" id="till-vanner">Lägg till vänner</button></p>';
+    el("till-vanner").addEventListener("click", function(){ window.loomboomVanner && window.loomboomVanner.oppna(); });
+    return;
+  }
+  if (!valdVan || !v.some(function(x){ return x.id === valdVan; })) valdVan = v[0].id;
+  h += '<div class="ny-grid"><div><span class="etikett" id="vv-t">Välj en vän</span><ul class="vanval" role="radiogroup" aria-labelledby="vv-t">' + v.map(function(x, i){
+    return '<li><input type="radio" name="van" id="van-' + i + '" value="' + esc(x.id) + '"' + (x.id === valdVan ? " checked" : "") + '><label for="van-' + i + '"><img src="' + esc(x.avatar) + '" alt="" referrerpolicy="no-referrer">' + esc(x.namn) + '</label></li>';
+  }).join("") + '</ul></div>';
+  h += '<p class="nasta" id="nasta" role="status"></p>';
+  h += '<div><button type="button" class="k gron stor" id="bjud">Bjud in till parti</button></div></div>';
+  el("ny-innehall").innerHTML = h;
+  el("ny-innehall").querySelectorAll('input[name="van"]').forEach(function(i){ i.addEventListener("change", function(){ valdVan = i.value; visaNasta(); }); });
+  visaNasta();
+  el("bjud").addEventListener("click", function(){
+    var b = this; b.disabled = true; visaMsg("ny-msg", "");
+    api({ typ: "schack_bjud", id: valdVan }).then(function(d){
+      visaMsg("ny-msg", "Inbjudan skickad! Partiet börjar när din vän tackar ja.");
+      laddaMeny(true);
+    }, function(e){ visaMsg("ny-msg", e.message, true); }).then(function(){ b.disabled = false; });
+  });
+}
+// Ni byter sida varje parti. Första gången börjar den som bjuder in.
+function visaNasta(){
+  var n = el("nasta"); if (!n) return;
+  // Bara ett parti eller en inbjudan åt gången mot samma vän
+  var igang = menyData && menyData.partier.find(function(p){ return p.motstandare.id === valdVan && (p.status === "pagar" || p.status === "inbjudan"); });
+  var bjud = el("bjud"); if (bjud) bjud.disabled = !!igang;
+  if (igang){
+    n.innerHTML = '<span>' + (igang.status === "pagar" ? "Ni har redan ett parti igång. Spela klart det innan ni börjar ett nytt." : "Det finns redan en inbjudan mellan er. Vänta på svar eller ta tillbaka den först.") + '</span>';
+    return;
+  }
+  var farg = (menyData && menyData.nasta && menyData.nasta[valdVan]) || "w";
+  n.innerHTML = pjHTML(farg, "k") + '<span>Ni byter sida varje parti. Nästa parti blir du <b>' + (farg === "w" ? "ljus (vit) och börjar" : "mörk (svart)") + '</b>.</span>';
+}
+function visaMsg(id, t, fel){ var m = el(id); m.textContent = t; m.className = "msg" + (fel ? " fel" : ""); }
+
+function miniHTML(fen, jag){
+  var rader = fen.split(" ")[0].split("/"), celler = [];
+  rader.forEach(function(r, ri){
+    var ci = 0;
+    for (var ch of r){
+      if (/\d/.test(ch)){ for (var n = 0; n < +ch; n++){ celler.push([ri, ci, null]); ci++; } }
+      else { celler.push([ri, ci, ch]); ci++; }
+    }
+  });
+  if (jag === "b") celler.reverse();
+  return '<span class="mini" aria-hidden="true">' + celler.map(function(c){
+    var m = (c[0] + c[1]) % 2 === 1, p = c[2];
+    return '<i' + (m ? ' class="m"' : '') + '>' + (p ? '<b class="' + (p === p.toUpperCase() ? "w" : "b") + (p.toLowerCase() === "k" ? " kung" : "") + '"></b>' : '') + '</i>';
+  }).join("") + '</span>';
+}
+function ritaMeny(){
+  ritaNy();
+  if (!menyData) return;
+  var P = menyData.partier, u = K.anvandare();
+  // Inbjudningar
+  var inb = P.filter(function(p){ return p.status === "inbjudan"; });
+  el("inbj-sek").hidden = !inb.length;
+  el("inbj-lista").innerHTML = inb.map(function(p){
+    var till = p.inbjuden_av !== u.id, sida = p.jag === "w" ? "ljus" : "mörk";
+    return '<li class="rad ' + (till ? "in" : "ut") + '"><img class="av" src="' + esc(p.motstandare.avatar) + '" alt="" referrerpolicy="no-referrer">' +
+      '<span class="txt"><b>' + esc(p.motstandare.namn) + '</b><small>' + (till ? "Vill spela schack med dig. Du blir " + sida + "." : "Väntar på svar · du är " + sida) + ' · ' + sedan(p.uppdaterad) + '</small></span>' +
+      '<span class="knappar">' + (till ? '<button type="button" class="k gron" data-a="ja" data-id="' + p.id + '">Spela!</button><button type="button" class="k rod" data-a="nej" data-id="' + p.id + '">Neka</button>'
+        : '<button type="button" class="k lila" data-a="avbryt" data-id="' + p.id + '">Ta tillbaka</button>') + '</span></li>';
+  }).join("");
+  el("inbj-lista").querySelectorAll("[data-a]").forEach(function(b){
+    b.addEventListener("click", function(){
+      var a = b.getAttribute("data-a"), id = b.getAttribute("data-id"); b.disabled = true;
+      api(a === "avbryt" ? { typ: "schack_avbryt", id: id } : { typ: "schack_svara", id: id, ja: a === "ja" }).then(function(d){
+        if (a === "ja") location.hash = "parti=" + id; else laddaMeny(true);
+      }, function(e){ b.disabled = false; alertMsg(e.message); });
+    });
+  });
+  // Pågående
+  var pag = P.filter(function(p){ return p.status === "pagar"; }).sort(function(a, b){
+    var ta = a.tur === a.jag || a.remi_erbjuden_av === a.motstandare.id, tb = b.tur === b.jag || b.remi_erbjuden_av === b.motstandare.id;
+    return (tb - ta) || (new Date(b.uppdaterad) - new Date(a.uppdaterad));
+  });
+  el("pag-lista").innerHTML = pag.length ? pag.map(kortHTML).join("") : '<li class="tom">Inga partier igång. Bjud in en vän ovanför!</li>';
+  var slut = P.filter(function(p){ return p.status === "slut"; });
+  el("slut-sek").hidden = !slut.length;
+  el("slut-lista").innerHTML = slut.map(kortHTML).join("");
+  ritaStat();
+}
+function kortHTML(p){
+  var min = p.status === "pagar" && p.tur === p.jag, remi = p.status === "pagar" && p.remi_erbjuden_av === p.motstandare.id, lapp = "";
+  if (p.status === "pagar") lapp = remi ? '<span class="lapp tur">Remi erbjuden!</span>' : min ? '<span class="lapp tur">Din tur!</span>' : '<span class="lapp">Väntar på ' + esc(p.motstandare.namn) + '</span>';
+  else {
+    var vann = (p.resultat === "vit" && p.jag === "w") || (p.resultat === "svart" && p.jag === "b");
+    lapp = p.resultat === "remi" ? '<span class="lapp remi">Remi</span>' : vann ? '<span class="lapp vinst">Du vann</span>' : '<span class="lapp forlust">Du förlorade</span>';
+  }
+  return '<li><a class="kort' + (min || remi ? ' min-tur' : '') + (p.status === "slut" ? ' slut' : '') + '" href="#parti=' + p.id + '">' + miniHTML(p.fen, p.jag) +
+    '<span><span class="namn"><img src="' + esc(p.motstandare.avatar) + '" alt="" referrerpolicy="no-referrer"><span>mot ' + esc(p.motstandare.namn) + '</span></span>' +
+    '<small>Du är ' + FARG[p.jag] + ' · ' + Math.ceil(p.antal / 2) + ' drag · ' + sedan(p.uppdaterad) + (p.status === "slut" && p.anledning ? ' · ' + (ANLEDNING[p.anledning] || "") : '') + '</small>' + lapp + '</span></a></li>';
+}
+function raknaStat(lista){
+  var st = { n: 0, v: 0, f: 0, r: 0, nw: 0, vw: 0, nb: 0, vb: 0, svit: 0 }, nu = 0;
+  lista.forEach(function(g){
+    st.n++; st[g.res]++;
+    if (g.farg === "w"){ st.nw++; if (g.res === "v") st.vw++; } else { st.nb++; if (g.res === "v") st.vb++; }
+    nu = g.res === "v" ? nu + 1 : 0; if (nu > st.svit) st.svit = nu;
+  });
+  return st;
+}
+function pct(a, b){ return b ? Math.round(a / b * 100) + "%" : "–"; }
+function ritaStat(){
+  var v = vanner() || [], H = menyData.historik || [];
+  var namn = {}; menyData.partier.forEach(function(p){ namn[p.motstandare.id] = p.motstandare; });
+  var ids = v.map(function(x){ return x.id; });
+  H.forEach(function(g){ if (ids.indexOf(g.mot) < 0) ids.push(g.mot); });
+  if (!ids.length){ el("stat").innerHTML = '<p class="tom">Här ser du hur det har gått mot varje vän när ni har spelat klart några partier.</p>'; return; }
+  var person = function(id){ return v.find(function(x){ return x.id === id; }) || namn[id] || { id: id, namn: "Tidigare vän", avatar: "" }; };
+  if (statVal !== "alla" && ids.indexOf(statVal) < 0) statVal = "alla";
+  var flikar = '<div class="stat-flikar" role="tablist" aria-label="Välj vän"><button type="button" role="tab" data-s="alla" aria-selected="' + (statVal === "alla") + '">Alla vänner</button>' +
+    ids.map(function(id){ var p = person(id); return '<button type="button" role="tab" data-s="' + esc(id) + '" aria-selected="' + (statVal === id) + '">' + (p.avatar ? '<img src="' + esc(p.avatar) + '" alt="" referrerpolicy="no-referrer">' : '') + esc(p.namn) + '</button>'; }).join("") + '</div>';
+  var st = raknaStat(statVal === "alla" ? H : H.filter(function(g){ return g.mot === statVal; }));
+  var ruta = function(kl, varde, text){ return '<div class="sr ' + kl + '"><b>' + varde + '</b><span>' + text + '</span></div>'; };
+  var h = flikar + (st.n ? '' : '<p class="tom" style="margin-bottom:12px">Inga avslutade partier ' + (statVal === "alla" ? "än" : "mot " + esc(person(statVal).namn) + " än") + '. Statistiken fylls på när ni spelar klart.</p>') +
+    '<div class="stat-rutor">' +
+      ruta("gra", st.n, "Partier") +
+      ruta("gron", st.v, "Vinster") +
+      ruta("rod", st.f, "Förluster") +
+      ruta("lila", st.r, "Remi") +
+      ruta("gul stor", pct(st.v, st.n), "Vinst-%") +
+      ruta("ljus", pct(st.vw, st.nw), "Vinst-% som vit (ljus)") +
+      ruta("mork", pct(st.vb, st.nb), "Vinst-% som svart (mörk)") +
+      ruta("ljus", st.vw, "Vinster som vit (ljus)") +
+      ruta("mork", st.vb, "Vinster som svart (mörk)") +
+      ruta("eld stor", st.svit, "Längsta vinstsvit") +
+    '</div>';
+  el("stat").innerHTML = h;
+  el("stat").querySelectorAll("[data-s]").forEach(function(b){ b.addEventListener("click", function(){ statVal = b.getAttribute("data-s"); ritaStat(); var f = el("stat").querySelector('[data-s="' + statVal + '"]'); if (f) f.focus(); }); });
+}
+function alertMsg(t){ K.toast(t); }
+
+/* ---------- LJUD ---------- */
+// Ljud per pjäs: p = mussla (bonde), n = sjöhäst (springare), q = blåsfisk (drottning). Övriga pjäser är tysta än så länge.
+var LJUD = { p: "ljud/schack-mussla.mp3", n: "ljud/schack-sjohast.mp3", q: "ljud/schack-blasfisk.mp3" };
+var ljudPa = true; try{ ljudPa = localStorage.getItem("schack-ljud") !== "av"; }catch(e){}
+var ljudCache = {};
+function spelaLjud(typ){
+  if (!ljudPa || !LJUD[typ]) return;
+  var a = ljudCache[typ] || (ljudCache[typ] = new Audio(LJUD[typ]));
+  try{ a.currentTime = 0; var r = a.play(); if (r && r.catch) r.catch(function(){}); }catch(e){}
+}
+// Vilken pjäs flyttades i ett drag skrivet som "e4", "Nf3", "O-O" …
+function pjasIDrag(san){ if (/^O-O/.test(san)) return "k"; var m = san.match(/^([KQRBN])/); return m ? m[1].toLowerCase() : "p"; }
+function ritaLjudknapp(){ var b = el("ljud-knapp"); b.setAttribute("aria-pressed", ljudPa ? "true" : "false"); b.textContent = ljudPa ? "🔊 Ljud på" : "🔇 Ljud av"; }
+el("ljud-knapp").addEventListener("click", function(){ ljudPa = !ljudPa; try{ localStorage.setItem("schack-ljud", ljudPa ? "pa" : "av"); }catch(e){} ritaLjudknapp(); if (ljudPa) spelaLjud("p"); });
+ritaLjudknapp();
+// Ladda ljuden direkt så de spelas utan fördröjning
+Object.keys(LJUD).forEach(function(t){ var a = new Audio(LJUD[t]); a.preload = "auto"; ljudCache[t] = a; });
+
+/* ---------- ETT PARTI ---------- */
+var parti = null, spel = null, vald = null, malDrag = [], skickar = false, fragaOm = null;
+function oppnaParti(id){
+  parti = null; spel = null; vald = null; fragaOm = null;
+  el("brade").innerHTML = ""; el("status").textContent = "Laddar partiet…"; el("status").className = "status";
+  el("sp-topp").innerHTML = ""; el("sp-botten").innerHTML = ""; el("atgarder").innerHTML = ""; el("remi-plats").innerHTML = ""; el("fraga-plats").innerHTML = ""; el("drag-lista").innerHTML = "";
+  visaMsg("parti-msg", "");
+  hamtaParti(false, id);
+  // Visa hela brädet direkt
+  window.scrollTo(0, 0);
+}
+function hamtaParti(tyst, id){
+  id = id || (parti && parti.id);
+  if (!id) return;
+  api({ typ: "schack_hamta", id: id }).then(function(d){
+    var nytt = !parti || parti.drag.length !== d.parti.drag.length || parti.status !== d.parti.status || parti.remi_erbjuden_av !== d.parti.remi_erbjuden_av;
+    // Motståndaren har gjort ett drag sedan sist: spela pjäsens ljud
+    if (parti && parti.id === d.parti.id && d.parti.drag.length > parti.drag.length) spelaLjud(pjasIDrag(d.parti.drag[d.parti.drag.length - 1]));
+    if (parti && parti.status !== d.parti.status) visaMsg("parti-msg", "");
+    parti = d.parti;
+    if (nytt || !tyst){ byggSpel(); rita(); }
+  }, function(e){
+    if (!parti){ el("status").textContent = e.message; }
+  }).then(planera);
+}
+function planera(){
+  if (vy !== "parti" || !parti) return;
+  if (parti.status === "slut") { stoppaPoll(); return; }
+  var vantar = parti.status === "inbjudan" || spel.turn() !== parti.jag || parti.remi_erbjuden_av === K.anvandare().id;
+  poll(function(){ hamtaParti(true); }, vantar ? 4000 : 15000);
+}
+function byggSpel(){
+  spel = new Chess();
+  parti.drag.forEach(function(d){ spel.move(d); });
+}
+function minTur(){ return parti && parti.status === "pagar" && spel.turn() === parti.jag && !skickar; }
+
+function rita(){
+  ritaBrade(); ritaSpelare(); ritaStatus(); ritaDrag(); ritaAtgarder();
+}
+function ritaBrade(){
+  var jag = parti.jag, rader = jag === "w" ? [8,7,6,5,4,3,2,1] : [1,2,3,4,5,6,7,8], filer = jag === "w" ? "abcdefgh" : "hgfedcba";
+  var hist = spel.history({ verbose: true }), sista = hist[hist.length - 1];
+  var schackRuta = null;
+  if (spel.inCheck()){
+    var tur = spel.turn();
+    spel.board().forEach(function(r){ r.forEach(function(c){ if (c && c.type === "k" && c.color === tur) schackRuta = c.square; }); });
+  }
+  var malMap = {}; malDrag.forEach(function(m){ malMap[m.to] = m; });
+  var h = "";
+  rader.forEach(function(r, ri){
+    for (var fi = 0; fi < 8; fi++){
+      var f = filer[fi], sq = f + r, p = spel.get(sq), mork = ("abcdefgh".indexOf(f) + r) % 2 === 1;   // a1 är mörk
+      var kl = "ruta" + (mork ? " m" : "");
+      if (sista && (sista.from === sq || sista.to === sq)) kl += " sist";
+      if (vald === sq) kl += " vald";
+      if (schackRuta === sq) kl += " schack";
+      var kan = minTur() && ((p && p.color === parti.jag) || malMap[sq]);
+      if (kan) kl += " kan";
+      var namn = sq + (p ? ", " + FARG[p.color] + " " + PJAS[p.type].namn.split(" ")[0].toLowerCase() : ", tom");
+      h += '<button type="button" class="' + kl + '" data-sq="' + sq + '" aria-label="' + namn + '" tabindex="' + (sq === (vald || (jag === "w" ? "e2" : "e7")) ? 0 : -1) + '">' +
+        (p ? pjHTML(p.color, p.type) : '') +
+        (malMap[sq] ? '<span class="mal' + (p || malMap[sq].flags.indexOf("e") >= 0 ? ' slag' : '') + '"></span>' : '') +
+        (ri === 7 ? '<span class="ko f">' + f + '</span>' : '') + (fi === 0 ? '<span class="ko r">' + r + '</span>' : '') + '</button>';
+    }
+  });
+  el("brade").innerHTML = h;
+}
+el("brade").addEventListener("click", function(e){
+  var b = e.target.closest(".ruta"); if (!b || !parti) return;
+  klick(b.getAttribute("data-sq"));
+});
+el("brade").addEventListener("keydown", function(e){
+  var b = e.target.closest(".ruta"); if (!b) return;
+  var alla = Array.prototype.slice.call(el("brade").querySelectorAll(".ruta")), i = alla.indexOf(b), n = -1;
+  if (e.key === "ArrowRight") n = i + 1; else if (e.key === "ArrowLeft") n = i - 1; else if (e.key === "ArrowDown") n = i + 8; else if (e.key === "ArrowUp") n = i - 8;
+  if (n >= 0 && n < 64 && n !== i){ e.preventDefault(); b.tabIndex = -1; alla[n].tabIndex = 0; alla[n].focus(); }
+});
+function klick(sq){
+  if (!minTur()) return;
+  var p = spel.get(sq);
+  var m = malDrag.filter(function(x){ return x.to === sq; });
+  if (vald && m.length){
+    if (m.length > 1 || m[0].promotion) valjPromotion(vald, sq);
+    else gorDrag(vald, sq);
+    return;
+  }
+  if (p && p.color === parti.jag){
+    if (vald === sq){ vald = null; malDrag = []; }
+    else { vald = sq; malDrag = spel.moves({ square: sq, verbose: true }); }
+  } else { vald = null; malDrag = []; }
+  ritaBrade();
+  var f = el("brade").querySelector('[data-sq="' + sq + '"]'); if (f){ el("brade").querySelectorAll(".ruta").forEach(function(r){ r.tabIndex = -1; }); f.tabIndex = 0; f.focus(); }
+}
+function valjPromotion(fran, till){
+  var bak = document.createElement("div"); bak.className = "promo-bak";
+  bak.innerHTML = '<div class="promo wood" role="dialog" aria-modal="true" aria-label="Välj pjäs"><p>Krabban nådde andra sidan! Vad ska den bli?</p><div class="val">' +
+    ["q","r","b","n"].map(function(t){ return '<button type="button" data-p="' + t + '" aria-label="' + PJAS[t].namn + '">' + pjHTML(parti.jag, t) + '</button>'; }).join("") +
+    '</div><small>Klicka utanför för att ångra</small></div>';
+  document.body.appendChild(bak);
+  bak.querySelector("button").focus();
+  function stang(){ bak.remove(); document.removeEventListener("keydown", esc_, true); }
+  function esc_(e){ if (e.key === "Escape"){ e.stopPropagation(); stang(); } }
+  document.addEventListener("keydown", esc_, true);
+  bak.addEventListener("click", function(e){
+    var b = e.target.closest("[data-p]");
+    if (b){ stang(); gorDrag(fran, till, b.getAttribute("data-p")); }
+    else if (e.target === bak) stang();
+  });
+}
+function gorDrag(fran, till, promo){
+  var antal = parti.drag.length, m;
+  try { m = spel.move({ from: fran, to: till, promotion: promo }); } catch (e) { m = null; }
+  if (!m) return;
+  parti.drag = parti.drag.concat([m.san]); vald = null; malDrag = []; skickar = true;
+  spelaLjud(m.piece);
+  rita();
+  api({ typ: "schack_drag", id: parti.id, fran: fran, till: till, promotion: promo, antal: antal }).then(function(d){
+    skickar = false; parti = d.parti; byggSpel(); rita();
+  }, function(e){
+    skickar = false; visaMsg("parti-msg", e.message, true);
+    hamtaParti(false);
+  }).then(planera);
+}
+function spelareHTML(sp, farg){
+  var tagna = tagnaPjaser(farg);
+  return '<img class="av" src="' + esc(sp.avatar) + '" alt="" referrerpolicy="no-referrer"><span class="txt"><b>' + esc(sp.namn) + '</b><small>' + (farg === "w" ? "Ljus sida" : "Mörk sida") + '</small>' +
+    '<span class="tagna" aria-label="Tagna pjäser">' + tagna + '</span></span>' + pjHTML(farg, "k");
+}
+function tagnaPjaser(farg){
+  // pjäser som den här spelaren har tagit från motståndaren
+  var start = { p: 8, n: 2, b: 2, r: 2, q: 1 }, kvar = { p: 0, n: 0, b: 0, r: 0, q: 0 }, mot = farg === "w" ? "b" : "w";
+  spel.board().forEach(function(r){ r.forEach(function(c){ if (c && c.color === mot && kvar[c.type] != null) kvar[c.type]++; }); });
+  var h = "";
+  ["q","r","b","n","p"].forEach(function(t){ for (var i = 0; i < Math.max(0, start[t] - kvar[t]); i++) h += '<img src="' + bild(mot, t) + '" alt="' + PJAS[t].namn + '">'; });
+  return h;
+}
+function ritaSpelare(){
+  var jag = parti.jag, mot = jag === "w" ? "b" : "w", tur = parti.status === "pagar" ? spel.turn() : null;
+  var sp = { w: parti.vit, b: parti.svart };
+  el("sp-topp").innerHTML = spelareHTML(sp[mot], mot); el("sp-topp").className = "spelare " + mot + (tur === mot ? " tur" : "");
+  el("sp-botten").innerHTML = spelareHTML(sp[jag], jag); el("sp-botten").className = "spelare " + jag + (tur === jag ? " tur" : "");
+}
+function ritaStatus(){
+  var s = el("status"), jag = parti.jag, mot = jag === "w" ? parti.svart : parti.vit, u = K.anvandare();
+  if (parti.status === "inbjudan"){
+    s.className = "status";
+    s.innerHTML = parti.inbjuden_av === u.id ? "Väntar på att " + esc(mot.namn) + " ska tacka ja" : esc(mot.namn) + " har bjudit in dig! Svara i schackmenyn.";
+    return;
+  }
+  if (parti.status === "slut"){
+    var vann = (parti.resultat === "vit" && jag === "w") || (parti.resultat === "svart" && jag === "b");
+    s.className = "status " + (parti.resultat === "remi" ? "remi" : vann ? "vinst" : "forlust");
+    s.innerHTML = (parti.resultat === "remi" ? "Remi! 🤝" : vann ? "Du vann! 🎉" : esc(mot.namn) + " vann") + '<small>' + (ANLEDNING[parti.anledning] || "") + '</small>';
+    return;
+  }
+  var min = spel.turn() === jag;
+  s.className = "status" + (min ? " min" : "");
+  s.innerHTML = (skickar ? "Skickar draget…" : min ? "Din tur!" : "Väntar på " + esc(mot.namn) + "…") + (spel.inCheck() ? '<small>' + (min ? "Din kung (hammarhajen) står i schack!" : "Schack!") + '</small>' : '<small>Senaste drag ' + sedan(parti.uppdaterad) + '</small>');
+}
+function sanHTML(san, farg){
+  var m = san.match(/^([KQRBN])/);
+  var t = san.replace(/=([QRBN])/, function(_, x){ return '=' + '<img src="' + bild(farg, x.toLowerCase()) + '" alt="' + PJAS[x.toLowerCase()].namn + '">'; });
+  var ikon = function(typ){ return '<img src="' + bild(farg, typ) + '" alt="' + PJAS[typ].namn + '">'; };
+  if (/^O-O/.test(san)) return ikon("k") + t.replace("O-O-O", "Lång rockad").replace("O-O", "Rockad");
+  if (m) return ikon(m[1].toLowerCase()) + t.slice(1);
+  return ikon("p") + t;   // bondedrag (mussla) har ingen bokstav i schacknotationen
+}
+function ritaDrag(){
+  var d = parti.drag, h = "";
+  if (!d.length){ el("drag-lista").innerHTML = '<li class="drag-tom">Inga drag än. Ljus sida börjar.</li>'; return; }
+  for (var i = 0; i < d.length; i += 2){
+    h += '<li><span class="nr">' + (i/2 + 1) + '.</span><span' + (i === d.length - 1 ? ' class="sista"' : '') + '>' + sanHTML(d[i], "w") + '</span><span' + (i + 1 === d.length - 1 ? ' class="sista"' : '') + '>' + (d[i+1] ? sanHTML(d[i+1], "b") : '') + '</span></li>';
+  }
+  var l = el("drag-lista"); l.innerHTML = h; l.scrollTop = l.scrollHeight;
+}
+function ritaAtgarder(){
+  var u = K.anvandare(), mot = parti.jag === "w" ? parti.svart : parti.vit;
+  el("remi-plats").innerHTML = ""; el("atgarder").innerHTML = "";
+  if (parti.status !== "pagar"){
+
+    el("fraga-plats").innerHTML = ""; return;
+  }
+  if (parti.remi_erbjuden_av === mot.id){
+    el("remi-plats").innerHTML = '<div class="remi-ruta">' + esc(mot.namn) + ' erbjuder remi (oavgjort). Vill du det?<div class="knappar"><button type="button" class="k gron" id="remi-ja">Ja, remi</button><button type="button" class="k" id="remi-nej">Nej, spela vidare</button></div></div>';
+    el("remi-ja").addEventListener("click", function(){ atgard({ typ: "schack_remi_svar", ja: true }, this); });
+    el("remi-nej").addEventListener("click", function(){ atgard({ typ: "schack_remi_svar", ja: false }, this); });
+  }
+  var remiSkickad = parti.remi_erbjuden_av === u.id;
+  el("atgarder").innerHTML = '<button type="button" class="k lila" id="remi"' + (remiSkickad ? " disabled" : "") + '>' + (remiSkickad ? "Remi erbjuden" : "Erbjud remi") + '</button><button type="button" class="k rod" id="ge-upp">Ge upp</button>';
+  el("remi").addEventListener("click", function(){ fraga("remi"); });
+  el("ge-upp").addEventListener("click", function(){ fraga("ge_upp"); });
+  ritaFraga();
+}
+function fraga(vad){ fragaOm = fragaOm === vad ? null : vad; ritaFraga(); }
+function ritaFraga(){
+  var p = el("fraga-plats");
+  if (!fragaOm || !parti || parti.status !== "pagar"){ p.innerHTML = ""; return; }
+  p.innerHTML = '<div class="fraga">' + (fragaOm === "ge_upp" ? "Vill du verkligen ge upp? Då vinner din vän partiet." : "Vill du erbjuda remi? Partiet blir oavgjort om din vän tackar ja.") +
+    '<div class="knappar"><button type="button" class="k ' + (fragaOm === "ge_upp" ? "rod" : "lila") + '" id="fraga-ja">' + (fragaOm === "ge_upp" ? "Ja, ge upp" : "Ja, erbjud remi") + '</button><button type="button" class="k" id="fraga-nej">Avbryt</button></div></div>';
+  el("fraga-ja").addEventListener("click", function(){ var t = fragaOm === "ge_upp" ? "schack_ge_upp" : "schack_remi"; fragaOm = null; atgard({ typ: t }, this); });
+  el("fraga-nej").addEventListener("click", function(){ fragaOm = null; ritaFraga(); });
+  el("fraga-ja").focus();
+}
+function atgard(data, knapp){
+  if (knapp) knapp.disabled = true;
+  data.id = parti.id;
+  api(data).then(function(d){ parti = d.parti; byggSpel(); rita(); if (d.meddelande) visaMsg("parti-msg", d.meddelande); },
+    function(e){ if (knapp) knapp.disabled = false; visaMsg("parti-msg", e.message, true); }).then(planera);
+}
+document.querySelector(".tillbaka").addEventListener("click", function(e){ e.preventDefault(); location.hash = ""; });
+document.addEventListener("click", function(e){ var a = e.target.closest && e.target.closest('a[href="#"]'); if (a && !a.classList.contains("tillbaka")){ e.preventDefault(); location.hash = ""; } });
+
+/* Starta när kontot är klart (konto.js kan behöva ta emot inloggningen från Discord först) */
+if (K) route(); else el("utloggad").hidden = false;
+</script>
+</body>
+</html>
