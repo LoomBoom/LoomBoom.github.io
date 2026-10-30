@@ -187,6 +187,8 @@ body.i-parti header.head,body.i-parti .nav,body.i-parti footer{display:none}
 .vanster .atgarder .k{width:100%}
 .spel-logo{display:block;width:90px;margin:0 auto 4px;filter:drop-shadow(3px 3px 0 var(--ink))}
 .spel-logo img{display:block;width:100%}
+.ljudknapp{background:linear-gradient(135deg,#9FF3F5,#22C3E6)}
+.ljudknapp[aria-pressed="false"]{background:linear-gradient(135deg,#E3E7EC,#B9C2CC)}
 .integ-l{justify-self:center;font:600 13px var(--body);color:#2c3a4a}
 .sida{justify-self:center;width:100%;max-width:300px}
 .brade-ram{width:min(calc(100svh - 28px), calc(100vw - 640px));min-width:320px}
@@ -353,6 +355,7 @@ footer .integ{display:block;width:fit-content;margin:14px auto 0;font:600 14px v
         <div class="atgarder" id="atgarder"></div>
         <div id="fraga-plats"></div>
         <p class="msg" id="parti-msg" role="status" style="margin:0"></p>
+        <button type="button" class="k ljudknapp" id="ljud-knapp" aria-pressed="true">🔊 Ljud på</button>
         <a class="integ-l" href="integritet.html">Integritet</a>
       </aside>
       <div class="brade-ram"><div class="brade" id="brade" role="grid" aria-label="Schackbräde"></div></div>
@@ -474,6 +477,13 @@ function ritaNy(){
 // Ni byter sida varje parti. Första gången börjar den som bjuder in.
 function visaNasta(){
   var n = el("nasta"); if (!n) return;
+  // Bara ett parti eller en inbjudan åt gången mot samma vän
+  var igang = menyData && menyData.partier.find(function(p){ return p.motstandare.id === valdVan && (p.status === "pagar" || p.status === "inbjudan"); });
+  var bjud = el("bjud"); if (bjud) bjud.disabled = !!igang;
+  if (igang){
+    n.innerHTML = '<span>' + (igang.status === "pagar" ? "Ni har redan ett parti igång. Spela klart det innan ni börjar ett nytt." : "Det finns redan en inbjudan mellan er. Vänta på svar eller ta tillbaka den först.") + '</span>';
+    return;
+  }
   var farg = (menyData && menyData.nasta && menyData.nasta[valdVan]) || "w";
   n.innerHTML = pjHTML(farg, "k") + '<span>Ni byter sida varje parti. Nästa parti blir du <b>' + (farg === "w" ? "ljus (vit) och börjar" : "mörk (svart)") + '</b>.</span>';
 }
@@ -578,6 +588,24 @@ function ritaStat(){
 }
 function alertMsg(t){ K.toast(t); }
 
+/* ---------- LJUD ---------- */
+// Ljud per pjäs. Bara musslan (bonde) har ett ljud än så länge.
+var LJUD = { p: "ljud/schack-mussla.mp3" };
+var ljudPa = true; try{ ljudPa = localStorage.getItem("schack-ljud") !== "av"; }catch(e){}
+var ljudCache = {};
+function spelaLjud(typ){
+  if (!ljudPa || !LJUD[typ]) return;
+  var a = ljudCache[typ] || (ljudCache[typ] = new Audio(LJUD[typ]));
+  try{ a.currentTime = 0; var r = a.play(); if (r && r.catch) r.catch(function(){}); }catch(e){}
+}
+// Vilken pjäs flyttades i ett drag skrivet som "e4", "Nf3", "O-O" …
+function pjasIDrag(san){ if (/^O-O/.test(san)) return "k"; var m = san.match(/^([KQRBN])/); return m ? m[1].toLowerCase() : "p"; }
+function ritaLjudknapp(){ var b = el("ljud-knapp"); b.setAttribute("aria-pressed", ljudPa ? "true" : "false"); b.textContent = ljudPa ? "🔊 Ljud på" : "🔇 Ljud av"; }
+el("ljud-knapp").addEventListener("click", function(){ ljudPa = !ljudPa; try{ localStorage.setItem("schack-ljud", ljudPa ? "pa" : "av"); }catch(e){} ritaLjudknapp(); if (ljudPa) spelaLjud("p"); });
+ritaLjudknapp();
+// Ladda ljuden direkt så de spelas utan fördröjning
+Object.keys(LJUD).forEach(function(t){ var a = new Audio(LJUD[t]); a.preload = "auto"; ljudCache[t] = a; });
+
 /* ---------- ETT PARTI ---------- */
 var parti = null, spel = null, vald = null, malDrag = [], skickar = false, fragaOm = null;
 function oppnaParti(id){
@@ -594,6 +622,8 @@ function hamtaParti(tyst, id){
   if (!id) return;
   api({ typ: "schack_hamta", id: id }).then(function(d){
     var nytt = !parti || parti.drag.length !== d.parti.drag.length || parti.status !== d.parti.status || parti.remi_erbjuden_av !== d.parti.remi_erbjuden_av;
+    // Motståndaren har gjort ett drag sedan sist: spela pjäsens ljud
+    if (parti && parti.id === d.parti.id && d.parti.drag.length > parti.drag.length) spelaLjud(pjasIDrag(d.parti.drag[d.parti.drag.length - 1]));
     if (parti && parti.status !== d.parti.status) visaMsg("parti-msg", "");
     parti = d.parti;
     if (nytt || !tyst){ byggSpel(); rita(); }
@@ -691,6 +721,7 @@ function gorDrag(fran, till, promo){
   try { m = spel.move({ from: fran, to: till, promotion: promo }); } catch (e) { m = null; }
   if (!m) return;
   parti.drag = parti.drag.concat([m.san]); vald = null; malDrag = []; skickar = true;
+  spelaLjud(m.piece);
   rita();
   api({ typ: "schack_drag", id: parti.id, fran: fran, till: till, promotion: promo, antal: antal }).then(function(d){
     skickar = false; parti = d.parti; byggSpel(); rita();
