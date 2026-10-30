@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-30T01:04:47.442Z",
+  "updated": "2026-10-30T07:12:21.208Z",
   "player": {
     "name": "LoomBoom",
     "avatar": "https://avatars.steamstatic.com/9e8af0555fb3fccfbf72c94ccf72d9da34206af7_full.jpg",
@@ -10,14 +10,14 @@
   },
   "library": {
     "count": 53,
-    "hours": 7200.7
+    "hours": 7200.9
   },
   "tracked": [
     {
       "appid": 730,
       "name": "Counter-Strike 2",
-      "hours": 6585.9,
-      "hours2w": 46.7
+      "hours": 6586.1,
+      "hours2w": 46.9
     },
     {
       "appid": 1966720,
@@ -30,8 +30,8 @@
     {
       "appid": 730,
       "name": "Counter-Strike 2",
-      "hours2w": 46.7,
-      "hours": 6585.9
+      "hours2w": 46.9,
+      "hours": 6586.1
     },
     {
       "appid": 728880,
@@ -54,12 +54,12 @@
   ],
   "cs": {
     "kills": 185120,
-    "deaths": 165973,
+    "deaths": 165989,
     "headshots": 78040,
     "shotsFired": 3182404,
     "shotsHit": 333517,
     "roundsWon": 99433,
-    "roundsPlayed": 191515,
+    "roundsPlayed": 191531,
     "matchesWon": 5061,
     "matchesPlayed": 10025,
     "mvps": 32591,
@@ -363,7 +363,7 @@
         "appid": 730,
         "name": "Counter-Strike 2",
         "achievements": 1,
-        "hours": 6585.9
+        "hours": 6586.1
       }
     ]
   },
@@ -1850,7 +1850,7 @@
       ],
       [
         "2026-10-30",
-        1
+        3
       ]
     ],
     "records": {},
