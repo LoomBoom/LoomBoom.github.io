@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-03T15:13:42.973Z",
+  "updated": "2026-11-03T21:04:24.066Z",
   "player": {
     "name": "LoomBoom",
     "avatar": "https://avatars.steamstatic.com/9e8af0555fb3fccfbf72c94ccf72d9da34206af7_full.jpg",
@@ -17,7 +17,7 @@
       "appid": 730,
       "name": "Counter-Strike 2",
       "hours": 6598.2,
-      "hours2w": 45
+      "hours2w": 42
     },
     {
       "appid": 1966720,
@@ -30,7 +30,7 @@
     {
       "appid": 730,
       "name": "Counter-Strike 2",
-      "hours2w": 45,
+      "hours2w": 42,
       "hours": 6598.2
     },
     {
