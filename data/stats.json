@@ -1,16 +1,16 @@
 {
-  "updated": "2026-11-06T02:30:35.363Z",
+  "updated": "2026-11-06T10:58:42.435Z",
   "player": {
     "name": "LoomBoom",
     "avatar": "https://avatars.steamstatic.com/9e8af0555fb3fccfbf72c94ccf72d9da34206af7_full.jpg",
     "url": "https://steamcommunity.com/id/LoomBoom/",
-    "online": false,
-    "playing": null,
+    "online": true,
+    "playing": "Bread",
     "level": 25
   },
   "library": {
     "count": 53,
-    "hours": 7216.2
+    "hours": 7216.3
   },
   "tracked": [
     {
@@ -34,6 +34,12 @@
       "hours": 6601.4
     },
     {
+      "appid": 3131610,
+      "name": "Bread",
+      "hours2w": 2,
+      "hours": 6
+    },
+    {
       "appid": 728880,
       "name": "Overcooked! 2",
       "hours2w": 1.4,
@@ -43,7 +49,7 @@
       "appid": 2923300,
       "name": "Banana",
       "hours2w": 0.1,
-      "hours": 8.4
+      "hours": 8.5
     }
   ],
   "cs": {
@@ -289,9 +295,9 @@
   },
   "perfect": {
     "count": 10,
-    "gamesWithAchievements": 39,
-    "unlocked": 1082,
-    "total": 2488,
+    "gamesWithAchievements": 40,
+    "unlocked": 1095,
+    "total": 2503,
     "games": [
       {
         "appid": 2313240,
