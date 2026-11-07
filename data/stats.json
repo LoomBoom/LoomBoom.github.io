@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-07T16:32:46.267Z",
+  "updated": "2026-11-07T20:56:07.286Z",
   "player": {
     "name": "LoomBoom",
     "avatar": "https://avatars.steamstatic.com/9e8af0555fb3fccfbf72c94ccf72d9da34206af7_full.jpg",
@@ -367,46 +367,7 @@
       }
     ]
   },
-  "fortnite": {
-    "name": "LooomBooom",
-    "level": 1,
-    "overall": {
-      "matches": 17888,
-      "wins": 782,
-      "winRate": 4.372,
-      "kills": 30140,
-      "kd": 1.762,
-      "top10": 718,
-      "minutes": 133215
-    },
-    "solo": {
-      "matches": 4765,
-      "wins": 95,
-      "winRate": 1.994,
-      "kills": 5595,
-      "kd": 1.198,
-      "top10": 718,
-      "minutes": 23466
-    },
-    "duo": {
-      "matches": 5577,
-      "wins": 238,
-      "winRate": 4.268,
-      "kills": 7238,
-      "kd": 1.356,
-      "top10": null,
-      "minutes": 39812
-    },
-    "squad": {
-      "matches": 3251,
-      "wins": 141,
-      "winRate": 4.337,
-      "kills": 3888,
-      "kd": 1.25,
-      "top10": null,
-      "minutes": 14749
-    }
-  },
+  "fortnite": null,
   "esplay": {
     "username": "LoomBoom",
     "url": "https://esplay.com/loomboom",
