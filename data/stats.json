@@ -1,23 +1,23 @@
 {
-  "updated": "2026-11-10T17:54:14.346Z",
+  "updated": "2026-11-10T23:26:23.076Z",
   "player": {
     "name": "LoomBoom",
     "avatar": "https://avatars.steamstatic.com/9e8af0555fb3fccfbf72c94ccf72d9da34206af7_full.jpg",
     "url": "https://steamcommunity.com/id/LoomBoom/",
-    "online": false,
-    "playing": null,
+    "online": true,
+    "playing": "Counter-Strike 2",
     "level": 25
   },
   "library": {
     "count": 53,
-    "hours": 7223.3
+    "hours": 7226.3
   },
   "tracked": [
     {
       "appid": 730,
       "name": "Counter-Strike 2",
       "hours": 6608.4,
-      "hours2w": 28.1
+      "hours2w": 25
     },
     {
       "appid": 1966720,
@@ -30,20 +30,20 @@
     {
       "appid": 730,
       "name": "Counter-Strike 2",
-      "hours2w": 28.1,
+      "hours2w": 25,
       "hours": 6608.4
+    },
+    {
+      "appid": 728880,
+      "name": "Overcooked! 2",
+      "hours2w": 3.8,
+      "hours": 26.8
     },
     {
       "appid": 3131610,
       "name": "Bread",
       "hours2w": 2.7,
       "hours": 6.7
-    },
-    {
-      "appid": 728880,
-      "name": "Overcooked! 2",
-      "hours2w": 1.4,
-      "hours": 23.8
     },
     {
       "appid": 2923300,
@@ -302,7 +302,7 @@
   "perfect": {
     "count": 10,
     "gamesWithAchievements": 40,
-    "unlocked": 1095,
+    "unlocked": 1096,
     "total": 2503,
     "games": [
       {
@@ -776,10 +776,6 @@
       ]
     },
     "activity": [
-      [
-        "2025-11-11",
-        1
-      ],
       [
         "2025-11-15",
         1
