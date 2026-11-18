@@ -1,23 +1,23 @@
 {
-  "updated": "2026-11-17T22:55:23.322Z",
+  "updated": "2026-11-18T04:26:27.881Z",
   "player": {
     "name": "LoomBoom",
     "avatar": "https://avatars.steamstatic.com/9e8af0555fb3fccfbf72c94ccf72d9da34206af7_full.jpg",
     "url": "https://steamcommunity.com/id/LoomBoom/",
     "online": true,
-    "playing": "Counter-Strike 2",
+    "playing": null,
     "level": 25
   },
   "library": {
     "count": 53,
-    "hours": 7244.9
+    "hours": 7245.2
   },
   "tracked": [
     {
       "appid": 730,
       "name": "Counter-Strike 2",
-      "hours": 6626,
-      "hours2w": 27.1
+      "hours": 6626.2,
+      "hours2w": 27.3
     },
     {
       "appid": 1966720,
@@ -30,8 +30,8 @@
     {
       "appid": 730,
       "name": "Counter-Strike 2",
-      "hours2w": 27.1,
-      "hours": 6626
+      "hours2w": 27.3,
+      "hours": 6626.2
     },
     {
       "appid": 728880,
@@ -59,36 +59,47 @@
     }
   ],
   "cs": {
-    "kills": 186089,
-    "deaths": 166767,
-    "headshots": 78462,
-    "shotsFired": 3196077,
+    "kills": 186124,
+    "deaths": 166801,
+    "headshots": 78482,
+    "shotsFired": 3196542,
     "shotsHit": 333517,
-    "roundsWon": 99914,
-    "roundsPlayed": 192493,
+    "roundsWon": 99922,
+    "roundsPlayed": 192527,
     "matchesWon": 5084,
-    "matchesPlayed": 10062,
-    "mvps": 32730,
-    "damage": 26518262
+    "matchesPlayed": 10063,
+    "mvps": 32733,
+    "damage": 26523665
   },
   "leetify": {
     "url": "https://leetify.com/app/profile/76561199030446550",
     "premier": 21330,
-    "leetifyRating": 5.07,
+    "leetifyRating": 4.8,
     "faceitLevel": 10,
     "faceitElo": 2184,
     "wingman": 18,
     "renown": null,
-    "winrate": 0.6,
-    "totalMatches": 3391,
+    "winrate": 0.5667,
+    "totalMatches": 3392,
     "rating": {
-      "aim": 85.083,
-      "positioning": 70.884,
-      "utility": 56.0088,
-      "clutch": 0.1176,
-      "opening": 0.0508
+      "aim": 84.1345,
+      "positioning": 70.5402,
+      "utility": 56.2892,
+      "clutch": 0.1054,
+      "opening": 0.0506
     },
     "recent": [
+      {
+        "date": "2026-11-17T22:36:47.000Z",
+        "map": "de_mirage",
+        "source": "esplay",
+        "outcome": "loss",
+        "score": [
+          3,
+          13
+        ],
+        "rating": 0.0234
+      },
       {
         "date": "2026-11-17T22:03:44.000Z",
         "map": "de_inferno",
@@ -165,17 +176,6 @@
           7
         ],
         "rating": 0.0647
-      },
-      {
-        "date": "2026-11-16T16:02:25.000Z",
-        "map": "de_vertigo",
-        "source": "esplay",
-        "outcome": "win",
-        "score": [
-          13,
-          3
-        ],
-        "rating": 0.0709
       }
     ]
   },
@@ -363,7 +363,7 @@
         "appid": 730,
         "name": "Counter-Strike 2",
         "achievements": 1,
-        "hours": 6626
+        "hours": 6626.2
       }
     ]
   },
@@ -411,17 +411,17 @@
     "username": "LoomBoom",
     "url": "https://esplay.com/loomboom",
     "level": 124,
-    "rating": 1962,
-    "matches": 2534,
+    "rating": 1943,
+    "matches": 2535,
     "wins": 1285,
-    "losses": 1249,
+    "losses": 1250,
     "ties": 0,
-    "kills": 44504,
-    "deaths": 35751,
-    "assists": 11357,
-    "headshots": 19852,
-    "rounds": 55574,
-    "damage": 4810070,
+    "kills": 44522,
+    "deaths": 35765,
+    "assists": 11360,
+    "headshots": 19862,
+    "rounds": 55590,
+    "damage": 4811771,
     "longestStreak": 0,
     "clips": 0,
     "maps": [
@@ -455,10 +455,10 @@
       },
       {
         "map_id": 5,
-        "kills": 4330,
-        "deaths": 3870,
+        "kills": 4348,
+        "deaths": 3884,
         "wins": 116,
-        "losses": 160
+        "losses": 161
       },
       {
         "map_id": 6,
@@ -541,51 +541,51 @@
     "weapons": [
       {
         "weapon_id": 28,
-        "kills": 16519,
-        "deaths": 12228,
-        "headshots": 8560,
-        "shots": 339910,
-        "hits": 52771
+        "kills": 16521,
+        "deaths": 12231,
+        "headshots": 8562,
+        "shots": 339957,
+        "hits": 52779
       },
       {
         "weapon_id": 41,
-        "kills": 7118,
-        "deaths": 4340,
+        "kills": 7120,
+        "deaths": 4342,
         "headshots": 2651,
-        "shots": 131264,
-        "hits": 25660
+        "shots": 131306,
+        "hits": 25671
       },
       {
         "weapon_id": 30,
-        "kills": 6524,
-        "deaths": 3282,
-        "headshots": 578,
-        "shots": 18910,
-        "hits": 7292
+        "kills": 6530,
+        "deaths": 3283,
+        "headshots": 579,
+        "shots": 18921,
+        "hits": 7299
       },
       {
         "weapon_id": 5,
         "kills": 2277,
-        "deaths": 2207,
+        "deaths": 2208,
         "headshots": 1726,
         "shots": 41794,
         "hits": 7497
       },
       {
         "weapon_id": 4,
-        "kills": 2118,
-        "deaths": 2274,
-        "headshots": 1774,
-        "shots": 31734,
-        "hits": 6678
+        "kills": 2119,
+        "deaths": 2275,
+        "headshots": 1775,
+        "shots": 31743,
+        "hits": 6679
       },
       {
         "weapon_id": 10,
-        "kills": 2090,
-        "deaths": 3737,
-        "headshots": 1245,
-        "shots": 24306,
-        "hits": 5523
+        "kills": 2097,
+        "deaths": 3742,
+        "headshots": 1251,
+        "shots": 24357,
+        "hits": 5537
       },
       {
         "weapon_id": 18,
@@ -629,12 +629,12 @@
       {
         "opponents": 3,
         "success": 117,
-        "fails": 2116
+        "fails": 2117
       },
       {
         "opponents": 4,
         "success": 34,
-        "fails": 1847
+        "fails": 1848
       },
       {
         "opponents": 5,
@@ -643,8 +643,8 @@
       }
     ],
     "entry": {
-      "kills": 6043,
-      "deaths": 4415
+      "kills": 6046,
+      "deaths": 4416
     },
     "history": [
       {
@@ -715,43 +715,43 @@
       },
       {
         "month": "202611",
-        "elo": 1895.918918918919,
+        "elo": 1897.657894736842,
         "eloMin": 1827,
         "eloMax": 1980,
-        "kd": 1.5805785123966942,
-        "adr": 102.19642857142857,
-        "hs": 0.43137254901960786,
-        "entry": 0.625,
-        "matches": 37
+        "kd": 1.572289156626506,
+        "adr": 102.27875,
+        "hs": 0.4342273307790549,
+        "entry": 0.6277777777777778,
+        "matches": 38
       }
     ],
     "recent": {
-      "wins": 18,
-      "losses": 12,
+      "wins": 17,
+      "losses": 13,
       "ties": 0,
-      "kills": 637,
-      "deaths": 384,
-      "headshots": 285,
-      "assists": 127,
-      "clutches": 5,
+      "kills": 639,
+      "deaths": 389,
+      "headshots": 291,
+      "assists": 122,
+      "clutches": 4,
       "rounds": 631,
-      "damage_dealt": 66075,
+      "damage_dealt": 65881,
       "hitgroup_hits": [
         {
           "hitgroup": 0,
-          "hits": 1057
+          "hits": 1058
         },
         {
           "hitgroup": 1,
-          "hits": 1321
+          "hits": 1332
         },
         {
           "hitgroup": 2,
-          "hits": 3114
+          "hits": 3132
         },
         {
           "hitgroup": 3,
-          "hits": 1105
+          "hits": 1111
         },
         {
           "hitgroup": 4,
@@ -759,15 +759,15 @@
         },
         {
           "hitgroup": 5,
-          "hits": 574
+          "hits": 577
         },
         {
           "hitgroup": 6,
-          "hits": 199
+          "hits": 201
         },
         {
           "hitgroup": 7,
-          "hits": 210
+          "hits": 211
         },
         {
           "hitgroup": 8,
@@ -1866,12 +1866,12 @@
       ],
       [
         "2026-11-17",
-        7
+        8
       ]
     ],
     "records": {},
     "modes": {
-      "mm": 2018,
+      "mm": 2019,
       "gather": 479,
       "tournament": 37,
       "gathersCreated": 38
