@@ -1,11 +1,11 @@
 {
-  "updated": "2026-11-19T03:33:35.857Z",
+  "updated": "2026-11-19T13:16:55.936Z",
   "player": {
     "name": "LoomBoom",
     "avatar": "https://avatars.steamstatic.com/9e8af0555fb3fccfbf72c94ccf72d9da34206af7_full.jpg",
     "url": "https://steamcommunity.com/id/LoomBoom/",
-    "online": false,
-    "playing": null,
+    "online": true,
+    "playing": "We Were Here",
     "level": 25
   },
   "library": {
@@ -55,7 +55,7 @@
       "appid": 2923300,
       "name": "Banana",
       "hours2w": 0.1,
-      "hours": 8.5
+      "hours": 8.6
     },
     {
       "appid": 2225070,
