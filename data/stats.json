@@ -1,16 +1,16 @@
 {
-  "updated": "2026-11-22T06:55:42.464Z",
+  "updated": "2026-11-22T15:23:08.943Z",
   "player": {
     "name": "LoomBoom",
     "avatar": "https://avatars.steamstatic.com/9e8af0555fb3fccfbf72c94ccf72d9da34206af7_full.jpg",
     "url": "https://steamcommunity.com/id/LoomBoom/",
-    "online": false,
-    "playing": null,
+    "online": true,
+    "playing": "Palworld",
     "level": 25
   },
   "library": {
     "count": 54,
-    "hours": 7279.1
+    "hours": 7281.6
   },
   "tracked": [
     {
@@ -36,8 +36,8 @@
     {
       "appid": 1623730,
       "name": "Palworld",
-      "hours2w": 9.2,
-      "hours": 83.1
+      "hours2w": 11.7,
+      "hours": 85.6
     },
     {
       "appid": 728880,
@@ -61,7 +61,7 @@
       "appid": 2923300,
       "name": "Banana",
       "hours2w": 0.3,
-      "hours": 8.7
+      "hours": 8.8
     }
   ],
   "cs": {
