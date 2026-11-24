@@ -1,16 +1,16 @@
 {
-  "updated": "2026-11-24T10:59:30.433Z",
+  "updated": "2026-11-24T21:16:10.498Z",
   "player": {
     "name": "LoomBoom",
     "avatar": "https://avatars.steamstatic.com/9e8af0555fb3fccfbf72c94ccf72d9da34206af7_full.jpg",
     "url": "https://steamcommunity.com/id/LoomBoom/",
-    "online": false,
-    "playing": null,
+    "online": true,
+    "playing": "Palworld",
     "level": 25
   },
   "library": {
     "count": 54,
-    "hours": 7302.3
+    "hours": 7307.3
   },
   "tracked": [
     {
@@ -36,13 +36,13 @@
     {
       "appid": 1623730,
       "name": "Palworld",
-      "hours2w": 29.1,
-      "hours": 103
+      "hours2w": 34.1,
+      "hours": 108
     },
     {
       "appid": 728880,
       "name": "Overcooked! 2",
-      "hours2w": 7.1,
+      "hours2w": 5.7,
       "hours": 30.9
     },
     {
@@ -308,7 +308,7 @@
   "perfect": {
     "count": 10,
     "gamesWithAchievements": 39,
-    "unlocked": 1106,
+    "unlocked": 1107,
     "total": 2750,
     "games": [
       {
