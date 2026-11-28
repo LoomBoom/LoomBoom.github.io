@@ -1,23 +1,23 @@
 {
-  "updated": "2026-11-27T22:00:37.018Z",
+  "updated": "2026-11-28T03:56:14.430Z",
   "player": {
     "name": "LoomBoom",
     "avatar": "https://avatars.steamstatic.com/9e8af0555fb3fccfbf72c94ccf72d9da34206af7_full.jpg",
     "url": "https://steamcommunity.com/id/LoomBoom/",
     "online": true,
-    "playing": "Palworld",
+    "playing": null,
     "level": 25
   },
   "library": {
     "count": 54,
-    "hours": 7331.3
+    "hours": 7334.8
   },
   "tracked": [
     {
       "appid": 730,
       "name": "Counter-Strike 2",
-      "hours": 6661.2,
-      "hours2w": 49.9
+      "hours": 6661.3,
+      "hours2w": 50
     },
     {
       "appid": 1966720,
@@ -30,14 +30,14 @@
     {
       "appid": 730,
       "name": "Counter-Strike 2",
-      "hours2w": 49.9,
-      "hours": 6661.2
+      "hours2w": 50,
+      "hours": 6661.3
     },
     {
       "appid": 1623730,
       "name": "Palworld",
-      "hours2w": 43.3,
-      "hours": 117.2
+      "hours2w": 46.8,
+      "hours": 120.7
     },
     {
       "appid": 728880,
@@ -77,7 +77,114 @@
     "mvps": 32888,
     "damage": 26657689
   },
-  "leetify": null,
+  "leetify": {
+    "url": "https://leetify.com/app/profile/76561199030446550",
+    "premier": 21330,
+    "leetifyRating": 6.8500000000000005,
+    "faceitLevel": 10,
+    "faceitElo": 2184,
+    "wingman": 18,
+    "renown": null,
+    "winrate": 0.5667,
+    "totalMatches": 3429,
+    "rating": {
+      "aim": 85.083,
+      "positioning": 74.2154,
+      "utility": 57.0344,
+      "clutch": 0.1395,
+      "opening": 0.0456
+    },
+    "recent": [
+      {
+        "date": "2026-11-27T19:47:44.000Z",
+        "map": "de_nuke",
+        "source": "esplay",
+        "outcome": "loss",
+        "score": [
+          10,
+          13
+        ],
+        "rating": 0.0143
+      },
+      {
+        "date": "2026-11-27T19:08:11.000Z",
+        "map": "de_nuke",
+        "source": "esplay",
+        "outcome": "win",
+        "score": [
+          13,
+          9
+        ],
+        "rating": 0.0494
+      },
+      {
+        "date": "2026-11-27T17:28:55.000Z",
+        "map": "de_ancient",
+        "source": "esplay",
+        "outcome": "loss",
+        "score": [
+          5,
+          13
+        ],
+        "rating": 0.0745
+      },
+      {
+        "date": "2026-11-27T16:42:55.000Z",
+        "map": "de_vertigo",
+        "source": "esplay",
+        "outcome": "win",
+        "score": [
+          13,
+          8
+        ],
+        "rating": 0.1203
+      },
+      {
+        "date": "2026-11-27T15:52:15.000Z",
+        "map": "de_vertigo",
+        "source": "esplay",
+        "outcome": "win",
+        "score": [
+          16,
+          13
+        ],
+        "rating": 0.0769
+      },
+      {
+        "date": "2026-11-27T15:10:59.000Z",
+        "map": "de_vertigo",
+        "source": "esplay",
+        "outcome": "win",
+        "score": [
+          13,
+          8
+        ],
+        "rating": 0.0607
+      },
+      {
+        "date": "2026-11-27T14:26:04.000Z",
+        "map": "de_vertigo",
+        "source": "esplay",
+        "outcome": "win",
+        "score": [
+          13,
+          8
+        ],
+        "rating": 0.0157
+      },
+      {
+        "date": "2026-11-26T22:33:31.000Z",
+        "map": "de_anubis",
+        "source": "esplay",
+        "outcome": "loss",
+        "score": [
+          5,
+          13
+        ],
+        "rating": 0.0139
+      }
+    ]
+  },
   "faceit": {
     "nickname": "LoomBoom",
     "url": "https://www.faceit.com/sv/players/LoomBoom",
@@ -201,7 +308,7 @@
   "perfect": {
     "count": 10,
     "gamesWithAchievements": 39,
-    "unlocked": 1109,
+    "unlocked": 1111,
     "total": 2750,
     "games": [
       {
@@ -262,7 +369,7 @@
         "appid": 730,
         "name": "Counter-Strike 2",
         "achievements": 1,
-        "hours": 6661.2
+        "hours": 6661.3
       }
     ]
   },
@@ -675,10 +782,6 @@
       ]
     },
     "activity": [
-      [
-        "2025-11-28",
-        2
-      ],
       [
         "2025-12-01",
         3
